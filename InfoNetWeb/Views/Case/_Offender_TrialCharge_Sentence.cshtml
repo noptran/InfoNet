@@ -1,0 +1,73 @@
+﻿@model ClientCase
+
+@{
+	var offenderKey = (Key)ViewData["offenderKey"];
+	var chargeKey = (Key)ViewData["chargeKey"];
+	var sentenceKey = (Key)ViewData["sentenceKey"];
+	string sentenceKeyPrefix = (string)ViewData["sentenceKeyPrefix"];
+	bool isDeleted = "-~".Contains(sentenceKeyPrefix);
+	string idPrefix = ("sentence" + offenderKey + "_" + chargeKey + "_" + sentenceKey).Replace(':', '_');
+}
+
+<tr class=@(isDeleted ? "hide" : null)>
+	<td style="padding-left: 10px">
+		<div class="form-group mb-0">
+			<div class="input-group date" data-provide="datepicker">
+				@Html.TextBoxFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].SentencesById[sentenceKey].SentenceDate, true, new { @class = "form-control", style = "min-width: 100px", data_icjia_broadcast = "#" + idPrefix + "Deleted td:eq(0) :input:first", data_val_sentencebeforecharge = "Sentence Date must be later than the Charge Date." })
+				<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+			</div>
+			@Html.ValidationMessageFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].SentencesById[sentenceKey].SentenceDate, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td>
+		<div class="form-group mb-0">
+			@Html.LookupFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].SentencesById[sentenceKey].SentenceId, "<Pick One>", true, new { @class = "form-control", style = "min-width: 150px", data_icjia_broadcast = "#" + idPrefix + "Deleted td:eq(1) :input:first" })
+			@Html.ValidationMessageFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].SentencesById[sentenceKey].SentenceId, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td>
+		<div class="form-group mb-0">
+			@Html.TextBoxFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].SentencesById[sentenceKey].YearsSentenced, new { @class = "form-control", style = "min-width: 50px", data_icjia_broadcast = "#" + idPrefix + "Deleted td:eq(2) :input:first" })
+			@Html.ValidationMessageFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].SentencesById[sentenceKey].YearsSentenced, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td>
+		<div class="form-group mb-0">
+			@Html.TextBoxFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].SentencesById[sentenceKey].MonthsSentenced, new { @class = "form-control", style = "min-width: 50px", data_icjia_broadcast = "#" + idPrefix + "Deleted td:eq(3) :input:first" })
+			@Html.ValidationMessageFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].SentencesById[sentenceKey].MonthsSentenced, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td>
+		<div class="form-group mb-0">
+			@Html.TextBoxFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].SentencesById[sentenceKey].DaysSentenced, new { @class = "form-control", style = "min-width: 50px", data_icjia_broadcast = "#" + idPrefix + "Deleted td:eq(4) :input:first" })
+			@Html.ValidationMessageFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].SentencesById[sentenceKey].DaysSentenced, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td class="text-right pl-0" style="padding-top: 10px">
+		<button type="button" class="btn btn-xs btn-danger btn-icon" aria-label="Delete This Sentence" data-icjia-role="offender.trialcharge.sentence.delete"><span class="glyphicon glyphicon-trash"></span></button>
+		@Html.Hidden(Html.NameFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].SentencesById) + ".index", sentenceKeyPrefix + sentenceKey, new { data_icjia_role = "offender.trialcharge.sentence.index" })
+	</td>
+</tr>
+<tr id="@(idPrefix)Deleted" class="deleted @(isDeleted ? null : "hide")">
+	<td style="padding-left: 10px">
+		<div class="input-group">
+			<input type="text" class="form-control" style="min-width: 100px" disabled="disabled" />
+			<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+		</div>
+	</td>
+	<td>
+		@Html.DropDownList(idPrefix + "DeletedSentence", Lookups.Sentence[Model.Provider].ToSelectList(), "<Pick One>", new { @class = "form-control", style = "min-width: 150px", disabled = "disabled" })
+	</td>
+	<td>
+		<input type="text" class="form-control" style="min-width: 50px" disabled="disabled" />
+	</td>
+	<td>
+		<input type="text" class="form-control" style="min-width: 50px" disabled="disabled" />
+	</td>
+	<td>
+		<input type="text" class="form-control" style="min-width: 50px" disabled="disabled" />
+	</td>
+	<td class="text-right pl-0" style="padding-top: 10px">
+		<button type="button" class="btn btn-xs btn-primary btn-icon" aria-label="Restore Deleted Sentence" data-icjia-role="offender.trialcharge.sentence.restore"><span class="glyphicon glyphicon-undo"></span></button>
+	</td>
+</tr>

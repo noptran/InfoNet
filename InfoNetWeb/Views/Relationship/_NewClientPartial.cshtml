@@ -1,0 +1,39 @@
+﻿@using Infonet.Web.ViewModels.Clients
+@model RelationshipViewModel
+
+@{ 
+	string clientCodeClass = (Model.isNewClient) ? "newClientCode" : "";
+}
+
+@for (int i = 0; i < Model.Clients.Count; i++) {
+	<tr class="clientRow">
+		<td class="clientMainCells">
+			<div class="form-group typeaheadGroup">
+				@Html.HiddenFor(m => m.Clients[i].InvestigationClient.ClientID, new { @class = "clientData" })
+				@Html.HiddenFor(m => m.Clients[i].InvestigationClient.ID, new { @class = "clientData" })
+				@Html.HiddenFor(m => m.Clients[i].InvestigationClient.Households[0].ID, new { @class = "clientData" })
+				@Html.HiddenFor(m => m.Clients[i].InvestigationClient.Households[0].TS_CACInvestigationClients_FK, new { @class = "clientData" })
+				@Html.HiddenFor(m => m.Clients[i].InvestigationClient.Households[0].T_CACInvestigations_FK, new { @class = "clientData" })
+				<input class="clientData" data-val="true" data-val-number="The field CenterId must be a number." id="Clients_@(i)__CenterId" name="Clients[@(i)].CenterId" type="hidden" value="@(Session.Center().Top.Id)">
+				@Html.TextBoxFor(m => m.Clients[i].ClientCode, new { @class = "form-control clientData clientCode " + clientCodeClass, autocomplete = "off" })
+				@Html.ValidationMessageFor(m => m.Clients[i].ClientCode, "", new { @class = "help-block" })
+			</div>
+		</td>
+		<td class="clientMainCells">
+			<div class="form-group">
+				@Html.DropDownListFor(m => m.Clients[i].InvestigationClient.CaseID, new SelectList(Model.Clients[i].Cases ?? new List<RelationshipViewModel.RelationshipClient.SimpleCase>(), "CaseId", "CaseId", Model.Clients[i].InvestigationClient.CaseID), new { @class = "form-control clientData caseList" })
+				@Html.ValidationMessageFor(m => m.Clients[i].InvestigationClient.CaseID, "", new { @class = "help-block" })
+			</div>
+		</td>
+		<td class="clientMainCells">
+			<div class="form-group">
+				@Html.TextBoxFor(m => m.Clients[i].InvestigationClient.Households[0].HouseHoldID, new { @class= "form-control clientData", type="number" })
+				@*@Html.DropDownListFor(m => m.Clients[i].InvestigationClient.Households[0].HouseHoldID, new SelectList(Model.Clients[i].HouseholdIDs, "ID", "Name", Model.Clients[i].InvestigationClient.Households[0].HouseHoldID), new { @class = "form-control clientData caseList" })*@
+				@Html.ValidationMessageFor(m => m.Clients[i].InvestigationClient.Households[0].HouseHoldID, "", new { @class = "help-block" })
+			</div>
+		</td>
+		<td class="deleteButton"><button class="btn btn-danger" type="button"><span class="glyphicon glyphicon-trash"></span></button></td>
+		
+	</tr>
+}
+

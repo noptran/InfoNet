@@ -1,0 +1,52 @@
+﻿@model Infonet.Web.ViewModels.Admin.FundingForStaff
+
+@{
+	if (Model != null && Model.FFSMFA != null && Model.FFSMFA.ServicesSelectionList != null) {
+
+		<div class="well icjia-ffs-scrollable">
+			<table class="table" id="multiFundServicesHeader">
+				<thead>
+					<tr>
+                        <th scope="col"><input type="checkbox" id="multiFundServicesSelectAll"></th>
+                        <th scope="col">Services</th>
+                        <th scope="col">%</th>
+                    </tr>
+				</thead>
+			</table>
+
+			<div class="table-responsive pre-scrollable icjia-ffs-scrollable" id="divMultiFundServices">
+				<table class="table" id="multiFundServices">
+					<tbody>
+						@for (var i = 0; i < Model.FFSMFA.ServicesSelectionList.Count(); i++) {
+			
+							<tr>
+								<td>
+									@Html.HiddenFor(m => m.FFSMFA.ServicesSelectionList[i].ServiceProgramID, new { @class = "CurrentServiceProgramID"})
+									@Html.CheckBoxFor(m => m.FFSMFA.ServicesSelectionList[i].IsChecked, new { @class= "multiFundServicesCheckbox" })
+								</td>
+								<td>
+									@Html.LabelFor(m =>
+											 m.FFSMFA.ServicesSelectionList[i].IsChecked, Model.FFSMFA.ServicesSelectionList[i].Name)
+									@Html.HiddenFor(m => m.FFSMFA.ServicesSelectionList[i].Name)
+								</td>
+								<td>
+									@Html.TextBoxFor(m => m.FFSMFA.ServicesSelectionList[i].PercentFunded, new { @class = "form-control", @type = "number", @readonly = "readonly" })
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+
+			<table class="table" id="multiFundServicesFooter">
+				<tfoot>
+					<tr>
+                        <th scope="col" >@Html.ValidationMessage("MFAServicesSelected", new { id = "MFAServicesSelected" })</th>
+                        <th scope="col" id="multiFundServicesTotal" class="text-right"><span data-toggle="tooltip" title="At least one or more services must be selected to save changes.">Total Services Selected:</span></th>
+                        <th scope="col" style="width:82px;" id="multiFundServicesTotalSelected">0</th>
+                    </tr>
+				</tfoot>
+			</table>
+		</div>
+			}
+}

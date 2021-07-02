@@ -1,0 +1,58 @@
+﻿@model Infonet.Web.ViewModels.Services.PublicationSearchViewModel
+@using PagedList.Mvc;
+@{
+	ViewBag.Title = "Media and Publications";
+}
+
+@using (Html.BeginForm("Search", "Publication", FormMethod.Get, new { id = "main" })) {
+	@Html.Partial("_DateRangeSelect", Model, new ViewDataDictionary { { "rangeTitle", "Service Date Range" }, { "rangeTooltipTitle", "" } })
+	@Html.Partial("_SearchResetNewButtons", Model, new ViewDataDictionary { { "NewButtonUrl", "/Publication/FormRedirect" }, { "NewButtonText", "New Media/Publication" } })
+}
+<table class="table table-hover table-responsive">
+	<tr>
+		<th scope="col">
+			Date
+		</th>
+		<th scope="col">
+			Type
+		</th>
+		<th scope="col">
+			Title
+		</th>
+		<th scope="col">
+			Number of Publications
+		</th>
+        <th scope="col"><span class="sr-only">Action</span></th>
+	</tr>
+	@foreach (var item in Model.MediaPubServiceList) {
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.PDate)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Type)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Title)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.NumOfPubs)
+			</td>
+			<td class="text-right">
+				@Html.ActionLink("Edit", "FormRedirect", new { id = item.ICS_ID }, new { @class = "btn btn-xs btn-primary btn-outline" })
+			</td>
+		</tr>
+			}
+</table>
+
+<div class="row">
+	<div class="col-sm-12">
+		@Html.PagedListPager(Model.MediaPubServiceList, page => Url.Action(@Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)), @Html.Snippets().PagedListPagerRouteValues(page, Model)), @Html.Snippets().PagedListRenderOptions())
+		@Html.Partial("_PagedListDropMenu", Model, new ViewDataDictionary { { "PagedListUrlAction", @Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)) } })
+	</div>
+</div>
+
+@section Scripts {
+	<script src="~/Scripts/ICJIA/date-ranges.js"></script>
+	<script src="~/Scripts/ICJIA/pagedlist.js"></script>
+}

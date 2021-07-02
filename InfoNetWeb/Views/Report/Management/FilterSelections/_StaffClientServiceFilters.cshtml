@@ -1,0 +1,24 @@
+﻿@using Infonet.Reporting.Enumerations
+@model Infonet.Reporting.ViewModels.ManagementReportViewModel
+
+<div class="panel panel-primary icjia-error-group reportProperty @SubReportSelection.MngRptStaffServiceServiceInformation.GetShortName()" style="display:none">
+	<div class="panel-heading">
+		<h2 class="panel-title">
+			<span class="icjia-panel-title-text">Filters</span>
+		</h2>
+	</div>
+	<div class="panel-body">
+		<div class="form-group">
+			@Html.LabelFor(m => m.StaffClientServiceStaffSelections)
+			@Html.DropDownListFor(model => model.StaffClientServiceStaffSelections, new MultiSelectList(Model.StaffDefault, "SVID", "StaffName", Model.StaffClientServiceStaffSelections), new { @class = "form-control chosen staffSelection", multiple = "multiple" })
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(m => m.StaffClientServiceServiceNameSelections)
+			@Html.DropDownListFor(model => model.StaffClientServiceServiceNameSelections, new MultiSelectList(Model.ServiceNameDefault, "CodeId", "Description", Model.StaffClientServiceServiceNameSelections), new { @class = "form-control chosen", multiple = "multiple", data_icjia_ajax_url = "/Report/ServiceNames" })
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(m => m.StaffClientServiceFundingSourceSelections)
+			@Html.DropDownListFor(model => model.StaffClientServiceFundingSourceSelections, new MultiSelectList(Model.FundingSourcesDefault, "CodeId", "Description", Model.StaffClientServiceFundingSourceSelections), new { @class = "form-control chosen", multiple = "multiple", data_icjia_ajax_url = "/Report/FundingSources" })
+		</div>
+	</div>
+</div>

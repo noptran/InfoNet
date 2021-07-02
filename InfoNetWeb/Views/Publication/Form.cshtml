@@ -1,0 +1,138 @@
+﻿@model Infonet.Web.ViewModels.Services.PublicationViewModel
+
+@{
+	ViewBag.Title = Model.ProgramID == 0 ? "New Media/Publication" : "Edit Media/Publication";
+
+	const int staffindex = 0;
+	int staffCount = Model.PublicationDetailStaff?.Count ?? 0;
+}
+
+<div id="Publications">
+	@using (Html.BeginForm("Form", "Publication", FormMethod.Post, new { id = "main", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+		@Html.AntiForgeryToken()
+		@Html.HiddenFor(m => m.ICS_ID)
+		<div class="row">
+			<div class="form-group col-md-6">
+				@Html.LabelFor(m => m.ProgramID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the appropriate media/publication service from the drop-down menu." })
+				@Html.DropDownListFor(m => m.ProgramID, new SelectList(ViewBag.Publications, "CodeID", "Description", Model.ProgramID), "<Pick One>", new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.ProgramID, "", new { @class = "help-block" })
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<h2>Publication Details</h2>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.LabelFor(m => m.Title, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the media segment/publication title." })
+					@Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+					@Html.ValidationMessageFor(m => m.Title, "", new { @class = "help-block", maxlength = "99" })
+				</div>
+				<div class="form-group">
+					@Html.LabelFor(m => m.PDate, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the date this media segment/publication was completed or released." })
+					<div class="input-group date" data-provide="datepicker" data-date-end-date=@DateTime.Today.ToShortDateString()>
+						@Html.TextBoxFor(m => m.PDate, "{0:MM/dd/yyyy}", new { @class = "form-control" })
+						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+					</div>
+					@Html.ValidationMessageFor(m => m.PDate, "", new { @class = "help-block" })
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.LabelFor(m => m.PrepareHours, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the total number of preparation hours by all staff/volunteers, entered in quarter hour increments." })
+					@Html.TextBoxFor(m => m.PrepareHours, new { @class = "form-control" })
+					@Html.ValidationMessageFor(m => m.PrepareHours, "", new { @class = "help-block" })
+				</div>
+				<div class="form-group">
+					@Html.LabelFor(m => m.NumOfBrochure, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the number of publications/media segments completed." })
+					@Html.TextBoxFor(m => m.NumOfBrochure, new { @class = "form-control", type= "number" })
+					@Html.ValidationMessageFor(m => m.NumOfBrochure, "", new { @class = "help-block" })
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group col-xs-12">
+				@Html.LabelFor(m => m.Comment_Pub, new { @class = "control-label", data_toggle = "tooltip", title = "Enter any additional comments you wish to add to this publication record." })
+				@Html.TextAreaFor(m => m.Comment_Pub, new { @class = "form-control" })
+				<div class="text-info">&nbsp;<span id="charRemaining"></span> characters remaining</div>
+				@Html.ValidationMessageFor(m => m.Comment_Pub, "", new { @class = "help-block" })
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<h2>Staff Information</h2>
+			</div>
+		</div>
+				<table id="staff" class="table table-responsive icjia-table-borderless" style="max-width:500px">
+					<thead>
+						<tr>
+							<th scope="col">@Html.LabelFor(m => m.PublicationDetailStaff[staffindex].SVID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the staff person(s)/volunteer(s) that prepared the publication/media segment from the drop-down menu." })</th>
+							<th scope="col">@Html.LabelFor(m => m.PublicationDetailStaff[staffindex].HoursPrep, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the number of hours the staff person/volunteer spent preparing for the presentation in quarter hour increments." })</th>
+                            <th scope="col"><span class="sr-only">Action</span></th>
+						</tr>
+					</thead>
+					<tbody style="border:0">
+						@Html.Partial("_Staff", Model)
+					</tbody>
+					<tfoot style="border:0">
+						<tr>
+							<td colspan="5">
+								<button type="button" class="btn btn-default btn-outline staff_AddNew"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;Add New Staff</button>
+								<input type="hidden" id="staffCount" value="@staffCount" />
+                                <input type="hidden" id="originalStaffCount" value="@staffCount"/>
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+		<input type="hidden" id="saveAddNew" value="0" name="saveAddNew" />
+		<input type="hidden" id="returnURL" value="@TempData.Peek("PublicationReturnUrl")" name="ReturnURL" />
+	}
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="pull-right">
+				<div class="btn-group">
+					@Html.Snippets().SaveButton(new {id="saveButton", data_icjia_role = "preventDuplicateRequest", accesskey = "s" })
+					<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<span class="caret"></span>
+						<span class="sr-only">Toggle Dropdown</span>
+					</button>
+					<ul class="dropdown-menu icjia-btn-dropdown">
+                        <li>@Html.Snippets().SaveAddButton(new { id = "saveAddButton", data_icjia_role = "preventDuplicateRequest", accesskey = "a" })</li>
+					</ul>
+				</div>
+				@Html.Snippets().UndoLink(Url.Action(), new { accesskey = "u" })
+				@if (Model.ProgramID == 0) {
+					<a href="@TempData.Peek("PublicationReturnUrl")" class="btn btn-danger">Cancel</a>
+				} else {
+				    @Html.Snippets().DeleteLink(Url.Action("Delete", "Publication", new { id = Model.ICS_ID }), new { accesskey = "d" })
+				}
+			</div>
+		</div>
+	</div>
+</div>
+<div class="form-group">
+	<a href="@TempData.Peek("PublicationReturnUrl")"><span class='glyphicon glyphicon-chevron-left' aria-hidden='true'></span><span class='glyphicon glyphicon-chevron-left' style='margin-left:-6px' aria-hidden='true'></span>Back to Media/Publications Search</a>
+</div>
+
+@section Scripts{
+	<script src="~/Scripts/Views/Services/_Publication.js"></script>
+	<script type="text/javascript">
+		function validateMyForm() {
+			removeEmptyStaff();
+			return true;
+		}
+
+		function validateMyForm2() {
+			$('#saveAddNew').val('1');
+			return validateMyForm();
+		}
+	</script>
+}
+
+
+
+
+
+

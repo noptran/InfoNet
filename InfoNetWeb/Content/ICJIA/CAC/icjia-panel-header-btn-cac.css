@@ -1,0 +1,12 @@
+﻿/*
+	************************** ICJIA H2 BUTTON LINK ICON **************************
+*/
+.icjia-h2-btn-link-icon:hover,
+.icjia-h2-btn-link-icon:focus {
+	color: #4da5fd; /* panel header triangle drop-down hover color */
+}
+
+.icjia-h2-btn-link-icon.icjia-restore:hover,
+.icjia-h2-btn-link-icon.icjia-restore:focus {
+	color: #4da5fd; /* panel header triangle drop-down hover color */
+}

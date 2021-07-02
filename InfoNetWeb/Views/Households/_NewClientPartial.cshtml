@@ -1,0 +1,36 @@
+﻿@using Infonet.Web.ViewModels.Clients
+@model HouseholdViewModel
+
+@{ 
+	bool fromPartial = Model.Clients == null || Model.Clients.Count == 0;
+	if (fromPartial) {
+		HouseholdViewModel.HouseholdClient newClient = new HouseholdViewModel.HouseholdClient();
+	    Model.Clients = new List<HouseholdViewModel.HouseholdClient> { newClient };
+	}
+	string clientCodeClass = (fromPartial) ? "" : "newClientCode";
+}
+<tr class="clientRow">
+    <td class="clientMainCells">
+        <div class="form-group typeaheadGroup">
+            @Html.HiddenFor(m => m.Clients[0].ClientID, new { @class = "clientData" })
+            @Html.HiddenFor(m => m.Clients[0].ID, new { @class = "clientData" })
+            <input class="clientData" data-val="true" data-val-number="The field CenterID must be a number." id="Clients___CenterID" name="Clients[0].CenterID" type="hidden" value="@(Session.Center().Top.Id)">
+            @Html.TextBoxFor(m => m.Clients[0].ClientCode, new { @class = "form-control clientData clientCode " + @clientCodeClass, autocomplete = "off" })
+            @Html.ValidationMessageFor(m => m.Clients[0].ClientCode, "", new { @class = "help-block" })
+            @if (Session.Center().IsSA)
+            {
+                @Html.HiddenFor(m => m.Clients[0].CaseID, new { @class = "clientData" })
+            }
+        </div>
+    </td>
+    @if (!Session.Center().IsSA)
+    {
+        <td class="clientMainCells">
+            <div class="form-group">
+                @Html.DropDownListFor(m => m.Clients[0].CaseID, new SelectList(Model.Clients[0].Cases, "CaseId", "CaseId", Model.Clients[0].CaseID), new { @class = "form-control clientData caseList" })
+            </div>
+        </td>
+    }
+    <td class="deleteButton"><button class="btn btn-danger" type="button"><span class="glyphicon glyphicon-trash"></span></button></td>
+    <td class="restoreClientRow hide" style="border:none; padding-top: 0px"><button type="button" class="btn btn-primary" aria-label="Restore Deleted Client" data-icjia-role="client.restore"><span class="glyphicon glyphicon-undo"></span></button></td>
+</tr>

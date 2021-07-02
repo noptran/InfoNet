@@ -1,0 +1,96 @@
+﻿@model ClientCase
+
+@{
+	var visitKey = Model.ClientCJProcessesById.Keys.SingleOrDefault() ?? Key.Template(null, "0");
+}
+
+<div class="panel-body">
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="form-group">
+				@Html.LabelFor(m => m.ClientCJProcessesById[visitKey].MedicalVisitId, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate if the client has visited a medical facility as it relates to the primary presenting issue." })
+				@Html.LookupFor(m => m.ClientCJProcessesById[visitKey].MedicalVisitId, "<Pick One>", true, new { @class = "form-control" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.ClientCJProcessesById[visitKey].MedicalTreatmentId, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate if the client received treatment for injuries from a medical facility or healthcare provider." })
+				@Html.LookupFor(m => m.ClientCJProcessesById[visitKey].MedicalTreatmentId, "<Pick One>", true, Html.Attributes(new { @class = "form-control" }).AndIf(Model.ClientCJProcessesById[visitKey].MedicalVisitId != 1, new { disabled = "disabled" }))
+				@Html.HiddenFor(m => m.ClientCJProcessesById[visitKey].MedicalTreatmentId, new { id = "", Value = "" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.ClientCJProcessesById[visitKey].InjuryId, new { @class = "control-label", data_toggle = "tooltip", title = "Please indicate if the client required hospital admission due to seriousness of injury(ies)." })
+				@Html.LookupFor(m => m.ClientCJProcessesById[visitKey].InjuryId, "<Pick One>", true, Html.Attributes(new { @class = "form-control" }).AndIf(Model.ClientCJProcessesById[visitKey].MedicalVisitId != 1, new { disabled = "disabled" }))
+				@Html.HiddenFor(m => m.ClientCJProcessesById[visitKey].InjuryId, new { id = "", Value = "" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.ClientCJProcessesById[visitKey].PhotosTakenId, new { @class = "control-label", data_toggle = "tooltip", title = "Please indicate if photos were taken of client's injury(ies)." })
+				@Html.LookupFor(m => m.ClientCJProcessesById[visitKey].PhotosTakenId, "<Pick One>", true, new { @class = "form-control" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.ClientCJProcessesById[visitKey].WherePhotos, new { @class = "control-label", data_toggle = "tooltip", title = "Briefly describe where photos are stored." })
+				@Html.TextBoxFor(m => m.ClientCJProcessesById[visitKey].WherePhotos, Html.Attributes(new { @class = "form-control" }).AndIf(Model.ClientCJProcessesById[visitKey].PhotosTakenId != 1, new { disabled = "disabled" }))
+				@Html.HiddenFor(m => m.ClientCJProcessesById[visitKey].WherePhotos, new { id = "", Value = "" })
+				
+				@Html.ValidationMessageFor(m => m.ClientCJProcessesById[visitKey].WherePhotos, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.ClientCJProcessesById[visitKey].MedWhereId, new { @class = "control-label", data_toggle = "tooltip", title = "Select the type of medial facility visited by client." })
+				@Html.LookupFor(m => m.ClientCJProcessesById[visitKey].MedWhereId, "<Pick One>", true, Html.Attributes(new { @class = "form-control" }).AndIf(Model.ClientCJProcessesById[visitKey].MedicalVisitId != 1, new { disabled = "disabled" }))
+				@Html.HiddenFor(m => m.ClientCJProcessesById[visitKey].MedWhereId, new { id = "", Value = "" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.ClientCJProcessesById[visitKey].EvidKitId, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate if an evidence kit was used on the client while being treated at the medical facility." })
+				@Html.LookupFor(m => m.ClientCJProcessesById[visitKey].EvidKitId, "<Pick One>", true, Html.Attributes(new { @class = "form-control" }).AndIf(Model.ClientCJProcessesById[visitKey].MedicalVisitId != 1, new { disabled = "disabled" }))
+				@Html.HiddenFor(m => m.ClientCJProcessesById[visitKey].EvidKitId, new { id = "", Value = "" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.ClientCJProcessesById[visitKey].OtherFamilyProblem, new { @class = "control-label", data_toggle = "tooltip", title = "Briefly describe any other problems important to document." })
+				@Html.TextBoxFor(m => m.ClientCJProcessesById[visitKey].OtherFamilyProblem, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.ClientCJProcessesById[visitKey].OtherFamilyProblem, "", new { @class = "help-block" })
+			</div>
+			@Html.Hidden(Html.NameFor(m => m.ClientCJProcessesById) + ".index", (visitKey.Components[0] == null ? "+" : "=") + visitKey)
+		</div>
+		<div class="col-sm-6">
+			<fieldset class="form-group">
+				<legend data-toggle="tooltip" title="Indicate forms of violence the offender/abuser committed against client. Select as many as apply.">The Offender: (Check all that apply)</legend>
+				<div class="icjia-checkbox-group">
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientConflictScale.Threw)
+						@Html.LabelFor(m => m.ClientConflictScale.Threw)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientConflictScale.Pushed)
+						@Html.LabelFor(m => m.ClientConflictScale.Pushed)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientConflictScale.Slapped)
+						@Html.LabelFor(m => m.ClientConflictScale.Slapped)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientConflictScale.Kicked)
+						@Html.LabelFor(m => m.ClientConflictScale.Kicked)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientConflictScale.Hit)
+						@Html.LabelFor(m => m.ClientConflictScale.Hit)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientConflictScale.BeatUp)
+						@Html.LabelFor(m => m.ClientConflictScale.BeatUp)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientConflictScale.Choked)
+						@Html.LabelFor(m => m.ClientConflictScale.Choked)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientConflictScale.Threatened)
+						@Html.LabelFor(m => m.ClientConflictScale.Threatened)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientConflictScale.Used)
+						@Html.LabelFor(m => m.ClientConflictScale.Used)
+					</div>
+				</div>
+			</fieldset>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,75 @@
+﻿@using Infonet.Web.ViewModels.Admin
+@model ServiceFileUploadModel
+
+@* KMS DO move viewmodel to another namespace *@
+
+@{
+	ViewBag.Title = "Import Services";
+}
+
+@using (Html.BeginForm("Upload", "ServiceFileUpload", FormMethod.Post, new { id = "main", autocomplete = "off", data_icjia_role = "dirty.form", enctype = "multipart/form-data" })) {
+	@Html.AntiForgeryToken()
+
+	<div class="form-group" style="margin-bottom: 20px">
+		@Html.LabelFor(m => m.UploadedFile, new { @class = "sr-only" })
+		<div class="input-group">
+			<span class="input-group-btn" style="z-index: 3">
+				<label class="btn btn-primary">
+					Browse... @Html.TextBoxFor(m => m.UploadedFile, new { type = "file", @class = "hide validate-even-hidden" })
+				</label>
+			</span>
+			<input id="UploadedFileText" name="UploadedFileText" type="text" placeholder="No *.mdb file selected for import." class="form-control" style="background-color: white" readonly="readonly" data-toggle="tooltip" title="Select an *.mdb file to import.  Maximum file size is 4,096 KB."/> @* KMS DO configured or checked somewhere? *@
+			<span class="input-group-btn" style="z-index: 0">
+				<button id="serviceImportSave" type="submit" class="btn btn-success" data-icjia-role="preventDuplicateRequest" accesskey="s">
+					Import&nbsp;<span class="glyphicon glyphicon-open" aria-hidden="true"></span>
+				</button>
+			</span>
+		</div>
+		@Html.ValidationMessageFor(m => m.UploadedFile, "", new { @class = "help-block" })
+	</div>
+
+	<table class="table table-hover table-striped" id="fileList">
+		<tr>
+			<th scope="col" class="col-md-6">File Name</th>
+			<th scope="col" class="col-md-4">Last Modified</th>
+			<th scope="col" class="col-md-1 text-right">Size</th>
+			<th scope="col" class="col-md-1 text-center">Action</th>
+		</tr>
+		@foreach (var each in Model.AvailableFiles) {
+			<tr>
+				<td>
+					@each.Name
+				</td>
+				<td>
+					@each.LastModified.ToLongDateString() @each.LastModified.ToLongTimeString()
+				</td>
+				<td class="text-right text-nowrap">
+					@((each.Size / 1024m).ToString("#,##0.##")) KB
+				</td>
+				<td class="text-center text-nowrap">
+					<a class="btn btn-xs btn-primary dirtyignore" href=@Url.Action("Download", "ServiceFileUpload", new { fileName = each.Name })>
+						<span class="glyphicon glyphicon-download-alt"></span>
+					</a>
+					@* KMS DO should have delete prompts? *@
+					<a class="btn btn-xs btn-danger" href=@Url.Action("Delete", "ServiceFileUpload", new { fileName = each.Name })>
+						<span class="glyphicon glyphicon-trash"></span>
+					</a>
+				</td>
+			</tr>
+		}
+	</table>
+
+	<div class="form-group" style="margin-bottom: 20px">
+		<a href=@Url.Action("Index") class="btn btn-warning">Refresh&nbsp;<span class="glyphicon glyphicon-refresh"></span></a>
+	</div>
+}
+<div class="icjia-loading" style="display: none;">Loading&#8230;</div>
+
+
+@section Scripts{
+	@Scripts.Render("~/Scripts/Views/Admin/ServiceFileUpload.js") @* KMS DO move script also *@
+}
+
+@section Styles {
+	<link rel="stylesheet" href="~/Content/ICJIA/full-screen-spinner.css" type="text/css">
+}

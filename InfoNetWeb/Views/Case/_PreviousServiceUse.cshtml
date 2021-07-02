@@ -1,0 +1,39 @@
+﻿@model ClientCase
+
+<div class="panel-body">
+	<div class="row">
+		<div class="col-sm-12 text-info"><strong>NOTE:</strong> For clients receiving shelter services only.
+			<hr style="margin-top: 10px; margin-bottom: 0px; padding-top: 10px; padding-bottom: 0px" />
+		</div>
+		<div class="col-sm-6">
+			<div class="form-group">
+				@Html.LabelFor(m => m.PreviousServiceUse.PrevShelterUseId)
+				@Html.LookupFor(m => m.PreviousServiceUse.PrevShelterUseId, "<Pick One>", new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.PreviousServiceUse.PrevShelterUseId, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(model => model.PreviousServiceUse.PrevShelterDate, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the Date (or approximate date) the client last stayed at another domestic violence shelter" })
+				<div class="input-group date" data-provide="datepicker">
+					@Html.TextBoxFor(model => model.PreviousServiceUse.PrevShelterDate, true, new { @class = "form-control", data_val_firstcontactdateyearbefore = "Date must not be greater than a year before First Contact Date." }) <!-- format duplicated from FirstContactDate property -->
+					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+				</div>
+				@Html.ValidationMessageFor(model => model.PreviousServiceUse.PrevShelterDate, "", new { @class = "help-block" })
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="form-group">
+				@Html.LabelFor(m => m.PreviousServiceUse.PrevServiceUseId)
+				@Html.LookupFor(m => m.PreviousServiceUse.PrevServiceUseId, "<Pick One>", new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.PreviousServiceUse.PrevServiceUseId, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(model => model.PreviousServiceUse.PrevServiceDate, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the date the client entered the homeless service." })
+				<div class="input-group date" data-provide="datepicker">
+					@Html.TextBoxFor(model => model.PreviousServiceUse.PrevServiceDate, true, new { @class = "form-control", data_val_firstcontactdateyearbefore = "Date must not be greater than a year before First Contact Date." })
+					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+				</div>
+				@Html.ValidationMessageFor(model => model.PreviousServiceUse.PrevServiceDate, "", new { @class = "help-block" })
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,88 @@
+﻿@model Infonet.Web.ViewModels.Clients.RelationshipSearchViewModel
+@using PagedList.Mvc;
+@{
+	ViewBag.Title = "Client Relationships";
+}
+
+@using (Html.BeginForm("Search", "Relationship", FormMethod.Get, new { id = "main" })) {
+	<div class="row">
+		<div class="form-group col-sm-8 col-md-6 ">
+			@Html.Partial("_DateRangeLabelTextboxes", Model, new ViewDataDictionary { { "rangeTitle", "Creation Date Range" }, { "rangeTooltipTitle", "" } })
+		</div>
+		<div class="form-group col-sm-4 col-md-3">
+			@Html.Label("rangePeriodChosen", "Ranges", new { @class = "control-label" })
+			<select class="form-control col-md-3" name="Range" id="rangePeriodChosen" data-icjia-role="dateRanges" data-icjia-start="#Start" data-icjia-end="#End" data-icjia-default-range="@Model.Range">
+				@Html.Partial("_DateRangeOptions1-8_13-15")
+				<option value="16">Last 2 Years</option>
+			</select>
+		</div>
+	</div>
+			<div class="row">
+				<div class="col-sm-6 col-md-4">
+					<div class="form-group">
+						@Html.LabelFor(m => m.InvestigationID, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the full or partial Relationship ID if known." })
+						@Html.TextBoxFor(m => m.InvestigationID, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.InvestigationID, "", new { @class = "help-block" })
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-5">
+					<div class="form-group">
+						@Html.LabelFor(m => m.ClientID, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the full or partial Client ID for a Client in the Relationship if known." })
+						@Html.TextBoxFor(m => m.ClientID, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.ClientID, "", new { @class = "help-block" })
+					</div>
+				</div>
+			</div>
+			@Html.Partial("_SearchResetNewButtons", Model, new ViewDataDictionary { { "NewButtonUrl", "/Relationship/FormRedirect" }, { "NewButtonText", "New Client Relationship" } })
+}
+<table class="table table-hover table-responsive">
+	<tr>
+		<th scope="col">Relationship ID</th>
+		<th scope="col">Clients</th>
+		<th scope="col">Creation Date</th>
+        <th scope="col"><span class="sr-only">Action</span></th>
+	</tr>
+	@foreach (var item in Model.InvestigationList) {
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.InvestigationID)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Clients)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.CreationDate)
+			</td>
+			<td class="text-right">
+				@Html.ActionLink("Edit", "FormRedirect", new { id = item.ID }, new { @class = "btn btn-xs btn-primary btn-outline" })
+			</td>
+		</tr>
+			}
+</table>
+
+<div class="row">
+	<div class="col-sm-12">
+		@Html.PagedListPager(Model.InvestigationList, page => Url.Action(Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)), new {
+			page, Model.Range,
+			StartDate = !Model.StartDate.HasValue ? " " : string.Format("{0:MM/dd/yyyy}", Model.StartDate),
+			EndDate = !Model.EndDate.HasValue ? " " : string.Format("{0:MM/dd/yyyy}", Model.EndDate), Model.InvestigationID, Model.ClientID, Model.PageSize
+		}),
+			Html.Snippets().PagedListRenderOptions())
+		@Html.Partial("_PagedListDropMenu", Model, new ViewDataDictionary { { "PagedListUrlAction", Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)) } })
+	</div>
+</div>
+
+
+@section scripts {
+	@Scripts.Render("~/Scripts/ICJIA/date-ranges.js")
+	<script src="~/Scripts/ICJIA/pagedlist.js"></script>
+}
+
+
+
+
+
+
+
+
+

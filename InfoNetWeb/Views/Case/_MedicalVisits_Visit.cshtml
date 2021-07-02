@@ -1,0 +1,116 @@
+﻿@model ClientCase
+
+@{
+	var visitKey = (Key)ViewData["visitKey"];
+	string visitKeyPrefix = (string)ViewData["visitKeyPrefix"];
+	bool isDeleted = "-~".Contains(visitKeyPrefix);
+	string idPrefix = ("medicalVisit_" + visitKey + "_").Replace(':', '_');
+}
+
+<tr class=@(isDeleted ? "deleted" : null) data-toggle="collapse" data-target="#@(idPrefix)Collapse">
+	<td style="padding-left: 40px">
+		<span id="@(idPrefix)MedicalVisitId"></span>
+	</td>
+	<td>
+		<span id="@(idPrefix)MedWhereId"></span>
+	</td>
+    <td>
+        <span id="@(idPrefix)MedicalTreatmentId"></span>
+    </td>
+	<td>
+		<span id="@(idPrefix)EvidKitId"></span>
+	</td>
+	<td>
+		<span id="@(idPrefix)FindingId"></span>
+	</td>
+	<td width="40px">
+		<button type="button" class="btn btn-xs btn-primary btn-icon collapsed @(isDeleted ? "hide" : null)" aria-label="Toggle Visit Editing" aria-controls="#@(idPrefix)Collapse" aria-expanded="false" data-icjia-role="medicalvisit.expand" data-toggle="collapse" data-target="#@(idPrefix)Collapse"><span class="glyphicon glyphicon-triangle-bottom rotate-90-if-collapsed"></span></button>
+		<button type="button" class="btn btn-xs btn-primary btn-icon @(isDeleted ? null : "hide")" aria-label="Restore Deleted Visit" data-icjia-role="medicalvisit.restore"><span class="glyphicon glyphicon-undo"></span></button>
+	</td>
+</tr>
+<tr>
+	<td colspan="6" style="border-top: none; padding: 0">
+		<div id="@(idPrefix)Collapse" class="collapse well" style="position: relative; margin: 0 39.3667px 19.68335px;">
+			@Html.Hidden(Html.NameFor(m => m.ClientCJProcessesById) + ".index", visitKeyPrefix + visitKey, new { data_icjia_role = "medicalvisit.index" })
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						@Html.LabelFor(m => m.ClientCJProcessesById[visitKey].MedicalVisitId, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate if the client has visited a medical facility as it relates to the primary presenting issue." })
+						@Html.LookupFor(m => m.ClientCJProcessesById[visitKey].MedicalVisitId, "<Pick One>", true, Html.Attributes(new { @class = "form-control", data_icjia_broadcast = $"#{idPrefix}MedicalVisitId" }).AndIf(Model.Provider == Provider.CAC, new { data_val_required = "The Visited Medical Facility? field is required." }))
+						@Html.ValidationMessageFor(m => m.ClientCJProcessesById[visitKey].MedicalVisitId, "", new { @class = "help-block" })
+					</div>
+					<div class="form-group">
+						<label for="@Html.IdFor(m => m.ClientCJProcessesById[visitKey].MedWhereId)" class="control-label" data-toggle="tooltip" title="Select the type of medical facility visited by the client.">Facility Type</label>
+						@Html.LookupFor(m => m.ClientCJProcessesById[visitKey].MedWhereId, "<Pick One>", true, new { @class = "form-control", data_icjia_broadcast = $"#{idPrefix}MedWhereId" })
+						@Html.ValidationMessageFor(m => m.ClientCJProcessesById[visitKey].MedWhereId, "", new { @class = "help-block" })
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.ClientCJProcessesById[visitKey].AgencyID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the medical facility visited by the client. If the medical facility is not listed, go to Administration → Lookup Lists → Agencies or Inform your supervisor." })						
+						@Html.DropDownListFor(m => m.ClientCJProcessesById[visitKey].AgencyID, new SelectList(Data.Centers.GetAgencyForCenterinCurrentAgencyId(Session.Center().ProviderId, Session.Center().Id, Model.ClientCJProcessesById[visitKey].AgencyID), "AgencyID", "AgencyName", Model.ClientCJProcessesById[visitKey] == null ? 0:Model.ClientCJProcessesById[visitKey].AgencyID), "Select an Agency", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.ClientCJProcessesById[visitKey].AgencyID, "", new { @class = "help-block" })
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.ClientCJProcessesById[visitKey].MedicalTreatmentId, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate if the client received treatment for injuries from a medical facility or health care provider." })
+						@Html.LookupFor(m => m.ClientCJProcessesById[visitKey].MedicalTreatmentId, "<Pick One>", true, Html.Attributes(new { @class = "form-control", data_icjia_broadcast = $"#{idPrefix}MedicalTreatmentId" }).AndIf(Model.ClientCJProcessesById[visitKey].MedicalVisitId != 1, new { disabled = "disabled" }))
+						@Html.HiddenFor(m => m.ClientCJProcessesById[visitKey].MedicalTreatmentId, new { id = "", Value = "" })
+						@Html.ValidationMessageFor(m => m.ClientCJProcessesById[visitKey].MedicalTreatmentId, "", new { @class = "help-block" })
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.ClientCJProcessesById[visitKey].ExamCompletedId, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate if the client completed the medical exam." })
+						@Html.LookupFor(m => m.ClientCJProcessesById[visitKey].ExamCompletedId, "<Pick One>", true, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.ClientCJProcessesById[visitKey].ExamCompletedId, "", new { @class = "help-block" })
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.ClientCJProcessesById[visitKey].BeforeAfterId, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate the timing of the VSI in relation to the medical exam." })
+						@Html.LookupFor(m => m.ClientCJProcessesById[visitKey].BeforeAfterId, "<Pick One>", true, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.ClientCJProcessesById[visitKey].BeforeAfterId, "", new { @class = "help-block" })
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						@Html.LabelFor(m => m.ClientCJProcessesById[visitKey].ExamDate, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate the date of the medical exam.", data_val_firstcontactdateyearbefore = "Cannot be older than one year prior to the First Contact Date." })
+						<div class="input-group date" data-provide="datepicker">
+							@Html.TextBoxFor(m => m.ClientCJProcessesById[visitKey].ExamDate, "{0:MM/dd/yyyy}", new { @class = "form-control", data_val_firstcontactdateyearbefore = "Cannot be older than one year prior to the First Contact Date." })
+							<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+						</div>
+						@Html.ValidationMessageFor(m => m.ClientCJProcessesById[visitKey].ExamDate, "", new { @class = "help-block" })
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.ClientCJProcessesById[visitKey].ExamTypeId, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate the type of exam conducted." })
+						@Html.LookupFor(m => m.ClientCJProcessesById[visitKey].ExamTypeId, "<Pick One>", true, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.ClientCJProcessesById[visitKey].ExamTypeId, "", new { @class = "help-block" })
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.ClientCJProcessesById[visitKey].SiteLocationId, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate the general location of the exam." })
+						@Html.LookupFor(m => m.ClientCJProcessesById[visitKey].SiteLocationId, "<Pick One>", true, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.ClientCJProcessesById[visitKey].SiteLocationId, "", new { @class = "help-block" })
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.ClientCJProcessesById[visitKey].EvidKitId, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate if an evidence kit was used on the client while being treated at the medical facility." })
+						@Html.LookupFor(m => m.ClientCJProcessesById[visitKey].EvidKitId, "<Pick One>", true, Html.Attributes(new { @class = "form-control", data_icjia_broadcast = $"#{idPrefix}EvidKitId" }).AndIf(Model.ClientCJProcessesById[visitKey].MedicalVisitId != 1, new { disabled = "disabled" }))
+						@Html.HiddenFor(m => m.ClientCJProcessesById[visitKey].EvidKitId, new { id = "", Value = "" })
+						@Html.ValidationMessageFor(m => m.ClientCJProcessesById[visitKey].EvidKitId, "", new { @class = "help-block" })
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.ClientCJProcessesById[visitKey].ColposcopeUsedId, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate if a colposcope was used on the client while being treated at the medical facility." })
+						@Html.LookupFor(m => m.ClientCJProcessesById[visitKey].ColposcopeUsedId, "<Pick One>", true, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.ClientCJProcessesById[visitKey].ColposcopeUsedId, "", new { @class = "help-block" })
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.ClientCJProcessesById[visitKey].FindingId, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate summary of findings from the exam." })
+						@Html.LookupFor(m => m.ClientCJProcessesById[visitKey].FindingId, "<Pick One>", true, new { @class = "form-control", data_icjia_broadcast = $"#{idPrefix}FindingId" })
+						@Html.ValidationMessageFor(m => m.ClientCJProcessesById[visitKey].FindingId, "", new { @class = "help-block" })
+					</div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ClientCJProcessesById[visitKey].SANETreatedId, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate whether or not the victim was treated by a certified Sexual Assault Nurse Examiner (SANE)." })
+                        @Html.LookupFor(m => m.ClientCJProcessesById[visitKey].SANETreatedId, "<Pick One>", true, new { @class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.ClientCJProcessesById[visitKey].SANETreatedId, "", new { @class = "help-block" })
+                    </div>
+				</div>
+			</div>
+			<div class="icjia-well-footer text-right">
+				<button type="button" class="btn btn-danger" aria-label="Delete This Medical Visit" data-icjia-role="medicalvisit.delete"><span class="glyphicon glyphicon-trash"></span></button>
+			</div>
+		</div>
+	</td>
+</tr>

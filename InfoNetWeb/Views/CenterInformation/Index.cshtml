@@ -1,0 +1,102 @@
+﻿@model Infonet.Web.ViewModels.Admin.CenterInfoViewModel
+
+@{ 
+	ViewBag.Title = "Center Information";
+}
+
+@using (Html.BeginForm("Index", "CenterInformation", FormMethod.Post, new { id = "main", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+	@Html.AntiForgeryToken()
+	<div class="row" style="margin-bottom: 20px">
+		<div class="col-sm-6">
+			<div class="form-group">
+				@Html.LabelFor(m => m.Center.Address, new { @class = "control-label icjia-required", data_toggle = "tooltip", title = "Enter Center mailing address. Post Office boxes should be entered for confidential locations." })
+				@Html.TextBoxFor(m => m.Center.Address, new { @class = "form-control", aria_required = "true", data_val_required = "The Address field is required." })
+				@Html.ValidationMessageFor(m => m.Center.Address, "", new { @class = "help-block" })
+			</div>
+
+			@* Zip, State, County, & City Input Fields *@
+			<div class="form-group">
+				@Html.LabelFor(m => m.Center.Zipcode, new { @class = "control-label icjia-required", data_toggle = "tooltip", title = "Enter the Center's Zip Code." })
+				@Html.TextBoxFor(m => m.Center.Zipcode, new { @class = "form-control zipcodeMain", maxlength = "5", aria_required = "true", data_val_required = "The Zip Code field is required." })
+				@Html.ValidationMessageFor(m => m.Center.Zipcode, "", new { @class = "help-block"})
+			</div>
+			<div class="form-group col-xs-4 col-sm-4 col-md-6" style="padding-left: 0px;">
+				@Html.LabelFor(m => m.Center.StateID, new { @class = "control-label icjia-required", data_toggle = "tooltip", title = "Select the State where the Center is located." })
+				@Html.DropDownListFor(m => m.Center.StateID, new SelectList(Model.States, "ID", "StateAbbreviation", Model.Center.StateID), "<Pick One>", new { @class = "form-control", aria_required = "true", data_val_required = "The State field is required." })
+                @Html.ValidationMessageFor(m => m.Center.StateID, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group col-xs-8 col-sm-8 col-md-6" style="padding-right: 0px;">
+				@Html.LabelFor(m => m.Center.CountyID, new { @class = "control-label icjia-required", data_toggle = "tooltip", title = "Select the County where the Center is located." })
+				@Html.DropDownListFor(m => m.Center.CountyID, new SelectList(Model.Counties, "ID", "CountyName", Model.Center.CountyID), "<Pick One>", new { @class = "form-control", aria_required = "true", data_val_required = "The County field is required." })
+                @Html.ValidationMessageFor(m => m.Center.CountyID, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group" style="clear: both">
+				@Html.LabelFor(m => m.Center.CityID, new { @class = "control-label icjia-required", data_toggle = "tooltip", title = "Select the City where the Center is located." })
+				@Html.DropDownListFor(m => m.Center.CityID, new SelectList(Model.Cities, "ID", "CityName", Model.Center.CityID), "<Pick One>", new { @class = "form-control", aria_required = "true", data_val_required = "The City field is required." })
+                @Html.ValidationMessageFor(m => m.Center.CityID, "", new { @class = "help-block" })
+			</div>
+
+			<div class="form-group">
+				@Html.LabelFor(m => m.Center.Email, new { @class = "control-label icjia-required", data_toggle = "tooltip", title = "Enter email address for the Center's Executive Director, Program Director, or primary contact regarding InfoNet matters." })
+				@Html.TextBoxFor(m => m.Center.Email, new { @class = "form-control", placeholder = "email@example.com", aria_required = "true", data_val_required = "The Email field is required." })
+				@Html.ValidationMessageFor(m => m.Center.Email, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.Center.Telephone, new { @class = "control-label icjia-required", data_toggle = "tooltip", title = "Enter the Phone number for the Center's main line or direct line for the person entered above. Do not enter hotline numbers unless this is the only way to contact by phone." })
+				@Html.TextBoxFor(m => m.Center.Telephone, new { @class = "form-control", placeholder = "(xxx) xxx-xxxx", maxlength = "14", aria_required = "true", data_val_required = "The Phone Number field is required." })
+				@Html.ValidationMessageFor(m => m.Center.Telephone, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.Center.Fax, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the fax number for the Center or primary contact." })
+				@Html.TextBoxFor(m => m.Center.Fax, new { @class = "form-control", placeholder = "(xxx) xxx-xxxx", maxlength = "14" })
+				@Html.ValidationMessageFor(m => m.Center.Fax, "", new { @class = "help-block" })
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="form-group">
+				@Html.LabelFor(m => m.Center.FederalEmployerID, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the Center's Federal Employer ID." })
+				@Html.TextBoxFor(m => m.Center.FederalEmployerID, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.Center.FederalEmployerID, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.Center.BoardMemberNum, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the number of Center Board Members." })
+				@Html.TextBoxFor(m => m.Center.BoardMemberNum, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.Center.BoardMemberNum, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.Center.EmpNumber, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the number of paid Staff at the Center." })
+				@Html.TextBoxFor(m => m.Center.EmpNumber, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.Center.EmpNumber, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.Center.LegisDistrict, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the Center's Legislative District." })
+				@Html.TextBoxFor(m => m.Center.LegisDistrict, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.Center.LegisDistrict, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.Center.JudicialDistrict, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the Center's Judicial District." })
+				@Html.TextBoxFor(m => m.Center.JudicialDistrict, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.Center.JudicialDistrict, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.Center.ServiceArea, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the Center's service area." })
+				@Html.TextBoxFor(m => m.Center.ServiceArea, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.Center.ServiceArea, "", new { @class = "help-block" })
+			</div>
+				<div class="form-group">
+				@Html.LabelFor(m => m.Center.Population, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the population of the Center's service area." })
+				@Html.EditorFor(m => m.Center.Population, new { htmlAttributes = new { @class = @"form-control" } })
+				@Html.ValidationMessageFor(m => m.Center.Population, "", new { @class = "help-block" })
+			</div>
+		</div>
+	</div>
+	@Html.HiddenFor(m => m.Center.CenterName)
+	<div class="form-group text-right">
+		@Html.Snippets().SaveButton(new { onclick = "$('#main').submit();", data_icjia_role = "preventDuplicateRequest", accesskey = "s" })
+		@Html.Snippets().UndoLink(Url.Action(), new { accesskey = "u" })
+	</div>
+}
+
+@section scripts{
+	<script src="~/Scripts/Views/Admin/_CenterInformation.js"></script>
+}

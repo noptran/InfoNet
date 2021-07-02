@@ -1,0 +1,25 @@
+﻿<tr class="attendeeInfo">
+    <td class="attendeeMainCells col-xs-5" style="border:0px; padding-top: 0px;">
+        <div class="form-group">
+            <input class="form-control attendeeData typeahead newClientCode" id="Attendees_0__ClientCode" name="Attendees[0].ClientCode" type="text" value="" style="position: relative; vertical-align: top;">  @*margin-top: -10px;*@
+            <span class="help-block field-validation-valid" data-valmsg-for="Attendees[0].ClientCode" data-valmsg-replace="true"></span>
+            <input class="attendeeData" data-val="true" data-val-number="The field Client Id must be a number." id="Attendees_0__ServiceDetailOfClient_ClientID" name="Attendees[0].ServiceDetailOfClient.ClientID" type="hidden" value="">
+            <input class="attendeeData" data-val="true" data-val-number="The field ServiceDetailID must be a number." id="Attendees_0__ServiceDetailOfClient_ServiceDetailID" name="Attendees[0].ServiceDetailOfClient.ServiceDetailID" type="hidden" value="">
+            <input class="attendeeData" data-val="true" data-val-number="The field ICS_ID must be a number." id="Attendees_0__ServiceDetailOfClient_ICS_ID" name="Attendees[0].ServiceDetailOfClient.ICS_ID" type="hidden" value="">
+        </div>
+    </td>
+    <td class="attendeeMainCells col-xs-4" style="border:0px; padding-top: 0px;">
+        <div class="form-group">
+            <select class="form-control attendeeData caseList" data-val="true" data-val-number="The field Case Id must be a number." id="Attendees_0__ServiceDetailOfClient_CaseID" name="Attendees[0].ServiceDetailOfClient.CaseID"></select>
+            <span class="field-validation-valid help-block" data-valmsg-for="Attendees[0].ServiceDetailOfClient.CaseID" data-valmsg-replace="true"></span>
+        </div>
+    </td>
+    <td class="attendeeMainCells col-xs-2" style="border:0px; padding-top: 0px;">
+        <div class="form-group">
+            <input class="form-control attendeeData" data-val="true" data-val-number="The field Received Hours must be a number." data-val-quarterincrement="The field Received Hours must be divisable by 0.25." id="Attendees_0__ServiceDetailOfClient_ReceivedHours" name="Attendees[0].ServiceDetailOfClient.ReceivedHours" type="number" step=0.25 value="">
+            <span class="field-validation-valid help-block" data-valmsg-for="Attendees[0].ServiceDetailOfClient.ReceivedHours" data-valmsg-replace="true"></span>
+        </div>
+    </td>
+    <td class="deleteAttendeeRow deleteButton" style="border:none; padding-top: 0px"><button class="btn btn-danger" type="button"><span class="glyphicon glyphicon-trash"></span></button></td>
+    <td class="restoreAttendeeRow hide" style="border:none; padding-top: 0px"><button type="button" class="btn btn-primary" aria-label="Restore Deleted Attendee" data-icjia-role="attendee.restore"><span class="glyphicon glyphicon-undo"></span></button></td>
+</tr>

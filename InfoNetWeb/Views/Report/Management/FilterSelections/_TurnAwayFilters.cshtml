@@ -1,0 +1,16 @@
+﻿@using Infonet.Reporting.Enumerations
+@model Infonet.Reporting.ViewModels.ManagementReportViewModel
+
+<div class="panel panel-primary icjia-error-group reportProperty @SubReportSelection.MngRptStaffServiceTurnAway.GetShortName()" style="display:none">
+	<div class="panel-heading">
+		<h2 class="panel-title">
+			<span class="icjia-panel-title-text">Filters</span>
+		</h2>
+	</div>
+	<div class="panel-body">
+		<div class="form-group">
+			@Html.LabelFor(m => m.TurnAwayReferralSelections)
+			@Html.DropDownListFor(model => model.TurnAwayReferralSelections, new MultiSelectList(Model.ReferralMadeDefault, "CodeId", "Description", Model.TurnAwayReferralSelections), new { @class = "form-control chosen", multiple = "multiple", data_icjia_ajax_url = "/Report/ReferralMade" })
+		</div>
+	</div>
+</div>

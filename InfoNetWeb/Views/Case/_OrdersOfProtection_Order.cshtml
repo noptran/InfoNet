@@ -1,0 +1,160 @@
+﻿@model ClientCase
+
+@{
+    var orderKey = (Key)ViewData["orderKey"];
+    string orderKeyPrefix = (string)ViewData["orderKeyPrefix"];
+    bool isDeleted = "-~".Contains(orderKeyPrefix);
+    string idPrefix = ("orderOfProtection_" + orderKey + "_").Replace(':', '_');
+}
+
+<tr class=@(isDeleted ? "deleted" : null) data-toggle="collapse" data-target="#@(idPrefix)Collapse">
+    <td style="padding-left: 40px">
+        <span id="@(idPrefix)StatusID"></span>
+    </td>
+    <td>
+        <span id="@(idPrefix)County"></span>
+    </td>
+    <td>
+        <span id="@(idPrefix)TypeOfOPID"></span>
+    </td>
+    <td>
+        <span id="@(idPrefix)Forum"></span>
+    </td>
+    <td>
+        <span id="@(idPrefix)DateFiled"></span>
+    </td>
+    <td class="text-center">
+        <span id="@(idPrefix)Activities"></span>
+    </td>
+    <td width="40px">
+        <button type="button" class="btn btn-xs btn-primary btn-icon collapsed @(isDeleted ? "hide" : null)" aria-label="Toggle Order Editing" aria-controls="#@(idPrefix)Collapse" aria-expanded="false" data-icjia-role="orderofprotection.expand" data-toggle="collapse" data-target="#@(idPrefix)Collapse"><span class="glyphicon glyphicon-triangle-bottom rotate-90-if-collapsed"></span></button>
+        <button type="button" class="btn btn-xs btn-primary btn-icon @(isDeleted ? null : "hide")" aria-label="Restore Deleted Order" data-icjia-role="orderofprotection.restore"><span class="glyphicon glyphicon-undo"></span></button>
+   </td>
+</tr>
+<tr>
+    <td colspan="7" style="border-top: none; padding: 0">
+        <div id="@(idPrefix)Collapse" class="collapse well" style="position: relative; margin: 0 39.3667px 19.68335px;">
+            @Html.Hidden(Html.NameFor(m => m.OrdersOfProtectionById) + ".index", orderKeyPrefix + orderKey, new { data_icjia_role = "orderofprotection.index" })
+            @Html.HiddenFor(m => m.OrdersOfProtectionById[orderKey].LocationID, new { Value = orderKeyPrefix == "+" ? Session.Center().Id : Model.OrdersOfProtectionById[orderKey].LocationID })		
+			<div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.OrdersOfProtectionById[orderKey].StatusID, new { @class = "control-label icjia-required", data_toggle = "tooltip", title = "Select whether the Originally Sought Order was Granted, Denied, or Pending. If the outcome is Pending, remember to update this status accordingly." })
+                        @Html.LookupFor(m => m.OrdersOfProtectionById[orderKey].StatusID, "<Pick One>", true, new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "StatusID", data_val_required = "The Originally Sought Order field is required." })
+                        @Html.ValidationMessageFor(m => m.OrdersOfProtectionById[orderKey].StatusID, "", new { @class = "help-block" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.OrdersOfProtectionById[orderKey].CountyID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the county in which the OP was filed. If OP was filed out of state, select Out of Illinois. If this information is not known, select Unknown." })
+                        @Html.DropDownListFor(m => m.OrdersOfProtectionById[orderKey].CountyID, new SelectList(Data.Usps.IllinoisCountiesAndOutOfIllinois, "ID", "CountyName", Model.OrdersOfProtectionById[orderKey].CountyID), "<Pick One>", new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "County", data_val_required = "The County field is required." })
+                        @Html.ValidationMessageFor(m => m.OrdersOfProtectionById[orderKey].CountyID, "", new { @class = "help-block" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.OrdersOfProtectionById[orderKey].TypeOfOPID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the original type of OP filed -  Emergency, Plenary, or Interim. If this information is not known, select Unknown."})
+                        @Html.LookupFor(m => m.OrdersOfProtectionById[orderKey].TypeOfOPID, "<Pick One>", true, new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "TypeOfOPID", data_val_required = "The Type field is required." })
+                        @Html.ValidationMessageFor(m => m.OrdersOfProtectionById[orderKey].TypeOfOPID, "", new { @class = "help-block" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.OrdersOfProtectionById[orderKey].DateFiled, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the Date the OP was Filed." })
+                        <div class="input-group date" data-provide="datepicker">
+                            @Html.TextBoxFor(m => m.OrdersOfProtectionById[orderKey].DateFiled, "{0:MM/dd/yyyy}", new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "DateFiled", data_val_required = "The Date Filed field is required." })
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                        @Html.ValidationMessageFor(m => m.OrdersOfProtectionById[orderKey].DateFiled, "", new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.OrdersOfProtectionById[orderKey].ForumID, new { @class = "control-label", data_toggle = "tooltip", title = "Select whether the OP was filed in criminal or civil court. If this information is not known, select Unknown." })
+                        @Html.LookupFor(m => m.OrdersOfProtectionById[orderKey].ForumID, "<Pick One>", true, new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "Forum" })
+                        @Html.ValidationMessageFor(m => m.OrdersOfProtectionById[orderKey].ForumID, "", new { @class = "help-block" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.OrdersOfProtectionById[orderKey].DateIssued, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the date the OP was issued." })
+                        <div class="input-group date" data-provide="datepicker">
+                            @Html.TextBoxFor(m => m.OrdersOfProtectionById[orderKey].DateIssued, "{0:MM/dd/yyyy}", new { @class = "form-control" })
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                        @Html.ValidationMessageFor(m => m.OrdersOfProtectionById[orderKey].DateIssued, "", new { @class = "help-block" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.OrdersOfProtectionById[orderKey].DateVacated, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the Date the OP was vacated. This field should only be completed if the OP was vacated prior to the expiration date." })
+                        <div class="input-group date" data-provide="datepicker">
+                            @Html.TextBoxFor(m => m.OrdersOfProtectionById[orderKey].DateVacated, "{0:MM/dd/yyyy}", new { @class = "form-control" })
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                        @Html.ValidationMessageFor(m => m.OrdersOfProtectionById[orderKey].DateVacated, "", new { @class = "help-block" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.OrdersOfProtectionById[orderKey].OriginalExpirationDate, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the order’s Original Expiration Date. Do not change this date if the OP is extended or upgraded. Upgrades, extensions, and modifications must be entered by adding an Activity to this OP." })
+                        <div class="input-group date" data-provide="datepicker">
+                            @Html.TextBoxFor(m => m.OrdersOfProtectionById[orderKey].OriginalExpirationDate, "{0:MM/dd/yyyy}", new { @class = "form-control" })
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                        @Html.ValidationMessageFor(m => m.OrdersOfProtectionById[orderKey].OriginalExpirationDate, "", new { @class = "help-block" })
+                        <div class="text-info">
+                            For orders of protection issued for an indefinite period (no expiration date), enter 9/9/9999
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-12">
+                    @Html.LabelFor(m => m.OrdersOfProtectionById[orderKey].Comments, new { @class = "control-label", data_toggle = "tooltip", title = "Enter any information regarding the OP that is important to track, e.g. remedies, special conditions, children or client’s place of employment excluded." })
+                    @Html.TextAreaFor(m => m.OrdersOfProtectionById[orderKey].Comments, new { @class = "form-control", style = "resize: vertical;" })
+                    <div class="text-info">&nbsp;<span id="@(idPrefix)charRemaining">300</span> characters remaining</div>
+					@Html.ValidationMessageFor(m => m.OrdersOfProtectionById[orderKey].Comments, "", new { @class = "help-block" })
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <table id="tbl_ordersOfProtection_activities" class="table table-responsive table-condensed table-borderless mb-0">
+					<caption class="text-center text-uppercase">Protection Activities</caption>
+					<colgroup>
+						<col />
+						<col style="width: 30%" />
+						<col style="width: 30%" />
+						<col style="width: 28.6667px" />
+					</colgroup>
+					<thead>
+                        @{ var SAMPLE_ORDER_OF_PROTECTION_ACTIVITY = new OpActivity(); }
+                        <tr class="icjia-panel-subheader">
+                            <th scope="col" class="icjia-required" style="padding-left: 10px" data-toggle="tooltip" title="Select the activity that occurred with this OP.">@Html.DisplayNameFor(m => SAMPLE_ORDER_OF_PROTECTION_ACTIVITY.OpActivityCodeID)</th>
+                            <th scope="col" class="icjia-required" data-toggle="tooltip" title="Enter the date this activity occurred.">@Html.DisplayNameFor(m => SAMPLE_ORDER_OF_PROTECTION_ACTIVITY.OpActivityDate)</th>
+                            <th scope="col" data-toggle="tooltip" title="If the activity involved a change in the OP’s expiration date, enter the new date here.">@Html.DisplayNameFor(m => SAMPLE_ORDER_OF_PROTECTION_ACTIVITY.NewExpirationDate)</th>
+                            <th scope="col"><span class="sr-only">Action</span></th>
+                        </tr>
+						<tr aria-hidden="true"> @* for spacing only *@
+							<th scope="col" colspan="4" class="pb-0"></th>
+						</tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var orderOfProtectionActivities = Model.OrdersOfProtectionById[orderKey].OrderOfProtectionActivitiesById;
+                        }
+                        @foreach (var each in orderOfProtectionActivities.KeysFor(orderOfProtectionActivities.Values.Concat(orderOfProtectionActivities.Values.Restorable).OrderByDescending(c => c.OpActivityID.HasValue).ThenBy(c => c.OpActivityID).ThenBy(c => orderOfProtectionActivities.KeyFor(c).Occurrence))) {
+                            bool isNew = each.Components[0] == null;
+                            string prefix = orderOfProtectionActivities.ContainsKey(each) ? (isNew ? "+" : "=") : (isNew ? "~" : "-");
+                            @Html.Partial("_OrdersOfProtection_Order_Activity", Model, ViewData.CopyWith(new { orderActivityKey = each, orderActivityKeyPrefix = prefix }))
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" class="text-right">
+                                <button type="button" class="btn btn-xs btn-primary btn-icon" aria-label="Add New Activity"
+                                        data-icjia-role="orderofprotection.activity.add" data-icjia-mustache-next='{ "key": @Model.OrdersOfProtectionById[orderKey].OrderOfProtectionActivitiesById.NextOccurrenceFor(null) }'>
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                    @using (var mustache = Html.BeginMustache(orderKey.IsTemplate ? "--q-!protect outer-p--script" : "script", "--qq-", "-pp--")) {
+                                        @Html.Partial("_OrdersOfProtection_Order_Activity", Model, ViewData.CopyWith(new { orderActivityKey = Key.Template(null, mustache.Tag("key")), orderActivityKeyPrefix = "+" }))
+                                    }
+                                </button>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+			<div class="icjia-well-footer text-right">
+				<button type="button" class="btn btn-danger" aria-label="Delete Order Of Protection" data-icjia-role="orderofprotection.delete"><span class="glyphicon glyphicon-trash"></span></button>
+			</div>
+            <input id="@Html.IdFor(m => m.OrdersOfProtectionById[orderKey].OrderOfProtectionActivities)" aria-hidden="true" hidden="hidden" data-icjia-broadcast="#@(idPrefix)Activities" value="@Model.OrdersOfProtectionById[orderKey].OrderOfProtectionActivities.Count" />
+        </div>
+    </td>
+</tr>

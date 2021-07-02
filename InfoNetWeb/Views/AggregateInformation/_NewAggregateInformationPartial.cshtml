@@ -1,0 +1,34 @@
+﻿@model Infonet.Web.ViewModels.Clients.AggregateInformationViewModel
+<tr class="newAggregateRow">
+	<td width="160px" style="border:none; min-width:160px; word-wrap: break-word;">
+		@Html.HiddenFor(m => m.displayForPaging[0].ID, new { @class = "form-control rowData newAggregateRowData" })
+		<div class="form-group">
+			<div class="input-group date" data-provide="datepicker" data-date-end-date=@DateTime.Today.ToShortDateString()>
+				@Html.TextBoxFor(m => m.displayForPaging[0].HMSDate, true, new { @class = "form-control rowData newAggregateRowData", data_val="true" })
+				<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+			</div>
+			@Html.ValidationMessageFor(m => m.displayForPaging[0].HMSDate, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td style="min-width:260px;">
+		<div class="form-group">
+			@Html.LookupFor(m => m.displayForPaging[0].TypeID, Lookups.HivMentalSubstance[Provider.DV], "<Pick One>", new { @class = "form-control rowData newAggregateRowData", disabled = "disabled" })
+			@Html.ValidationMessageFor(m => m.displayForPaging[0].TypeID, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td width="120px" style="min-width:120px;">
+		<div class="form-group">
+			@Html.TextBoxFor(m => m.displayForPaging[0].AdultsNo, new { @class = "form-control rowData newAggregateRowData", type="number", disabled = "disabled" })
+			@Html.ValidationMessageFor(m => m.displayForPaging[0].AdultsNo, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td width="120px" style="min-width:120px;">
+		<div class="form-group">
+			@Html.TextBoxFor(m => m.displayForPaging[0].ChildrenNo, new { @class = "form-control rowData newAggregateRowData", type = "number", disabled = "disabled" })
+			@Html.ValidationMessageFor(m => m.displayForPaging[0].ChildrenNo, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td width="56px" class="delete" style="border:none; padding-top: 0px">
+		<button class="btn btn-danger delete" type="button"><span class="glyphicon glyphicon-trash"></span></button>
+	</td>
+</tr>

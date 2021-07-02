@@ -1,0 +1,239 @@
+﻿@model ClientCase
+
+<div class="panel-body">
+	<p class="text-info">
+		These are general level needs. Check all needs the client has at or near the time of intake.
+	</p>
+	<hr style="margin: 10px 0 30px 0"/>
+	<div class="icjia-checkbox-group label-weight-normal pl-0">
+		<div class="row" style="padding-right: 25px;">
+			<div class="row">
+				<div class="col-xs-4 col-sm-4 col-md-2 col-lg-3">
+				</div>
+				<div class="col-xs-5 col-sm-5 col-md-3 col-lg-2 text-right">
+					<strong>
+						Service Needs<br /> at Intake
+					</strong>
+				</div>
+				<div class="col-xs-3 col-sm-3 col-md-1 col-lg-1 text-left">
+					<strong>
+						Services<br /> Received
+					</strong>
+				</div>
+				<div class="hidden-xs hidden-sm col-md-2 col-lg-3">
+				</div>
+				<div class="hidden-xs hidden-sm col-md-3 col-lg-2 text-right">
+					<strong>
+						Service Needs<br /> at Intake
+					</strong>
+				</div>
+				<div class="hidden-xs hidden-sm col-md-1 col-lg-1 text-left">
+					<strong>
+						Services<br /> Received
+					</strong>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+						<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+							@Html.LabelFor(model => model.ServiceNeeds.Shelter)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left">
+							@Html.CheckBoxFor(model => model.ServiceNeeds.Shelter)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 text-left">
+							@Html.CheckBoxFor(model => model.ServiceGot.Shelter)
+						</div>
+						<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+							@Html.LabelFor(model => model.ServiceNeeds.Housing)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left">
+							@Html.CheckBoxFor(model => model.ServiceNeeds.Housing)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 text-left">
+							@Html.CheckBoxFor(model => model.ServiceGot.Housing)
+						</div>
+						<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+							@Html.LabelFor(model => model.ServiceNeeds.Financial)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left">
+							@Html.CheckBoxFor(model => model.ServiceNeeds.Financial)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 text-left">
+							@Html.CheckBoxFor(model => model.ServiceGot.Financial)
+						</div>
+						<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+							@Html.LabelFor(model => model.ServiceNeeds.Referral)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left">
+							@Html.CheckBoxFor(model => model.ServiceNeeds.Referral)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 text-left">
+							@Html.CheckBoxFor(model => model.ServiceGot.Referral)
+						</div>
+						<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+							@Html.LabelFor(model => model.ServiceNeeds.LockUp)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left ">
+							@Html.CheckBoxFor(model => model.ServiceNeeds.LockUp)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 text-left">
+							@Html.CheckBoxFor(model => model.ServiceGot.LockUp)
+						</div>
+						<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+							@Html.LabelFor(model => model.ServiceNeeds.Emotional)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left">
+							@Html.CheckBoxFor(model => model.ServiceNeeds.Emotional)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 text-left">
+							@Html.CheckBoxFor(model => model.ServiceGot.Emotional)
+						</div>
+						<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+							@Html.LabelFor(model => model.ServiceNeeds.IndividualSupportChild)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left">
+							@Html.CheckBoxFor(model => model.ServiceNeeds.IndividualSupportChild)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 text-left">
+							@Html.CheckBoxFor(model => model.ServiceGot.IndividualSupportChild)
+						</div>
+						<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+							@Html.LabelFor(model => model.ServiceNeeds.SchoolAdvocacyChild)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left">
+							@Html.CheckBoxFor(model => model.ServiceNeeds.SchoolAdvocacyChild)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 text-left">
+							@Html.CheckBoxFor(model => model.ServiceGot.SchoolAdvocacyChild)
+						</div>
+						<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+							@Html.LabelFor(model => model.ServiceNeeds.GroupActivity)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left">
+							@Html.CheckBoxFor(model => model.ServiceNeeds.GroupActivity)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 text-left">
+							@Html.CheckBoxFor(model => model.ServiceGot.GroupActivity)
+						</div>
+						<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+							@Html.LabelFor(model => model.ServiceNeeds.Education)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left">
+							@Html.CheckBoxFor(model => model.ServiceNeeds.Education)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 text-left">
+							@Html.CheckBoxFor(model => model.ServiceGot.Education)
+						</div>
+						<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+							@Html.LabelFor(model => model.ServiceNeeds.Employment)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left">
+							@Html.CheckBoxFor(model => model.ServiceNeeds.Employment)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 text-left">
+							@Html.CheckBoxFor(model => model.ServiceGot.Employment)
+						</div>
+				</div>
+				<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+						<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+							@Html.LabelFor(model => model.ServiceNeeds.ChildCare)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left">
+							@Html.CheckBoxFor(model => model.ServiceNeeds.ChildCare)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 text-left">
+							@Html.CheckBoxFor(model => model.ServiceGot.ChildCare)
+						</div>
+						<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+							@Html.LabelFor(model => model.ServiceNeeds.Legal)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left">
+							@Html.CheckBoxFor(model => model.ServiceNeeds.Legal)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 text-left">
+							@Html.CheckBoxFor(model => model.ServiceGot.Legal)
+						</div>
+						<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+							@Html.LabelFor(model => model.ServiceNeeds.LegalAdvocacy)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left">
+							@Html.CheckBoxFor(model => model.ServiceNeeds.LegalAdvocacy)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1">
+							@Html.CheckBoxFor(model => model.ServiceGot.LegalAdvocacy)
+						</div>
+						<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+							@Html.LabelFor(model => model.ServiceNeeds.Medical)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left">
+							@Html.CheckBoxFor(model => model.ServiceNeeds.Medical)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 text-left">
+							@Html.CheckBoxFor(model => model.ServiceGot.Medical)
+						</div>
+						<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+							@Html.LabelFor(model => model.ServiceNeeds.MedicalAdvocacy)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left">
+							@Html.CheckBoxFor(model => model.ServiceNeeds.MedicalAdvocacy)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 text-left">
+							@Html.CheckBoxFor(model => model.ServiceGot.MedicalAdvocacy)
+						</div>
+						<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+							@Html.LabelFor(model => model.ServiceNeeds.CrisisIntervention)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left">
+							@Html.CheckBoxFor(model => model.ServiceNeeds.CrisisIntervention)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 text-left">
+							@Html.CheckBoxFor(model => model.ServiceGot.CrisisIntervention)
+						</div>
+						<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+							@Html.LabelFor(model => model.ServiceNeeds.Transportation)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left">
+							@Html.CheckBoxFor(model => model.ServiceNeeds.Transportation)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 text-left">
+							@Html.CheckBoxFor(model => model.ServiceGot.Transportation)
+						</div>
+						<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+							@Html.LabelFor(model => model.ServiceNeeds.ParentChildSupport)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left">
+							@Html.CheckBoxFor(model => model.ServiceNeeds.ParentChildSupport)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 text-left">
+							@Html.CheckBoxFor(model => model.ServiceGot.ParentChildSupport)
+						</div>
+						<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+							@Html.LabelFor(model => model.ServiceNeeds.CommunityAdvocacyChild)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left">
+							@Html.CheckBoxFor(model => model.ServiceNeeds.CommunityAdvocacyChild)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 text-left">
+							@Html.CheckBoxFor(model => model.ServiceGot.CommunityAdvocacyChild)
+						</div>
+						<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+							@Html.LabelFor(model => model.ServiceNeeds.Therapy)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left">
+							@Html.CheckBoxFor(model => model.ServiceNeeds.Therapy)
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 text-left">
+							@Html.CheckBoxFor(model => model.ServiceGot.Therapy)
+						</div>
+						<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1">
+						</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

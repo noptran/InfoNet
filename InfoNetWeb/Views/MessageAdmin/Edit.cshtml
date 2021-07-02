@@ -1,0 +1,134 @@
+@model SystemMessage
+@{
+	ViewBag.Title = Model.Id == null ? "New Message" : "Edit Message";
+}
+
+@using (Html.BeginForm("Edit", "MessageAdmin", FormMethod.Post, new { id = "main", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+	@Html.AntiForgeryToken()
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="form-group">
+				@Html.LabelFor(m => m.ModeId, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(m => m.ModeId, Session.Center().Provider) })
+				@Html.LookupFor(m => m.ModeId, Session.Center().Provider, null, true, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.ModeId, "", new { @class = "help-block" })
+			</div>
+			<fieldset class="form-group">
+				<legend data-toggle="tooltip" title="@Html.HelpFor(m => m.IsHot, Session.Center().Provider)">Priority</legend>
+				<div class="icjia-checkbox-group">
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.IsHot)
+						@Html.LabelFor(m => m.IsHot, new { @class = "control-label" })
+					</div>
+					@Html.ValidationMessageFor(m => m.IsHot, "", new { @class = "help-block" })
+				</div>
+			</fieldset>
+			<fieldset class="form-group">
+				<legend data-toggle="tooltip" title="@Html.HelpFor(m => m.ProviderIds, Session.Center().Provider)">@Html.DisplayNameFor(m => m.ProviderIds)</legend>
+				<div class="icjia-checkbox-group">
+					@foreach (var each in ProviderEnum.All) {
+						<div class="checkbox">
+							<label class="control-label">
+								<input type="checkbox" name="ProviderIds" value="@each.ToInt32()" checked="@(Model.ProviderIds == null || Model.ProviderIds.Contains(each.ToInt32()))"/>
+								@each.GetDisplayName()
+							</label>
+						</div>
+					}
+					@Html.ValidationMessageFor(m => m.ProviderIds, "", new { @class = "help-block" })
+				</div>
+			</fieldset>
+			<div class="form-group">
+				@Html.LabelFor(model => model.PostedDate, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(m => m.PostedDate, Session.Center().Provider) })
+				@Html.TextBoxFor(m => m.PostedDate, new { @class = "form-control", placeholder = "mm/dd/yyyy [hh:mm:ss AM/PM]" })
+				@Html.ValidationMessageFor(model => model.PostedDate, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(model => model.ExpirationDate, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(m => m.ExpirationDate, Session.Center().Provider) })
+				@Html.TextBoxFor(m => m.ExpirationDate, new { @class = "form-control", placeholder = "mm/dd/yyyy [hh:mm:ss AM/PM]" })
+				@Html.ValidationMessageFor(model => model.ExpirationDate, "", new { @class = "help-block" })
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="form-group">
+				@Html.LabelFor(m => m.Title, new { @class = "control-label icjia-required" })
+				@Html.TextBoxFor(m => m.Title, new { @class = "form-control", data_val_required = "The Title field is required." })
+				@Html.ValidationMessageFor(m => m.Title, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.Message, new { @class = "control-label" })
+				@Html.TextAreaFor(m => m.Message, new { @class = "form-control", style = "resize: vertical" })
+				<div class="text-info"><span id="messageCharsRemaining"></span> characters remaining</div>
+				@Html.ValidationMessageFor(m => m.Message, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.Details, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(m => m.Details, Session.Center().Provider) })
+				@Html.TextAreaFor(m => m.Details, Html.Attributes(new { @class = "form-control", style = "resize: vertical" }).AndIf(Model.ModeId != 2, new { disabled = "disabled" }))
+				<div class="text-info"><span id="detailsCharsRemaining"></span> characters remaining</div>
+				@Html.ValidationMessageFor(m => m.Details, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.LinkUrl, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(m => m.LinkUrl, Session.Center().Provider) })
+				@Html.TextBoxFor(m => m.LinkUrl, Html.Attributes(new { @class = "form-control", placeholder = "e.g. http://www.icjia.state.il.us/systems/infonet" }).AndIf(Model.ModeId != 1, new { disabled = "disabled" }))
+				@Html.ValidationMessageFor(model => model.LinkUrl, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.LinkText, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(m => m.LinkText, Session.Center().Provider) })
+				@Html.TextBoxFor(m => m.LinkText, Html.Attributes(new { @class = "form-control", placeholder = "e.g. Download, Learn More, Let's Do It!" }).AndIf(Model.ModeId != 1 || string.IsNullOrEmpty(Model.LinkUrl), new { disabled = "disabled" }))
+				@Html.ValidationMessageFor(m => m.LinkText, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.IsDownload, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(m => m.IsDownload, Session.Center().Provider) })
+				&nbsp;
+				@Html.CheckBoxFor(m => m.IsDownload, Model.ModeId != 1 || string.IsNullOrEmpty(Model.LinkUrl) ? new { disabled = "disabled" } : null)
+				@Html.ValidationMessageFor(m => m.IsDownload, "", new { @class = "help-block" })
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		@Html.Snippets().SaveButton(new { id = "saveMain", data_icjia_role = "preventDuplicateRequest", accesskey = "s" })
+		@Html.Snippets().UndoLink(Url.Action(), new { accesskey = "u" })
+	</div>
+	<div class="form-group">
+		<a href="@Url.Action("Index")"><span class='glyphicon glyphicon-chevron-left' aria-hidden='true'></span><span class='glyphicon glyphicon-chevron-left' style='margin-left:-6px' aria-hidden='true'></span>Back to Manage Messages</a>
+	</div>
+}
+
+@section Scripts {
+	@* KMS DO add and change placeholder for Link Text to match default verbiage? *@
+	<script type="text/javascript">
+		$(document).on('click', '#saveMain', function() {
+			$("#main").submit();
+		});
+		$(document).on('change keyup', '#ModeId,#LinkUrl', function() {
+			var modeId = $('#ModeId').val();
+			var $linkUrl = $('#LinkUrl');
+			var linkUrl = $linkUrl.val();
+
+			$('#Details').prop('disabled', modeId != 2);
+			$linkUrl.prop('disabled', modeId != 1);
+			$('#LinkText').prop('disabled', modeId != 1 || linkUrl == '');
+			$('#IsDownload').prop('disabled', modeId != 1 || linkUrl == '');
+		});
+
+		function updateCharsRemaining(charsRemainingSpanSelector$, length) {
+			var remaining = 500 - length;
+			var $charsRemaining = $(charsRemainingSpanSelector$);
+			if (remaining < 0) {
+				$charsRemaining.parent().removeClass('text-info').addClass('text-danger');
+			} else {
+				$charsRemaining.parent().removeClass('text-danger').addClass('text-info');
+			}
+			$charsRemaining.text(remaining);
+		}
+
+		$(function() {
+			updateCharsRemaining('#messageCharsRemaining', $('#Message').val().length);
+			updateCharsRemaining('#detailsCharsRemaining', $('#Details').val().length);
+			$('#Message').on('change keyup paste', function () {
+				updateCharsRemaining('#messageCharsRemaining', $(this).val().length);
+			});
+			$('#Details').on('change keyup paste', function () {
+				updateCharsRemaining('#detailsCharsRemaining', $(this).val().length);
+			});
+		});
+	</script>
+}

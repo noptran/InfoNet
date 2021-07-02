@@ -1,0 +1,44 @@
+﻿@model ClientCase
+
+@{ 
+	string firstContactDate = Model.FirstContactDate.Value.ToString("MM/dd/yyyy");
+}
+<div class="table-responsive">
+	<table class="table">
+		<thead class="icjia-panel-subheader">
+			@{ var SAMPLE_MEDICAL_VISIT = new ClientCJProcess(); }
+			<tr>
+				<th scope="col" style="padding-left: 40px">Medical Visit</th>
+				<th scope="col">Facility Type</th>
+				<th scope="col">Treated For Injuries</th>
+				<th scope="col">@Html.DisplayNameFor(m => SAMPLE_MEDICAL_VISIT.EvidKitId)</th>
+				<th scope="col">@Html.DisplayNameFor(m => SAMPLE_MEDICAL_VISIT.FindingId)</th>
+                <th scope="col"><span class="sr-only">Action</span></th>
+			</tr>
+		</thead>
+		<tbody>
+			@{
+				var medicalVisits = Model.ClientCJProcessesById;
+			}
+			@foreach (var each in medicalVisits.KeysFor(medicalVisits.Values.Concat(medicalVisits.Values.Restorable).OrderByDescending(c => c.Med_ID.HasValue).ThenBy(c => c.Med_ID).ThenBy(c => medicalVisits.KeyFor(c).Occurrence))) {
+				bool isNew = each.Components[0] == null;
+				string prefix = medicalVisits.ContainsKey(each) ? (isNew ? "+" : "=") : (isNew ? "~" : "-");
+				@Html.Partial("_MedicalVisits_Visit", Model, ViewData.CopyWith(new { visitKey = each, visitKeyPrefix = prefix }))
+			}
+			@Html.Hidden("FirstContactDate", firstContactDate)
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="6" class="text-right">
+					<button type="button" class="btn btn-xs btn-primary btn-icon" aria-label="Add New Medical Visit"
+							data-icjia-role="medicalvisit.add" data-icjia-mustache-next='{ "key": @Model.ClientCJProcessesById.NextOccurrenceFor(null) }'>
+						<span class="glyphicon glyphicon-plus"></span>
+						@using (var mustache = Html.BeginMustache("script", "--q-", "-p--")) {
+							@Html.Partial("_MedicalVisits_Visit", Model, ViewData.CopyWith(new { visitKey = Key.Template(null, mustache.Tag("key")), visitKeyPrefix = "+" }))
+						}
+					</button>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+</div>

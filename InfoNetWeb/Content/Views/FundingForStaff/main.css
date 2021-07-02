@@ -1,0 +1,50 @@
+﻿#assignServicesModal .modal-dialog, #editStaffListModal .modal-dialog, #multiselectSetColors .modal-dialog, #multiFundAssignmentModal .modal-dialog, #assignFundingSourceModal .modal-dialog {
+	margin: 10px auto;
+}
+
+.icjia-ffs-scrollable > table > thead > tr > th:first-child, .icjia-ffs-scrollable > table > thead > tr > th:first-child,
+.icjia-ffs-scrollable > table > tbody > tr > td:first-child {
+	vertical-align: middle;
+	padding-right: 0px;
+	width: 30px;
+}
+
+.icjia-ffs-scrollable, .icjia-ffs-scrollable > table > thead > tr > th:not(:first-child),
+.icjia-ffs-scrollable > table > tbody > tr > td:not(:first-child) {
+	vertical-align: middle;
+	padding: 0;
+	margin: 0;
+}
+
+.icjia-ffs-scrollable > table > tbody > tr > td:last-child {
+	width: 65px;
+}
+
+.icjia-ffs-scrollable > table > thead > tr > th:last-child {
+	width: 82px; /*Plus 17px = width of scrollbar*/
+}
+
+.icjia-ffs-scrollable label, .icjia-ffs-scrollable > table {
+	margin: 0;
+}
+
+.icjia-ffs-scrollable > table > tfoot {
+	border-top: solid 3px rgb(221,221,221);
+}
+
+.modal-body {
+	padding-top: 5px;
+}
+
+.modal-header {
+	padding-bottom: 0px;
+}
+
+.ffs-title {
+	margin-bottom: 10px;
+}
+
+#addFundingIssueDateModal .modal-footer {
+	margin-top: -20px;
+}
+

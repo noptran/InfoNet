@@ -1,0 +1,536 @@
+﻿@model ClientCase
+
+<div class="panel-body">
+	<p class="text-info form-group">
+		Select which, if any, behaviors were observed in client (or disclosed by client’s parent) at intake. Update later with behaviors observed of the client at outtake. If client displays none of these behaviors, leave boxes unchecked. If client also displays no behaviors from all of the categories (Emotional, Physical, Social, or Educational), select None observed (intake or outtake).
+	</p>
+	<div class="form-group mb-0">
+		<span style="padding-right: 20px">None observed:</span>
+		@Html.CheckBoxFor(model => model.ChildBehavioralIssues.NoneObserved)
+		@Html.LabelFor(model => model.ChildBehavioralIssues.NoneObserved, new { style = "padding-right: 20px" })
+		@Html.CheckBoxFor(model => model.ChildBehavioralIssues.NoneObservedAtOuttake)
+		@Html.LabelFor(model => model.ChildBehavioralIssues.NoneObservedAtOuttake, new { style = "padding-right: 20px" })
+	</div>
+	<hr style="margin-top: 5px; margin-bottom: 10px" />
+	<fieldset class="form-group mb-0">
+		<legend style="margin-bottom: -5px">Emotional</legend>
+		<div class="icjia-checkbox-group label-weight-normal">
+			<div class="row">
+				<div class="col-xs-4 col-sm-4 col-md-2 col-lg-3">
+				</div>
+				<div class="col-xs-6 col-sm-6 col-md-3 col-lg-2 text-right">
+					<strong>
+						<span>
+							In
+						</span>
+					</strong>
+				</div>
+				<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 text-left">
+					<strong>
+						<span>
+							Out
+						</span>
+					</strong>
+				</div>
+				<div class="hidden-xs hidden-sm col-xs-4 col-sm-4 col-md-2 col-lg-3">
+				</div>
+				<div class="hidden-xs hidden-sm col-md-3 col-lg-2 text-right">
+					<strong>
+						<span>
+							In
+						</span>
+					</strong>
+				</div>
+				<div class="hidden-xs hidden-sm col-md-1 col-lg-1 text-left">
+					<strong>
+						<span>
+							Out
+						</span>
+					</strong>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="row">
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.Afraid)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.Afraid, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.AfraidAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.CantLeave)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.CantLeave, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.CantLeaveAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.Accepts)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.Accepts, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.AcceptsAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.Cries)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.Cries, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.CriesAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.Mood)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.Mood, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.MoodAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="row">
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.NoInteract)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.NoInteract, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.NoInteractAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.Nightmares)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.Nightmares, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.NightmaresAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.HurtsSelf)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.HurtsSelf, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.HurtsSelfAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.Suicidal)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.Suicidal, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.SuicidalAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+	<hr style="margin-top: 5px; margin-bottom: 10px" />
+	<fieldset class="form-group mb-0">
+		<legend style="margin-bottom: -5px">Physical</legend>
+		<div class="icjia-checkbox-group label-weight-normal">
+			<div class="row">
+				<div class="col-xs-4 col-sm-4 col-md-2 col-lg-3">
+				</div>
+				<div class="col-xs-6 col-sm-6 col-md-3 col-lg-2 text-right">
+					<strong>
+						<span>
+							In
+						</span>
+					</strong>
+				</div>
+				<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 text-left">
+					<strong>
+						<span>
+							Out
+						</span>
+					</strong>
+				</div>
+				<div class="hidden-xs hidden-sm col-xs-4 col-sm-4 col-md-2 col-lg-3">
+				</div>
+				<div class="hidden-xs hidden-sm col-md-3 col-lg-2 text-right">
+					<strong>
+						<span>In</span>
+					</strong>
+				</div>
+				<div class="hidden-xs hidden-sm col-md-1 col-lg-1 text-left">
+					<strong>
+						<span>Out</span>
+					</strong>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="row">
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.BedWet)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.BedWet, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.BedWetAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.Illnesses)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.Illnesses, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.IllnessesAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.Weight)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.Weight, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.WeightAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.MoreActive)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.MoreActive, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.MoreActiveAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="row">
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.SpecialClassActive)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.SpecialClassActive, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.SpecialClassActiveAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.AbuseDrugs)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.AbuseDrugs, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.AbuseDrugsAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.AbuseAlcohol)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.AbuseAlcohol, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.AbuseAlcoholAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+	<hr style="margin-top: 5px; margin-bottom: 10px" />
+	<fieldset class="form-group mb-0">
+		<legend style="margin-bottom: -5px">Social</legend>
+		<div class="icjia-checkbox-group label-weight-normal">
+			<div class="row">
+				<div class="col-xs-4 col-sm-4 col-md-2 col-lg-3">
+				</div>
+				<div class="col-xs-6 col-sm-6 col-md-3 col-lg-2 text-right">
+					<strong>
+						<span>In</span>
+					</strong>
+				</div>
+				<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 text-left">
+					<strong>
+						<span>Out</span>
+					</strong>
+				</div>
+				<div class="hidden-xs hidden-sm col-xs-4 col-sm-4 col-md-2 col-lg-3">
+				</div>
+				<div class="hidden-xs hidden-sm col-md-3 col-lg-2 text-right">
+					<strong>
+						<span>In</span>
+					</strong>
+				</div>
+				<div class="hidden-xs hidden-sm col-md-1 col-lg-1 text-left">
+					<strong>
+						<span>Out</span>
+					</strong>
+				</div>
+			</div>
+			@* Checkboxes for Social Behaviors *@
+			<div class="row">
+				<div class="col-md-6">
+					<div class="row">
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.Fire)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.Fire, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.FireAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.RoleReversal)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.RoleReversal, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.RoleReversalAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.Protective)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.Protective, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.ProtectiveAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.Resists)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.Resists, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.ResistsAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="row">
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.Possessive)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.Possessive, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.PossessiveAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.HitsKicksBites)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.HitsKicksBites, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.HitsKicksBitesAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.BehavesYoung)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.BehavesYoung, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.BehavesYoungAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.HarmsAnimals)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.HarmsAnimals, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.HarmsAnimalsAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+	<hr style="margin-top: 5px; margin-bottom: 10px" />
+	<fieldset class="form-group mb-0">
+		<legend style="margin-bottom: -5px">Educational</legend>
+		<div class="icjia-checkbox-group label-weight-normal">
+			<div class="row">
+				<div class="col-xs-4 col-sm-4 col-md-2 col-lg-3">
+				</div>
+				<div class="col-xs-6 col-sm-6 col-md-3 col-lg-2 text-right">
+					<strong>
+						<span>In</span>
+					</strong>
+				</div>
+				<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 text-left">
+					<strong>
+						<span>Out</span>
+					</strong>
+				</div>
+				<div class="hidden-xs hidden-sm col-xs-4 col-sm-4 col-md-2 col-lg-3">
+				</div>
+				<div class="hidden-xs hidden-sm col-md-3 col-lg-2 text-right">
+					<strong>
+						<span>In</span>
+					</strong>
+				</div>
+				<div class="hidden-xs hidden-sm col-md-1 col-lg-1 text-left">
+					<strong>
+						<span>Out</span>
+					</strong>
+				</div>
+			</div>
+			<div class="row">	
+				<div class="col-md-6">
+					<div class="row">
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.MissSchool)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.MissSchool, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.MissSchoolAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.DropOut)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.DropOut, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.DropOutAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.SchoolRules)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.SchoolRules, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.SchoolRulesAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.BehaviorProblems)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.BehaviorProblems, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.BehaviorProblemsAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="row">
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.SpecialClassBehavioral)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.SpecialClassBehavioral, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.SpecialClassBehavioralAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.LearningProblems)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.LearningProblems, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.LearningProblemsAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-8">
+								@Html.LabelFor(model => model.ChildBehavioralIssues.SpecialClassLearning)
+							</div>
+							<div class="col-xs-2 text-right">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.SpecialClassLearning, new { @class = "childBehavior_in" })
+							</div>
+							<div class="col-xs-2 text-left">
+								@Html.CheckBoxFor(model => model.ChildBehavioralIssues.SpecialClassLearningAtOuttake, new { @class = "childBehavior_out" })
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+</div>

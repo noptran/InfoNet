@@ -1,0 +1,30 @@
+﻿@model HousingServicesSearchDates
+
+<div class="row">
+	<div class="col-lg-6">
+		<div class="form-group">
+			@Html.Label("HousingServiceDateRangeStart", "Date Range", new { @class = "control-label" })
+			<div class="input-daterange input-group" id="datepickerHousingServicesShelterEnd" data-provide="datepicker">
+				@Html.TextBoxFor(m => m.HousingServiceDateRangeStart, "{0:MM/dd/yyyy}", new { @class = "form-control housingServicesDateRange dirtyignore", autocomplete = "off" })
+				<span class="input-group-addon"><b>to</b></span>
+				@Html.TextBoxFor(m => m.HousingServiceDateRangeEnd, "{0:MM/dd/yyyy}", new { @class = "form-control housingServicesDateRange dirtyignore", autocomplete = "off" })
+			</div>
+			<div>@Html.ValidationMessageFor(m => m.HousingServiceDateRangeStart)</div>
+			<div>@Html.ValidationMessageFor(m => m.HousingServiceDateRangeEnd)</div>
+		</div>
+	</div>
+	
+	<div class="form-group col-lg-3">
+		<label for="housingServicesDateRangesSelectShelterEnd" class="control-label">Date Ranges</label>
+		<select class="form-control housingServicesDateRange dirtyignore" name="Range" id="housingServicesDateRangesSelectShelterEnd" data-icjia-role="dateRanges" data-icjia-start="#housingServiceSearchDates_0__HousingServiceDateRangeStart" data-icjia-end="#housingServiceSearchDates_0__HousingServiceDateRangeEnd" data-icjia-default-range="0">
+			@Html.Partial("_DateRangeOptions1-8")
+		</select>
+	</div>
+
+	<div class="form-group col-lg-3 icjia-search-reset">
+		<button type="button" id="housingServiceSearch" class="btn btn-primary icjia-has-spinner"> <span class="icjia-spinner"><img src="~/Content/Images/ajax-loader.gif" width="12" height="12"></span>Search <span class="glyphicon glyphicon-search"></span></button>
+		<button type="button" class="btn btn-warning cancel" id="housingServiceReset">
+			Reset <span class="glyphicon glyphicon-refresh"></span>
+		</button>
+	</div>
+</div>

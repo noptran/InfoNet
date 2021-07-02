@@ -1,0 +1,11 @@
+﻿@model Infonet.Web.ViewModels.Shared.PagedListPagination
+
+@{ 
+	string startDate = Model.StartDate?.ToShortDateString() ?? "";
+	string endDate = Model.EndDate?.ToShortDateString() ?? "";
+}
+
+<input type="hidden" id="startDate" name="StartDate" value="@startDate" />
+<input type="hidden" id="endDate" name="EndDate" value="@endDate" />
+<input type="hidden" id="pageNumber" name="PageNumber" value="@Model.PageNumber" />
+<input type="hidden" id="range" name="Range" value="@Model.Range" />

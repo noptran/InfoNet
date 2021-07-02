@@ -1,0 +1,92 @@
+﻿@model Infonet.Web.ViewModels.Clients.RelationshipViewModel
+
+@{
+	ViewBag.Title = Model.ID == null ? "Add Client Relationships" : "Edit Client Relationships";
+	int clientCount = Model.Clients?.Count ?? 0;
+}
+
+<div id="Investigations">
+	@using (Html.BeginForm("Form", "Relationship", FormMethod.Post, new { id = "main", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+		@Html.AntiForgeryToken()
+		@Html.HiddenFor(m => m.ID)
+		@Html.HiddenFor(m => m.CreationDate)
+		<h2>Relationship Details</h2>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.LabelFor(m => m.InvestigationID, new { @class = "control-label", data_toggle = "tooltip", title = "This is a unique identifier assigned to your client’s investigation to identify clients that are part of the same investigation, as well as to allow you to report the number of households that received services. This identifier must not contain any personal information about your client, e.g. birth dates, initials, etc." })
+					@Html.TextBoxFor(m => m.InvestigationID, new { @class = "form-control", maxlength="50" })
+					@Html.ValidationMessageFor(m => m.InvestigationID, "", new { @class = "help-block" })
+				</div>
+			</div>
+			<input type="hidden" id="saveAddNew" name="saveAddNew" value="0" />
+			<input type="hidden" id="returnURL" value="@TempData.Peek("RelationshipReturnUrl")" name="ReturnURL" />
+		</div>
+		<h2>Related Clients</h2>
+		<div class="row">
+			<div class="col-md-6">
+				<table id="clients" class="table icjia-table-borderless">
+					<thead>
+						<tr>
+							<th scope="col" width="50%" class="icjia-required" data-toggle="tooltip" title="Enter the full or partial client ID for a client in the investigation if known.">Client ID</th>
+							<th scope="col" width="25%" class="icjia-required" data-toggle="tooltip" title="Select the client's case to be assigned to this relationship from the drop-down menu.">Case ID</th>
+							<th scope="col" width="60%" class="icjia-required" data-toggle="tooltip" title="Enter the Household ID. Clients with the same household ID number are assumed to be in the same household. The Household ID must be a numeric value of at least 1 and no greater than the total number clients in the Relationship.">Household ID</th>
+							<th scope="col" width="10%"><span class="sr-only">Action</span></th>
+						</tr>
+					</thead>
+					<tbody>
+						@Html.Partial("_NewClientPartial", Model)
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group text-nowrap">
+					<button id="clientAddNew" type="button" class="btn btn-default btn-outline" value="@Model.Clients.Count"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;&nbsp;Add New Client</button>
+					<button id="clientAddSearch" type="button" class="btn btn-default btn-outline" data-toggle="modal" data-target="#searchModal"><span class="glyphicon glyphicon-search"></span>&nbsp;&nbsp;Add Clients by Search</button>
+					<input type="hidden" id="clientCount" value="@clientCount">
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group text-right text-nowrap">
+					<div class="btn-group">
+						@Html.Snippets().SaveButton(new { onclick = "validateMyForm()", data_icjia_role = "preventDuplicateRequest", accesskey = "s" })
+						<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<span class="caret"></span>
+							<span class="sr-only">Toggle Dropdown</span>
+						</button>
+						<ul class="dropdown-menu icjia-btn-dropdown">
+			                <li>@Html.Snippets().SaveAddButton(new { onclick = "if (validateMyForm2()) $('#main').submit();", data_icjia_role = "preventDuplicateRequest", accesskey = "a" })</li>
+							@*<li><a class="btn-success" onclick="if (validateMyForm2()) $('#main').submit();" href="#">Save & Add New</a></li>*@
+						</ul>
+					</div>
+					@Html.Snippets().UndoLink(Url.Action(), new { accesskey = "u" })
+					@if (Model.ID == 0 || Model.ID == null) {
+						<a href="@TempData.Peek("RelationshipReturnUrl")" class="btn btn-danger">Cancel</a>
+					} else {
+						@Html.Snippets().DeleteLink(Url.Action("Delete", "Relationship", new { id = Model.ID }), new { accesskey = "d" })
+					}
+				</div>
+			</div>
+		</div>
+	}
+	@Html.Partial("_ClientSearch", Model.ClientSearchViewModel)
+</div>
+<div class="form-group">
+	<a href=@TempData["RelationshipReturnUrl"]><span class='glyphicon glyphicon-chevron-left' aria-hidden='true'></span><span class='glyphicon glyphicon-chevron-left' style='margin-left:-6px' aria-hidden='true'></span>Back to Client Relationships Search</a>
+</div>
+
+@section Styles {
+	<style>
+		.form-group.typeaheadGroup.has-error{
+			margin-top:-5px;
+		}
+	</style>
+}
+
+@section Scripts {
+	@Scripts.Render("~/bundles/typeahead")
+	<script src="~/Scripts/ICJIA/date-ranges.js"></script>
+	<script src="~/Scripts/Views/Client/_Relationships.js"></script>
+}

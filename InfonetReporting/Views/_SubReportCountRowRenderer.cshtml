@@ -1,0 +1,29 @@
+﻿@using System.Linq
+@using Infonet.Core.Collections
+@using Infonet.Reporting.Core
+@using Infonet.Reporting.Enumerations
+@inherits RazorEngine.Templating.TemplateBase<IReportTable>
+
+@foreach (var row in Model.Rows.OrderBy(r => r.Code == null).ThenBy(r=>r.Order).ThenBy(r => r.Title)) {
+	int tdPercent = 80 / (row.Counts.Count * row.Counts[row.Counts.First().Key].Count);
+	string tdWidth = string.Format("{0}%", tdPercent);
+	<tr>
+		<th style="font-weight:normal;" scope="row">@row.Title</th>
+		@foreach (var header in Model.Headers) {
+			foreach (var subheader in header.SubHeaders) {
+
+				<td width="@tdWidth" class="text-right">
+					@if (!Model.HideZeroValues || row.Counts[header.Code.ToString()][subheader.Code.ToString()] != 0) {
+						if (row.Counts[header.Code.ToString()][subheader.Code.ToString()] < -100) {
+							@(((ReportStringOutputEnum)row.Counts[header.Code.ToString()][subheader.Code.ToString()]).GetDisplayName())
+							row.Counts[header.Code.ToString()][subheader.Code.ToString()] = 0;
+						} else {
+							string format = row.Counts[header.Code.ToString()][subheader.Code.ToString()] % 1 == 0 ? "{0:n0}" : "{0:n2}";
+							@(string.Format(format, row.Counts[header.Code.ToString()][subheader.Code.ToString()]))
+						}
+					}
+				</td>
+			}
+		}
+	</tr>
+}

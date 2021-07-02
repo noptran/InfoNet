@@ -1,0 +1,549 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C815BFB2-02FC-4292-AD0D-5244867519A7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Infonet.Reporting</RootNamespace>
+    <AssemblyName>InfonetReporting</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EFHooks, Version=2.3.0.0, Culture=neutral, PublicKeyToken=1386ae34114c35cf, processorArchitecture=MSIL">
+      <HintPath>..\packages\Atreyu.EFHooks.2.3.1\lib\net45\EFHooks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="LinqKit.EntityFramework, Version=1.1.9.0, Culture=neutral, PublicKeyToken=b6c8cfc71f7a6a80, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinqKit.EntityFramework.1.1.9.0\lib\net45\LinqKit.EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RazorEngine, Version=3.10.0.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
+      <HintPath>..\packages\RazorEngine.3.10.0\lib\net45\RazorEngine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AdHoc\Condition.cs" />
+    <Compile Include="AdHoc\ConditionInput.cs" />
+    <Compile Include="AdHoc\DateField.cs" />
+    <Compile Include="AdHoc\IFieldReader.cs" />
+    <Compile Include="AdHoc\LookupField.cs" />
+    <Compile Include="AdHoc\Option.cs" />
+    <Compile Include="AdHoc\Pivots\Coordinate.cs" />
+    <Compile Include="AdHoc\Pivots\CoordinateComparer.cs" />
+    <Compile Include="AdHoc\Pivots\Count.cs" />
+    <Compile Include="AdHoc\Pivots\CountDistinct.cs" />
+    <Compile Include="AdHoc\Pivots\IAggregate.cs" />
+    <Compile Include="AdHoc\Pivots\QueryPivot.cs" />
+    <Compile Include="AdHoc\Pivots\Matrix.cs" />
+    <Compile Include="AdHoc\Pivots\PivotTable.cs" />
+    <Compile Include="AdHoc\Predicates\FieldEmptyPredicate.cs" />
+    <Compile Include="AdHoc\Output.cs" />
+    <Compile Include="AdHoc\Perspective.cs" />
+    <Compile Include="AdHoc\Predicates\ConjunctionPredicate.cs" />
+    <Compile Include="AdHoc\Cardinal.cs" />
+    <Compile Include="AdHoc\CardinalityExpression.cs" />
+    <Compile Include="AdHoc\FieldType.cs" />
+    <Compile Include="AdHoc\Predicates\FieldInPredicate.cs" />
+    <Compile Include="AdHoc\Predicates\FieldBetweenPredicate.cs" />
+    <Compile Include="AdHoc\Predicates\FieldLikePredicate.cs" />
+    <Compile Include="AdHoc\Predicates\FieldEqualsPredicate.cs" />
+    <Compile Include="AdHoc\PredicateOperator.cs" />
+    <Compile Include="AdHoc\Predicates\FieldPredicate.cs" />
+    <Compile Include="AdHoc\QueryWriter.cs" />
+    <Compile Include="AdHoc\Filter.cs" />
+    <Compile Include="AdHoc\IPredicate.cs" />
+    <Compile Include="AdHoc\Predicates\FilterPredicate.cs" />
+    <Compile Include="AdHoc\Join.cs" />
+    <Compile Include="AdHoc\Model.cs" />
+    <Compile Include="AdHoc\Entity.cs" />
+    <Compile Include="AdHoc\Field.cs" />
+    <Compile Include="AdHoc\Query.cs" />
+    <Compile Include="AdHoc\Relationship.cs" />
+    <Compile Include="AdHoc\Fragment.cs" />
+    <Compile Include="AdHoc\DataModel.cs" />
+    <Compile Include="Core\Predicates\StaffFunding.cs" />
+    <Compile Include="Core\ReportFilter.cs" />
+    <Compile Include="Core\Predicates\SelectOneEdge.cs" />
+    <Compile Include="Core\Predicates\SelectManyEdge.cs" />
+    <Compile Include="Core\Predicates\DirectedEdge.cs" />
+    <Compile Include="Core\Predicates\IDirectedEdge.cs" />
+    <Compile Include="Core\Predicates\FilterContext.cs" />
+    <Compile Include="Core\ReportQueries.cs" />
+    <Compile Include="Core\ReportRow.cs" />
+    <Compile Include="Core\ReportTableHeader.cs" />
+    <Compile Include="Core\ReportTableSubHeader.cs" />
+    <Compile Include="Core\ReportTableGroup.cs" />
+    <Compile Include="Enumerations\ExceptionUNRUDataFieldsEnum.cs" />
+    <Compile Include="Enumerations\PdfOrientation.cs" />
+    <Compile Include="Enumerations\PdfSize.cs" />
+    <Compile Include="Enumerations\ReportSelection.cs" />
+    <Compile Include="Enumerations\ReportTableHeaderEnum.cs" />
+    <Compile Include="Enumerations\ReportTableSubHeaderEnum.cs" />
+    <Compile Include="Enumerations\SubReportSelection.cs" />
+    <Compile Include="Enumerations\StaffReportAgeSetSelectionsEnum.cs" />
+    <Compile Include="Enumerations\RecordDetailOrderSelectionsEnum.cs" />
+    <Compile Include="Enumerations\OrderOfProtectionIssuedOrExpiredSelectionsEnum.cs" />
+    <Compile Include="Enumerations\ReportOrderSelecetionsEnum.cs" />
+    <Compile Include="ExceptionReports\Builders\OpenAndLengthyShelterStaysSubReportBuilder.cs" />
+    <Compile Include="ExceptionReports\Filters\OpenButInactiveCasesFilter.cs" />
+    <Compile Include="Filters\ClientCenterFilter.cs" />
+    <Compile Include="Filters\CancellationServiceFilter.cs" />
+    <Compile Include="Filters\CancellationStaffFilter.cs" />
+    <Compile Include="Filters\CancellationReasonFilter.cs" />
+    <Compile Include="Filters\ClientTypeFilter.cs" />
+    <Compile Include="Filters\PredicateFilter.cs" />
+    <Compile Include="Filters\DateFilter.cs" />
+    <Compile Include="Filters\FundingSourceFilter.cs" />
+    <Compile Include="Filters\LocationFilter.cs" />
+    <Compile Include="Filters\RangeFilter.cs" />
+    <Compile Include="Filters\ReferralDetailLocationFilter.cs" />
+    <Compile Include="Filters\ReferralDetailDateFilter.cs" />
+    <Compile Include="Filters\OrFilter.cs" />
+    <Compile Include="Filters\ReferralDetailTwnTshipCountyFilter.cs" />
+    <Compile Include="Filters\StaffFilter.cs" />
+    <Compile Include="Filters\SubcontextFilter.cs" />
+    <Compile Include="Filters\ServiceDetailServiceFilter.cs" />
+    <Compile Include="Filters\ServiceDetailDateFilter.cs" />
+    <Compile Include="Filters\ClientCaseShelterTypeFilter.cs" />
+    <Compile Include="Filters\ServiceDetailStaffFundingSourceFilter.cs" />
+    <Compile Include="Filters\ServiceDetailLocationFilter.cs" />
+    <Compile Include="Filters\ServiceDetailStaffFilter.cs" />
+    <Compile Include="Filters\ServiceDetailTwnTshipCountyFilter.cs" />
+    <Compile Include="Filters\ClientCaseAnnualIncomeRangeFilter.cs" />
+    <Compile Include="Filters\OffenderRelationshipFilter.cs" />
+    <Compile Include="Filters\ClientRaceHudFilter.cs" />
+    <Compile Include="Filters\ClientRaceFilter.cs" />
+    <Compile Include="Filters\LookupFilter.cs" />
+    <Compile Include="Filters\EventDetailAddressFilter.cs" />
+    <Compile Include="Filters\EventDetailProgramFilter.cs" />
+    <Compile Include="Filters\OtherStaffActivityStaffFilter.cs" />
+    <Compile Include="Filters\OtherStaffActivityTypeFilter.cs" />
+    <Compile Include="Filters\HotlineCallTypeFilter.cs" />
+    <Compile Include="Filters\ProgramDetailAgencyFilter.cs" />
+    <Compile Include="Filters\ProgramDetailAddressFilter.cs" />
+    <Compile Include="Filters\PublicationDetailProgramFilter.cs" />
+    <Compile Include="Core\Predicates\Vertex.cs" />
+    <Compile Include="Filters\ClientCaseAgeFilter.cs" />
+    <Compile Include="Filters\ClientGenderIdentityFilter.cs" />
+    <Compile Include="Filters\ClientEthnicityFilter.cs" />
+    <Compile Include="Filters\ClientCodeFilter.cs" />
+    <Compile Include="Filters\EventDetailCountyAndStateFilter.cs" />
+    <Compile Include="Filters\EventDetailFundingSourceFilter.cs" />
+    <Compile Include="Filters\EventDetailStaffFilter.cs" />
+    <Compile Include="Filters\HotlineAgeFilter.cs" />
+    <Compile Include="Filters\HotlineFundingSourceFilter.cs" />
+    <Compile Include="Filters\HotlineSexFilter.cs" />
+    <Compile Include="Filters\HotlineRaceFilter.cs" />
+    <Compile Include="Filters\HotlineStaffFilter.cs" />
+    <Compile Include="Filters\ProgramDetailProgramFilter.cs" />
+    <Compile Include="Filters\ProgramDetailStaffFilter.cs" />
+    <Compile Include="Filters\ProgramDetailFundingSourceFilter.cs" />
+    <Compile Include="Filters\PublicationDetailFundingSourceFilter.cs" />
+    <Compile Include="Filters\PublicationDetailStaffFilter.cs" />
+    <Compile Include="Filters\TurnAwayReferralMadeFilter.cs" />
+    <Compile Include="Filters\HotlineTwnTshipCountyFilter.cs" />
+    <Compile Include="Filters\TwnTshipCountyFilter.cs" />
+    <Compile Include="Ordering\ServiceDetailsOfClient\ServiceDetailOfClientCaseReportOrder.cs" />
+    <Compile Include="Ordering\ServiceDetailsOfClient\ServiceDetailOfClientShelterBegDateReportOrder.cs" />
+    <Compile Include="Ordering\ServiceDetailsOfClient\ServiceDetailOfClientServiceDateReportOrder.cs" />
+    <Compile Include="Ordering\ServiceDetailsOfClient\ServiceDetailOfClientStateReportOrder.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ExceptionReports\Builders\ClientsWithoutOffendersDataFieldsBuilder.cs" />
+    <Compile Include="ExceptionReports\Builders\ClientsWithoutPresentingIssueBuilder.cs" />
+    <Compile Include="ExceptionReports\Builders\ClientsWithoutServiceRecordBuilder.cs" />
+    <Compile Include="ExceptionReports\Builders\ClientsWithUNRUFieldsBuilder.cs" />
+    <Compile Include="ExceptionReports\Builders\FirstContactDateLaterThanServiceDateBuilder.cs" />
+    <Compile Include="ExceptionReports\Filters\OpenAndLengthyShelterStaysFilter.cs" />
+    <Compile Include="ExceptionReports\Builders\OpenCasesBuilder.cs" />
+    <Compile Include="ExceptionReports\Builders\OrdersOfProtectionWithoutExpirationDateBuilder.cs" />
+    <Compile Include="Enumerations\ShelterServiceEnum.cs" />
+    <Compile Include="Enumerations\ClientTypeEnum.cs" />
+    <Compile Include="Filters\Enums\FilterEnums.cs" />
+    <Compile Include="Enumerations\ReportColumnSelectionsEnum.cs" />
+    <Compile Include="Enumerations\ReportOutputType.cs" />
+    <Compile Include="Enumerations\ReportStringOutputEnum.cs" />
+    <Compile Include="Enumerations\ShortAnswerEnum.cs" />
+    <Compile Include="Filters\CancellationLocationFilter.cs" />
+    <Compile Include="Filters\CancellationDateFilter.cs" />
+    <Compile Include="Filters\EventDetailLocationFilter.cs" />
+    <Compile Include="Filters\EventDetailDateFilter.cs" />
+    <Compile Include="Filters\HivMentalSubstanceLocationFilter.cs" />
+    <Compile Include="Filters\HivMentalSubstanceDateFilter.cs" />
+    <Compile Include="Filters\OrderOfProtectionLocationFilter.cs" />
+    <Compile Include="Filters\OrderOfProtectionDateExpiredFilter.cs" />
+    <Compile Include="Filters\OrderOfProtectionDateIssuedFilter.cs" />
+    <Compile Include="Filters\OtherStaffActivityLocationFilter.cs" />
+    <Compile Include="Filters\OtherStaffActivityDateFilter.cs" />
+    <Compile Include="Filters\HotlineLocationFilter.cs" />
+    <Compile Include="Filters\HotlineDateFilter.cs" />
+    <Compile Include="Filters\ProgramDetailLocationFilter.cs" />
+    <Compile Include="Filters\ProgramDetailDateFilter.cs" />
+    <Compile Include="Filters\PublicationDetailLocationFilter.cs" />
+    <Compile Include="Filters\PublicationDetailDateFilter.cs" />
+    <Compile Include="Filters\ServiceOutcomeLocationFilter.cs" />
+    <Compile Include="Filters\ServiceOutcomeDateFilter.cs" />
+    <Compile Include="Filters\TurnAwayLocationFilter.cs" />
+    <Compile Include="Filters\TurnAwayDateFilter.cs" />
+    <Compile Include="Core\IReportOrder.cs" />
+    <Compile Include="Core\IReportOrderBase.cs" />
+    <Compile Include="Core\IReportQuery.cs" />
+    <Compile Include="Core\IReportRow.cs" />
+    <Compile Include="Core\IReportTable.cs" />
+    <Compile Include="Core\ISubReportBuilder.cs" />
+    <Compile Include="Core\ISubReportBuilderBase.cs" />
+    <Compile Include="Core\OrderedTextOutput.cs" />
+    <Compile Include="Ordering\Cancellations\CancellationCaseIdReportOrder.cs" />
+    <Compile Include="Ordering\Cancellations\CancellationClientCodeReportOrder.cs" />
+    <Compile Include="Ordering\Cancellations\CancellationDateReportOrder.cs" />
+    <Compile Include="Ordering\Cancellations\CancellationReasonReportOrder.cs" />
+    <Compile Include="Ordering\Cancellations\CancellationServiceNameReportOrder.cs" />
+    <Compile Include="Ordering\Cancellations\CancellationStaffNameReportOrder.cs" />
+    <Compile Include="Ordering\EventDetailsStaff\EventDateReportOrder.cs" />
+    <Compile Include="Ordering\EventDetailsStaff\EventStaffNameReportOrder.cs" />
+    <Compile Include="Ordering\EventDetailsStaff\EventTypeReportOrder.cs" />
+    <Compile Include="Ordering\OrdersOfProtection\OrderOfProtectionClientCodeReportOrder.cs" />
+    <Compile Include="Ordering\OtherStaffActivities\OSActivityNameReportOrder.cs" />
+    <Compile Include="Ordering\OtherStaffActivities\OSADateReportOrder.cs" />
+    <Compile Include="Ordering\OtherStaffActivities\OSAStaffNameReportOrder.cs" />
+    <Compile Include="Ordering\PhoneHotlines\HotlineCountyReportOrder.cs" />
+    <Compile Include="Ordering\PhoneHotlines\HotlineDateReportOrder.cs" />
+    <Compile Include="Ordering\PhoneHotlines\HotlineStaffNameReportOrder.cs" />
+    <Compile Include="Ordering\PhoneHotlines\HotlineTownReportOrder.cs" />
+    <Compile Include="Ordering\PhoneHotlines\HotlineTownshipReportOrder.cs" />
+    <Compile Include="Ordering\PhoneHotlines\HotlineZipcodeReportOrder.cs" />
+    <Compile Include="Ordering\ProgramDetailsStaff\ProgramDetailDateReportOrder.cs" />
+    <Compile Include="Ordering\ProgramDetailsStaff\ProgramDetailServiceReportOrder.cs" />
+    <Compile Include="Ordering\ProgramDetailsStaff\ProgramDetailStaffNameReportOrder.cs" />
+    <Compile Include="Ordering\PublicationsStaff\PublicationDateReportOrder.cs" />
+    <Compile Include="Ordering\PublicationsStaff\PublicationMediaTypeReportOrder.cs" />
+    <Compile Include="Ordering\PublicationsStaff\PublicationStaffNameReportOrder.cs" />
+    <Compile Include="Ordering\ServiceDetailsOfClient\ServiceDetailOfClientClientCodeReportOrder.cs" />
+    <Compile Include="Ordering\ServiceDetailsOfClient\ServiceDetailOfClientCountyReportOrder.cs" />
+    <Compile Include="Ordering\ServiceDetailsOfClient\ServiceDetailOfClientServiceNameReportOrder.cs" />
+    <Compile Include="Ordering\ServiceDetailsOfClient\ServiceDetailOfClientStaffNameReportOrder.cs" />
+    <Compile Include="Ordering\ServiceDetailsOfClient\ServiceDetailOfClientTownReportOrder.cs" />
+    <Compile Include="Ordering\ServiceDetailsOfClient\ServiceDetailOfClientTownshipReportOrder.cs" />
+    <Compile Include="Ordering\ServiceDetailsOfClient\ServiceDetailOfClientZipCodeReportOrder.cs" />
+    <Compile Include="Ordering\TurnAwayServices\TurnAwayServiceDateReportOrder.cs" />
+    <Compile Include="Ordering\TurnAwayServices\TurnAwayServiceReferralMadeReportOrder.cs" />
+    <Compile Include="Core\ReportContainer.cs" />
+    <Compile Include="Core\ReportLookup.cs" />
+    <Compile Include="Core\ReportOrder.cs" />
+    <Compile Include="Core\ReportQuery.cs" />
+    <Compile Include="Core\ReportTable.cs" />
+    <Compile Include="Core\SubReportCountBuilder.cs" />
+    <Compile Include="Core\SubReportDataBuilder.cs" />
+    <Compile Include="ManagementReports\ReportTables\Client\ClientAnnualIncomeReportTable.cs" />
+    <Compile Include="ManagementReports\ReportTables\Client\ChildBehavioralIssuesReportTable.cs" />
+    <Compile Include="ManagementReports\ReportTables\Client\ChildrenWithBehavioralIssuesCountReportTable.cs" />
+    <Compile Include="ManagementReports\ReportTables\Client\ClientPrimaryIncomeReportTable.cs" />
+    <Compile Include="ManagementReports\Builders\ClientChildBehavioralBuilder.cs" />
+    <Compile Include="ManagementReports\Builders\ClientDetailInformationBuilder.cs" />
+    <Compile Include="ManagementReports\Builders\ClientIncomeSourceBuilder.cs" />
+    <Compile Include="Enumerations\ChildBehaviorsEnum.cs" />
+    <Compile Include="ManagementReports\ReportTables\StaffService\AgeReportTable.cs" />
+    <Compile Include="ManagementReports\ReportTables\StaffService\CaseCountReportTable.cs" />
+    <Compile Include="ManagementReports\ReportTables\StaffService\ClientCountReportTable.cs" />
+    <Compile Include="ManagementReports\ReportTables\StaffService\DirectClientServicesReportTable.cs" />
+    <Compile Include="ManagementReports\ReportTables\StaffService\EthnicityReportTable.cs" />
+    <Compile Include="ManagementReports\ReportTables\StaffService\RaceHudReportTable.cs" />
+    <Compile Include="ManagementReports\Builders\CancellationNoshowInformationBuilder.cs" />
+    <Compile Include="ManagementReports\Builders\HotlineCrisisInformationBuilder.cs" />
+    <Compile Include="ManagementReports\Builders\OtherOrderOfProtectionBuilder.cs" />
+    <Compile Include="ManagementReports\Builders\OtherStaffActivityBuilder.cs" />
+    <Compile Include="ManagementReports\Builders\ClientServiceInformationBuilder.cs" />
+    <Compile Include="ManagementReports\Builders\EventDetailInformationBuilder.cs" />
+    <Compile Include="ManagementReports\Builders\MediaPublicationInformationBuilder.cs" />
+    <Compile Include="ManagementReports\Builders\ProgramDetailInformationBuilder.cs" />
+    <Compile Include="ManagementReports\Builders\StaffBuilder.cs" />
+    <Compile Include="ManagementReports\Builders\DirectClientServicesBuilder.cs" />
+    <Compile Include="ManagementReports\Builders\TurnAwayInformationBuilder.cs" />
+    <Compile Include="Enumerations\ClientReferralSourceEnum.cs" />
+    <Compile Include="Enumerations\DisabilityEnum.cs" />
+    <Compile Include="Enumerations\HivMentalSubstanceEnum.cs" />
+    <Compile Include="Enumerations\NonCashBenefitsEnum.cs" />
+    <Compile Include="Enumerations\RaceHudEnum.cs" />
+    <Compile Include="Enumerations\ShelterUseEnum.cs" />
+    <Compile Include="ManagementReportFactory.cs" />
+    <Compile Include="ExceptionReportFactory.cs" />
+    <Compile Include="StandardReportFactory.cs" />
+    <Compile Include="StandardReports\Builders\Investigation\ClientMDTSubReportBuilder.cs" />
+    <Compile Include="StandardReports\Builders\MedicalCJ\MedicalSystemInvolvementConflictScaleSubReport.cs" />
+    <Compile Include="StandardReports\Builders\MedicalCJ\MedicalSystemInvolvementSubReport.cs" />
+    <Compile Include="StandardReports\Builders\MedicalCJ\ProsecutionInvolvementPoliceProsecutionSubReport.cs" />
+    <Compile Include="StandardReports\Builders\Services\DirectClientReferralsSubReport.cs" />
+    <Compile Include="StandardReports\Builders\Services\HudClientServicesSubReport.cs" />
+    <Compile Include="StandardReports\Builders\Services\HudGroupServicesSubReport.cs" />
+    <Compile Include="StandardReports\Builders\Services\StaffLineItem.cs" />
+    <Compile Include="StandardReports\Builders\Services\VolunteerClientServicesSubReport.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Aggregate\HivAidsReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Aggregate\MentalHealthReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Aggregate\SubstanceAbuseReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\AdultEducationReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\AgeReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\CACRelationshipToVictimReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\CaseCountReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\ChildAbuseReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\ChildEducationReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\ClientCountReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\ClientTypeReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\CollegeStudentReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\CustodyReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\EmploymentReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\EthnicityReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\GenderReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\HealthInsuranceDVReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\HealthInsuranceReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\HouseholdsReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\LivesWithReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\MaritalStatusReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\MonthlyIncomeSourceReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\NonCashBenefitsReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\NumberOfChildrenReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\PregnantReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\PrimaryIncomeReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\RaceHudReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\RaceReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\SAEducationReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\SexualOrientationReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Demographics\VeteransStatusReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\PresentingIssues\PresentingIssueLocationReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\PresentingIssues\PresentingIssuesReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Referral\ReferralSourceReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Residence\DestinationReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Residence\DestinationSubsidyReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Residence\DestinationTenureReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Residence\LeaveReasonReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Residence\LengthOfStayReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Residence\ResidenceTypeReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\Residence\ShelterHomelessReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\SpecialNeeds\ClientSpecialNeedsReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\SpecialNeeds\DevelopmentalDisabilityReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\SpecialNeeds\DisablingConditionReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\SpecialNeeds\PhysicalDisabilityReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\ClientInformation\SpecialNeeds\PrimaryLanguagesReportTable.cs" />
+    <Compile Include="StandardReports\Builders\ClientInformation\AggregateSubReport.cs" />
+    <Compile Include="StandardReports\Builders\ClientInformation\DemographicsSubReport.cs" />
+    <Compile Include="StandardReports\Builders\ClientInformation\PresentingIssuesSubReport.cs" />
+    <Compile Include="StandardReports\Builders\ClientInformation\ReferralSourcesSubReport.cs" />
+    <Compile Include="StandardReports\Builders\ClientInformation\ResidenceDestinationSubReport.cs" />
+    <Compile Include="StandardReports\Builders\ClientInformation\SpecialNeedsSubReport.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\AbuseNeglectPetitions\AbuseNeglectPetitonAdjudicationReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\AbuseNeglectPetitions\AbuseNeglectPetitonPetitionReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\AbuseNeglectPetitions\AbuseNeglectPetitonTotalVictimCasesReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\AbuseNeglectPetitions\AbuseNeglectPetitonTotalVictimsReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\ClientMDT\ClientMDTPositionReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\ClientMDT\ClientMDTTotalCasesReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\ClientMDT\ClientMDTTotalVictimsReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\DCFSAllegations\InvestigationDCFSAllegationAbuseAllegationReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\DCFSAllegations\InvestigationDCFSAllegationFindingReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\DCFSAllegations\InvestigationDCFSAllegationTotalVictimCasesReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\DCFSAllegations\InvestigationDCFSAllegationTotalVictimsReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\Medical\MedicalColposcopeReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\Medical\MedicalEvidenceKitReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\Medical\MedicalExamCompletedBeforeOrAfterReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\Medical\MedicalExamCompletedReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\Medical\MedicalExamLocationReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\Medical\MedicalExamTypeReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\Medical\MedicalFacilityTypeReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\Medical\MedicalFacilityVisitReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\Medical\MedicalFindingsReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\Medical\MedicalTotalVictimCasesReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\Medical\MedicalTotalVictimsReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\Medical\MedicalTreatedReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\VictimSensitiveInterviews\VictimSensitiveInterviewCourtesyInterviewReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\VictimSensitiveInterviews\VictimSensitiveInterviewLocationReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\VictimSensitiveInterviews\VictimSensitiveInterviewObserversReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\VictimSensitiveInterviews\VictimSensitiveInterviewRecordTypeReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\VictimSensitiveInterviews\VictimSensitiveInterviewTotalCasesReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Investigation\VictimSensitiveInterviews\VictimSensitiveInterviewTotalVictimsReportTable.cs" />
+    <Compile Include="StandardReports\Builders\Investigation\AbuseNeglectPetitonSubReport.cs" />
+    <Compile Include="StandardReports\Builders\Investigation\DCFSAllegationSubReport.cs" />
+    <Compile Include="StandardReports\Builders\Investigation\MedicalSubReport.cs" />
+    <Compile Include="StandardReports\Builders\Investigation\VictimSensitiveInterviewSubReport.cs" />
+    <Compile Include="Enumerations\ClientConflictScaleEnum.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\MedicalResponse\MedicalCJResponseEvidenceKitReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\MedicalResponse\MedicalCJResponseFacilityTypeReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\MedicalResponse\MedicalCJResponseFacilityVisitReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\MedicalResponse\MedicalCJResponsePhotosReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\MedicalResponse\MedicalCJResponseSeriousnessReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\MedicalResponse\MedicalCJResponseSeverityOfAbuseReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\MedicalResponse\MedicalCJResponseTreatedBySANEReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\MedicalResponse\MedicalCJResponseTreatedReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\Offender\MedicalCjOffendersAgeReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\Offender\MedicalCJOffendersGenderReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\Offender\MedicalCJOffendersRaceReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\Offender\MedicalCJOffendersRegisteredReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\Offender\MedicalCJOffendersRelationshipReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\Offender\MedicalCJOffendersTotalOffenderCasesReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\Offender\MedicalCJOffendersTotalOffendersReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\Offender\MedicalCJOffendersTotalVictimCasesReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\Offender\MedicalCJOffendersVictimizedMultipleReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\Offender\MedicalCJOffendersVisitationReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\OrderOfProtection\MedicalCJOPActiveOrdersReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\OrderOfProtection\MedicalCJOPForumOfOrdersReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\OrderOfProtection\MedicalCJOPNewOrdersReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\OrderOfProtection\MedicalCJOPOrderActivityReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\OrderOfProtection\MedicalCJOPOrderUpgradesMadeReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\OrderOfProtection\MedicalCJOPOrderUpgradesReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\OrderOfProtection\MedicalCJOPStatusOfOrdersReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\OrderOfProtection\MedicalCJOPTypeOfOrdersReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\OrderOfProtection\MedicalCJOPTypeOfUpgradeReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\OrderOfProtection\MedicalCJOPVictimsFiledOrdersReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\OrderOfProtection\MedicalCJOPVictimsWithActiveOrdersReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\OrderOfProtection\MedicalCJOPViolationsReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\PoliceInvolvement\ChargeTypeReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\PoliceInvolvement\DetectiveReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\PoliceInvolvement\PatrolInterviewReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\PoliceInvolvement\PoliceChargesReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\PoliceInvolvement\ReportedToPoliceReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\PoliceInvolvement\SuspectArrestedReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\PoliceInvolvement\SuspectChargedReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\ProsecutionInvolvement\ProsecutionCourtActivityReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\ProsecutionInvolvement\ProsecutionCourtDispositionReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\ProsecutionInvolvement\ProsecutionSentenceTypeReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\ProsecutionInvolvement\ProsecutionStateAttorneyChargesReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\ProsecutionInvolvement\ProsecutionStateAttorneyInterviewReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\ProsecutionInvolvement\ProsecutionSuspectChargedReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\ProsecutionInvolvement\ProsecutionTrialScheduledReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\ProsecutionInvolvement\ProsecutionTrialTypesReportTable .cs" />
+    <Compile Include="StandardReports\ReportTables\Medical\ProsecutionInvolvement\ProsecutionVWParticipationReportTable.cs" />
+    <Compile Include="StandardReports\Builders\MedicalCJ\OrdersOfProtectionSubReport.cs" />
+    <Compile Include="StandardReports\Builders\MedicalCJ\PoliceInvolvementMedicalCJSubReport.cs" />
+    <Compile Include="StandardReports\Builders\MedicalCJ\PoliceInvolvementPoliceChargeSubReport.cs" />
+    <Compile Include="StandardReports\Builders\MedicalCJ\ProsecutionInvolvementTrialChargesSubReport.cs" />
+    <Compile Include="StandardReports\Builders\MedicalCJ\OffenderSubReport.cs" />
+    <Compile Include="Enumerations\CrisisInterventionEnum.cs" />
+    <Compile Include="Enumerations\ServiceOutcomeSurveyEnum.cs" />
+    <Compile Include="StandardReports\ReportTables\Services\CommunityGroup\CommunityGroupServiceReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Services\CommunityGroup\EventDetailReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Services\CommunityGroup\PublicationReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Services\DirectServices\ReferralsReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Services\DirectServices\DirectServiceReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Services\DirectServices\DirectServiceGroupTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Services\DirectServices\ShelterServiceReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Services\Hotline\HotlineReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Services\Hud\HudClientServicesReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Services\Hud\HudGroupServicesReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Services\Hud\HudTurnAwaysReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Services\NonClientCrisisIntervention\CrisisInterventionAgeReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Services\NonClientCrisisIntervention\CrisisInterventionGenderReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Services\NonClientCrisisIntervention\CrisisInterventionRaceReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Services\NonClientCrisisIntervention\CrisisInterventionReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Services\NonClientCrisisIntervention\CrisisInterventionTotalHoursReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Services\ServiceOutcome\SurveyReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Services\Volunteer\VolunteerClientServicesReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Services\Volunteer\VolunteerGroupServicesReportTable.cs" />
+    <Compile Include="StandardReports\ReportTables\Services\Volunteer\VolunteerHotlineCallsReportTable.cs" />
+    <Compile Include="StandardReports\Builders\Services\CommunityGroupSubReport.cs" />
+    <Compile Include="StandardReports\Builders\Services\DirectClientServicesSubReport.cs" />
+    <Compile Include="StandardReports\Builders\Services\EventDetailSubReport.cs" />
+    <Compile Include="StandardReports\Builders\Services\HotlineSubReport.cs" />
+    <Compile Include="StandardReports\Builders\Services\HudTurnAwaysSubReport.cs" />
+    <Compile Include="StandardReports\Builders\Services\NonClientCrisisInterventionSubReport.cs" />
+    <Compile Include="StandardReports\Builders\Services\PublicationSubReport.cs" />
+    <Compile Include="StandardReports\Builders\Services\ServiceOutcomeSubReport.cs" />
+    <Compile Include="StandardReports\Builders\Services\VolunteerHotlineCallsSubReport.cs" />
+    <Compile Include="StandardReports\Builders\Services\VolunteerGroupServicesSubReport.cs" />
+    <Compile Include="ViewModels\ExceptionReportViewModel.cs" />
+    <Compile Include="ViewModels\FilterSelection.cs" />
+    <Compile Include="ViewModels\IDateRange.cs" />
+    <Compile Include="ViewModels\IDateRangeWithOutputType.cs" />
+    <Compile Include="ViewModels\IReportCenterSelectionBase.cs" />
+    <Compile Include="ViewModels\ManagementReportViewModel.cs" />
+    <Compile Include="ViewModels\ReportFilterDisplay.cs" />
+    <Compile Include="ViewModels\ReportOrderDisplay.cs" />
+    <Compile Include="ViewModels\StaffViewModel.cs" />
+    <Compile Include="StandardReports\StandardReportSpecification.cs" />
+    <Compile Include="ViewModels\SubmitReportViewModel.cs" />
+    <Compile Include="ViewModels\StandardReportViewModel.cs" />
+    <Compile Include="ViewModels\SubReportCountViewModel.cs" />
+    <Compile Include="ViewModels\SubReportDataViewModel.cs" />
+    <Compile Include="ViewModels\Validation\ReportSpecificRequirementAttribute.cs" />
+    <Compile Include="Views\ViewResources.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\InfonetCore\InfonetCore.csproj">
+      <Project>{46c182b8-8645-4754-8be6-30d68c7f5a91}</Project>
+      <Name>InfonetCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InfonetData\InfonetData.csproj">
+      <Project>{7550a24e-08ab-428a-bf9e-e8985e376df2}</Project>
+      <Name>InfonetData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InfonetUspsData\InfonetUspsData.csproj">
+      <Project>{301F3673-C549-4AEC-B64C-E2CE9FAC42C6}</Project>
+      <Name>InfonetUspsData</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <EmbeddedResource Include="Views\_SubReportCount.cshtml" />
+    <EmbeddedResource Include="Views\_SubReportCountRowRenderer.cshtml" />
+    <EmbeddedResource Include="Views\_SubReportCountTableGroupGrandTotal.cshtml" />
+    <EmbeddedResource Include="Views\_SubReportCountTableGroupRenderer.cshtml" />
+    <EmbeddedResource Include="Views\_SubReportCountTableRenderer.cshtml" />
+    <EmbeddedResource Include="Views\_SubReportCountTableSubtotal.cshtml" />
+    <EmbeddedResource Include="Views\_SubReportData.cshtml" />
+    <EmbeddedResource Include="Views\_SubReportDataTableRenderer.cshtml" />
+    <EmbeddedResource Include="Views\AdHoc\_Pivot.cshtml" />
+    <EmbeddedResource Include="Views\AdHoc\_Data.cshtml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>powershell -ExecutionPolicy ByPass -File  $(SolutionDir.TrimEnd('\'))\scripts\InjectGitVersion.ps1 $(ProjectDir)</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,93 @@
+﻿@model Infonet.Web.ViewModels.Clients.HouseholdSearchViewModel
+@using PagedList.Mvc;
+@{
+	ViewBag.Title = "Households";
+}
+
+@using (Html.BeginForm("Search", "Households", FormMethod.Get, new { id = "main" })) {
+	<div class="row">
+		<div class="form-group col-sm-8 col-md-6 ">
+			@Html.Label("Start", "Service Date Range", new { @class = "control-label" })
+			<div class="input-daterange input-group" id="datepicker" data-provide="datepicker" data-date-end-date=@DateTime.Today.ToShortDateString()>
+				@Html.TextBoxFor(model => model.StartDate, "{0:MM/dd/yyyy}", new { @class = "form-control", autocomplete = "off", id = "Start" })
+				<span class="input-group-addon"><b>to</b></span>
+				@Html.TextBoxFor(model => model.EndDate, "{0:MM/dd/yyyy}", new { @class = "form-control", autocomplete = "off", id = "End" })
+			</div>
+		</div>
+		<div class="form-group col-sm-4 col-md-3">
+			@Html.Label("rangePeriodChosen", "Ranges", new { @class = "control-label" })
+			<select class="form-control col-md-3" name="Range" id="rangePeriodChosen" data-icjia-role="dateRanges" data-icjia-start="#Start" data-icjia-end="#End" data-icjia-default-range="@Model.Range">
+				@Html.Partial("_DateRangeOptions1-8_13-15")
+				<option value="16">Last 2 Years</option>
+			</select>
+		</div>
+	</div>
+			<div class="row">
+				<div class="col-sm-6 col-md-4">
+					<div class="form-group">
+						@Html.LabelFor(m => m.HouseholdID, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the full or partial Household ID if known." })
+						@Html.TextBoxFor(m => m.HouseholdID, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.HouseholdID, "", new { @class = "help-block" })
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-5">
+					<div class="form-group">
+						@Html.LabelFor(m => m.ClientID, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the full or partial Client ID for a Client in the household if known." })
+						@Html.TextBoxFor(m => m.ClientID, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.ClientID, "", new { @class = "help-block" })
+					</div>
+				</div>
+			</div>
+			@Html.Partial("_SearchResetNewButtons", Model, new ViewDataDictionary { { "NewButtonUrl", "/Households/FormRedirect" }, { "NewButtonText", "Add New Household" } })
+}
+<table class="table table-hover table-responsive">
+	<tr>
+		<th scope="col">
+			Household ID
+		</th>
+		<th scope="col">
+			Clients
+		</th>
+		<th scope="col">
+			Creation Date
+		</th>
+        <th scope="col"><span class="sr-only">Action</span></th>
+	</tr>
+	@foreach (var item in Model.HouseholdList) {
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.InvestigationID)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Clients)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.CreationDate)
+			</td>
+			<td class="text-right">
+				@Html.ActionLink("Edit", "FormRedirect", new { id = item.ID }, new { @class = "btn btn-xs btn-primary btn-outline" })
+			</td>
+		</tr>
+	}
+</table>
+
+<div class="row">
+	<div class="col-sm-12">
+		@Html.PagedListPager(Model.HouseholdList, page => Url.Action(@Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)), @Html.Snippets().PagedListPagerRouteValues(page, Model)), @Html.Snippets().PagedListRenderOptions())
+		@Html.Partial("_PagedListDropMenu", Model, new ViewDataDictionary { { "PagedListUrlAction", @Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)) } })
+	</div>
+</div>
+
+@section scripts {
+	<script src="~/Scripts/ICJIA/date-ranges.js"></script>
+	<script src="~/Scripts/ICJIA/pagedlist.js"></script>
+}
+
+
+
+
+
+
+
+
+

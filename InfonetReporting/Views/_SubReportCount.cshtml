@@ -1,0 +1,74 @@
+﻿@using System
+@using System.Collections.Generic
+@using System.Linq
+@using Infonet.Core.Collections
+@using Infonet.Reporting.Core
+@inherits RazorEngine.Templating.TemplateBase<Infonet.Reporting.ViewModels.SubReportCountViewModel>
+
+@{
+	var elapsed = DateTime.Now - Model.ReportContainer.ReportRanTimestamp;
+}
+
+<div class="panel panel-primary">
+	<div class="panel-heading avoid-break avoid-break-after">
+		<h2 class="panel-title">@Model.SubReportType.GetDisplayName()</h2>
+	</div>
+	<div class="panel-body">
+		<div class="well avoid-break avoid-break-before">
+			<div class="icjia-subreport-centers">
+				<div>
+					<b>Provider Name: </b>
+					@{ bool isFirstCenter = true; }
+					@foreach (var center in Model.ReportContainer.Centers) {
+						if (!isFirstCenter) {
+							<span>, @center.CenterName</span>
+						} else {
+							<span>&nbsp;@center.CenterName</span>
+						}
+						isFirstCenter = false;
+					}
+				</div>
+			</div>
+			<div class="icjia-subreport-date-range">
+				<div>
+					<b>Report Date Range:</b> &nbsp;@Model.ReportContainer.StartDate.Value.ToShortDateString() - @Model.ReportContainer.EndDate.Value.ToShortDateString()
+				</div>
+			</div>
+		</div>
+		@{ var visibleFilters = Model.Query.VisibleFilters.ToArray(); }
+		@if (visibleFilters.Length > 0) {
+			<div class="well avoid-break">
+				<div class="icjia-subreport-filters">
+					<b>Applied Filters</b>
+				</div>
+				@foreach (var each in visibleFilters) {
+					<div class="row">
+						<div class="col-xs-12">
+							<span><b>@each.Label:</b></span>&nbsp;&nbsp;
+							<span>@{ each.WriteCriteriaOn(CurrentWriter, Model.ReportContainer); }</span>
+						</div>
+					</div>
+				}
+			</div>
+		}
+		@if (Model.AppliedOrdering.Any()) {
+			<div class="well avoid-break">
+				<b>Applied Ordering</b>
+				@{ bool isFirst = true; }
+				@foreach (var order in Model.AppliedOrdering) {
+					if (!isFirst) {
+						@Raw(" THEN BY ")
+					}
+					@Raw(order.ReportOrderAsString)
+					isFirst = false;
+				}
+			</div>
+		}
+		@Include("_SubReportCountTableRenderer", Model.ReportContainer.GroupedSubReports[Model.SubReportType].OrderBy(rg => rg.DisplayOrder).ToList(), typeof(List<IReportTable>))
+	</div>
+	<div class="panel-footer icjia-report-time avoid-break avoid-break-before">
+		<i><b>Start:</b> @string.Format("{0}", Model.ReportContainer.ReportRanTimestamp)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Elapsed:</b> @elapsed.TotalSeconds secs</i>
+	</div>
+</div>
+
+

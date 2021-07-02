@@ -1,0 +1,187 @@
+﻿@model Infonet.Web.ViewModels.CaseSearchViewModel
+@using PagedList.Mvc;
+@{
+	ViewBag.Title = "Search";
+	bool isCAC = Provider.CAC == Session.Center().Provider;
+
+	//KMS DO move all of this to CaseSearchViewModel?
+	string dateDescription = isCAC ? "CAC Case Open Date Range" : "First Contact Date Range";
+	string dateTitle = isCAC ? "Search by client’s CAC Case Open Date Range." : "Search by client’s First Contact Date.";
+	string dateLabel = isCAC ? "CAC Case Open Date" : "First Contact Date";
+	string ageLabel = isCAC ? "Age at CAC Case Open" : "Age at First Contact";
+	string ageTitle = isCAC ? "Select client's age at CAC Case Open to filter your search results." : "Select client's age at first contact to filter your search results.";
+}
+
+<div class="row">
+	<div class="col-xs-12">
+		<p>
+			Search for a Client using one or all available fields below. <br /><br />
+		</p>
+	</div>
+</div>
+
+@using (Html.BeginForm("Search", "Client", FormMethod.Get, new { id="main", @class = "main", autocomplete = "off" })) {
+	<div class="row">
+		<div class="col-xs-8 col-sm-8 col-md-6">
+			<div class="form-group">
+				@Html.Label("Start", dateDescription, new { @class = "control-label", data_toggle = "tooltip", title = dateTitle })
+				<div class="input-daterange input-group" id="datepicker" data-provide="datepicker">
+					@Html.TextBoxFor(model => model.StartDate, "{0:MM/dd/yyyy}", new { @class = "form-control", id = "Start" })
+					<span class="input-group-addon"><b>to</b></span>
+					@Html.TextBoxFor(model => model.EndDate, "{0:MM/dd/yyyy}", new { @class = "form-control", id = "End" })
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-2 col-sm-4 col-md-3">
+			<div class="form-group">
+				@Html.Label("rangePeriodChosen", "Ranges", new { @class = "control-label" })
+				<select class="form-control col-md-3" name="Range" id="rangePeriodChosen" data-icjia-role="dateRanges" data-icjia-start="#Start" data-icjia-end="#End" data-icjia-default-range="@Model.Range">
+					@Html.Partial("_DateRangeOptions1-4_20_5-19")
+				</select>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-12 col-sm-6 col-md-3">
+			<div class="form-group" autocomplete="off">
+				@Html.Label("ClientCode", "Client ID", new { @class = "control-label", data_toggle = "tooltip", title = "Please enter the full or partial unique identifier assigned by your location to identify the client." })
+				@Html.TextBoxFor(model => model.ClientCode, new { @class = "form-control", type = "text" })
+				@Html.ValidationMessageFor(model => model.ClientCode, "", new { @class = "help-block" })
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-3 col-md-3">
+			<div class="form-group" autocomplete="off">
+				@Html.Label("Age", ageLabel, new { @class = "control-label", data_toggle = "tooltip", title = ageTitle })
+				@Html.EditorFor(model => model.Age, new { htmlAttributes = new { @class = @"form-control", type = "text" } })
+				@Html.ValidationMessageFor(model => model.Age, "", new { @class = "help-block" })
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-3 col-md-3">
+			<div class="form-group">
+				@Html.Label("ClientTypeId", "Client Type", new { @class = "control-label", data_toggle = "tooltip", title = "Select a client type to filter your search results." })
+				@Html.LookupFor(model => model.ClientTypeId, Session.Center().Provider, "", new { @class = "form-control" })
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-6">
+			@Html.Partial("_SearchResetButtons")
+		</div>
+		<div class="col-xs-6">
+			<div class="dropdown pull-right">
+				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+					<span class="glyphicon glyphicon-pencil"></span> Add New Client
+					<span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu dropdown-menu-right">
+					@foreach (var each in Lookups.ClientType[Session.Center().Provider]) {
+						<li><a href="~/Case/Edit?clientType=@each.CodeId">New @each.Description</a></li>
+					}
+				</ul>
+			</div>
+		</div>
+
+	</div>
+	<br />
+}
+
+<div class="icjia-sm-not-responsive table-responsive">
+	<table class="table table-hover">
+		<tr>
+			<th scope="col">
+				Client ID
+			</th>
+			<th class="text-center" scope="col">
+				Case Number
+			</th>
+			<th scope="col">
+				Case Status
+			</th>
+			<th scope="col">
+				@dateLabel
+			</th>
+			<th class="text-right" scope="col">
+				Age
+			</th>
+			<th scope="col">
+				Gender
+			</th>
+			<th scope="col">
+				Client Type
+			</th>
+			<th id="editButton"><span class="sr-only">Action</span></th>
+		</tr>
+
+		@foreach (var item in Model.SearchList) {
+			var isClosed = item.CaseClosed;
+			string caseStatus;
+			if (isClosed == 1) { caseStatus = "Closed"; } else { caseStatus = "Open"; }
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.ClientCode)
+					</td>
+					<td class="text-center">
+						@Html.DisplayFor(modelItem => item.CaseId)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => caseStatus)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.FirstContactDate)
+					</td>
+					<td class="text-right">
+						@Html.DisplayFor(modelItem => item.Age)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => Lookups.GenderIdentity[item.GenderIdentityId].Description)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => Lookups.ClientType[item.ClientTypeId].Description)
+					</td>
+					<td width="95px" style="min-width: 95px">
+						<div class="btn-group pull-right">
+						    @Html.ActionLink("Edit", "Edit", "Case", new { clientId = item.ClientId, caseId = item.CaseId }, new { @class = "btn btn-xs btn-primary btn-outline" })
+						    <button type="button" class="btn btn-xs btn-primary btn-outline dropdown-toggle" style="padding-left: 4px; padding-right: 4px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<span class="caret"></span>
+								<span class="sr-only">Toggle Dropdown</span>
+							</button>
+							<ul class="dropdown-menu dropdown-menu-right">
+								@* KMS DO these should be generated from CaseOutline *@
+								<li><a href="@Url.Action("Edit", "Case", new { clientId = item.ClientId, caseId = item.CaseId })">Intake</a></li>
+								@if (item.ClientTypeId == 1 || item.ClientTypeId == 3) {
+									<li><a href="@Url.Action("Medical", "Case", new { clientId = item.ClientId, caseId = item.CaseId })">Medical/Criminal Justice</a></li>
+								}
+								@if (item.ClientTypeId == 1 || item.ClientTypeId == 3 || item.ClientTypeId == 7) {
+									<li><a href="@Url.Action("Offenders", "Case", new { clientId = item.ClientId, caseId = item.CaseId })">Offenders</a></li>
+								}
+								@if (item.ClientTypeId == 7 || item.ClientTypeId == 6) {
+									<li><a href="@Url.Action("Investigation", "Case", new { clientId = item.ClientId, caseId = item.CaseId })">Investigation</a></li>
+								}
+								<li><a href="@Url.Action("Services", "Case", new { clientId = item.ClientId, caseId = item.CaseId })">Services</a></li>
+								<li><a href="@Url.Action("Closeout", "Case", new { clientId = item.ClientId, caseId = item.CaseId })">Case Closeout</a></li>
+							</ul>
+						</div>
+					</td>
+				</tr>
+		}
+	</table>
+</div>
+
+<div class="row">
+	<div class="col-sm-12">
+		@Html.PagedListPager(Model.SearchList, page => Url.Action(Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)), new {
+			page, Model.Range, StartDate = Model.StartDate.HasValue ? $"{Model.StartDate:MM/dd/yyyy}" : " ",
+			EndDate = Model.EndDate.HasValue ? $"{Model.EndDate:MM/dd/yyyy}" : " ", Model.ClientCode, Model.Age, ClientTypeID = Model.ClientTypeId, Model.PageSize
+		}),
+			Html.Snippets().PagedListRenderOptions())
+		@*@Html.Partial("_PagedListDropMenu", Model, new ViewDataDictionary { { "PagedListUrlAction", @Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)) } })*@
+		@Html.Partial("_PagedListDropMenu", Model)
+	</div>
+</div>
+
+@section Scripts {
+	<script src="~/Scripts/ICJIA/date-ranges.js"></script>
+	<script src="~/Scripts/ICJIA/pagedlist.js"></script>
+}

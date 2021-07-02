@@ -1,0 +1,215 @@
+﻿@using Infonet.Reporting.Enumerations
+@model Infonet.Reporting.ViewModels.StandardReportViewModel
+
+@{
+	ViewBag.Title = "Standard Reports";
+	bool isChecked = false;
+}
+
+@helper RenderSelectionGroup(ReportSelection reportType, bool isChecked = false) {
+	string colSize = Session.Center().Provider == Provider.CAC ? "col-sm-3" : "col-sm-4";
+	<div class="@colSize">
+		<fieldset>
+			<legend> @* KMS DO label in legend? *@
+				<label style="font-weight: normal; cursor: pointer"><input type="radio" class="reportSelectionRadio" id="selectionGroup@((int)reportType)" name="ReportSelection" value="@((int)reportType)" data-icjia-name="@reportType.ToString()" @(!isChecked ? "" : "checked=checked") /> @reportType.GetDisplayName()</label>
+			</legend>
+			@for (int i = 0; i < Model.AvailableSelections[reportType].Count; i++) {
+				string style = string.Empty;
+				bool skipForDefault = false;
+				if (Model.AvailableSelections[reportType][i] == SubReportSelection.StdRptServiceProgramsHudHmisServiceReport) {
+					style = "style=margin-top:24px;";
+					skipForDefault = true;
+				}
+				if (Model.AvailableSelections[reportType][i] == SubReportSelection.StdRptServiceProgramsNonClientCrisisInterventionDemographics) {
+					style = "style=padding-left:20px;";
+					skipForDefault = true;
+				}
+				<div class="checkbox" @style>
+					<label>
+						<input type="checkbox"
+							   name="@Html.NameFor(model => model.SubReportSelections)"
+							   class="subSelection selectionGroup@((int)reportType) @(skipForDefault ? "skipDefault" : "")"
+							   value="@((int)Model.AvailableSelections[reportType][i])"
+                               data-icjia-parent-id="#selectionGroup@((int)reportType)"
+							   id="@Model.AvailableSelections[reportType][i].ToString()"
+                               data-icjia-name="@Model.AvailableSelections[reportType][i].ToString()" />
+						@(Model.AvailableSelections[reportType][i].GetDisplayName())
+					</label>
+				</div>
+			}
+		</fieldset>
+	</div>
+
+}
+
+@using (Html.BeginForm("StandardReportRun", "Report", FormMethod.Post, new { id = "main", autocomplete = "off", target = "_blank" })) {
+	@Html.AntiForgeryToken()
+	<input id="providerId" type="hidden" value="@Session.Center().ProviderId">
+	@Html.Partial("Reports/_ReportDateRangeAndOutput", Model)
+	@Html.Partial("Reports/_CenterSelection", Model)
+	<div class="row">
+		<div class="col-sm-12 col-md-12 col-lg-12">
+			<div class="panel panel-primary icjia-error-group">
+				<div class="panel-heading">
+					<h2 class="panel-title">Report Selection</h2>
+				</div>
+				<div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-12 form-group">
+                            @Html.Hidden("SubReportSelectionsVal")
+                            @Html.ValidationMessageFor(model => model.SubReportSelections, "", new { @class = "help-block" })
+                        </div>
+                    </div>
+                    <div class="row">
+						@foreach (var reportType in Model.AvailableSelections.Keys) {
+							if (isChecked) {
+								@RenderSelectionGroup(reportType)
+							} else {
+								@RenderSelectionGroup(reportType, true)
+								isChecked = true;
+							}
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12" style="margin-bottom:20px">
+			<button type="button" class="btn btn-primary center-block" id="Generate" name="Search">
+				Generate
+			</button>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12 col-md-12 col-lg-12">
+			<div class="panel panel-primary icjia-error-group">
+				<div class="panel-heading" data-toggle="collapse" data-target="#filtersCollapse">
+					<h2 class="panel-title">Filters
+						<button type="button" class="btn btn-link icjia-h2-btn-link-icon pull-right collapsed" data-toggle="collapse" data-target="#filtersCollapse" data-icjia-role="panel.expand" aria-label="Toggle Panel" aria-controls="filtersCollapse" aria-expanded="false"><span class="glyphicon glyphicon-triangle-bottom rotate-90-if-collapsed"></span></button>
+					</h2>
+				</div>
+				<div id="filtersCollapse" class="panel-collapse collapse">
+					<div class="panel-body">
+						<div class="col-sm-6 col-md-4">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<span class="panel-title">Client Demographic Filters</span>
+								</div>
+								<div class="panel-body">
+									<div class="form-group">
+										@Html.LabelFor(m => m.GenderIds)
+										@Html.DropDownListFor(model => model.GenderIds, new MultiSelectList(Model.GenderDefault, "CodeId", "Description", Model.GenderIds), new { @class = "form-control", multiple = "multiple", data_icjia_role = "chosen" })
+									</div>
+									@if (Session.Center().Provider != Provider.CAC) {
+										<div id="ethnicityDropdown">
+											<div class="form-group">
+												@Html.LabelFor(m => m.EthnicityIds)
+												@Html.DropDownListFor(model => model.EthnicityIds, new MultiSelectList(Model.EthnicityDefault, "CodeId", "Description", Model.EthnicityIds), new { @class = "form-control", multiple = "multiple", data_icjia_role = "chosen" })
+											</div>
+										</div>
+									}
+									<div class="form-group">
+										@Html.LabelFor(m => m.MinimumAge)
+										<div class="input-group">
+											@Html.TextBoxFor(m => m.MinimumAge, new { @class = "form-control" })
+											<span class="input-group-addon" id="basic-addon1"><b>to</b></span>
+											@Html.TextBoxFor(m => m.MaximumAge, new { @class = "form-control" })
+										</div>
+									</div>
+									<div class="form-group">
+										@Html.LabelFor(m => m.RaceIds)
+										@Html.DropDownListFor(model => model.RaceIds, new MultiSelectList(Model.RaceDefault, "CodeId", "Description", Model.RaceIds), new { @class = "form-control", multiple = "multiple", data_icjia_role = "chosen" })
+									</div>
+								</div>
+
+							</div>
+						</div>
+						<div class="col-sm-6 col-md-4">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<span class="panel-title">Client Location Filters</span>
+								</div>
+								<div class="panel-body">
+									<div class="form-group">
+										@Html.LabelFor(m => m.CityOrTowns)
+										@Html.DropDownListFor(model => model.CityOrTowns, new MultiSelectList(Model.CityOrTownsDefault, "Description", "Description", Model.CityOrTowns), new { @class = "form-control", multiple = "multiple", data_icjia_ajax_url = "/Report/CityOrTowns", data_icjia_role = "chosen" })
+									</div>
+									<div class="form-group">
+										@Html.LabelFor(m => m.Townships)
+										@Html.DropDownListFor(model => model.Townships, new MultiSelectList(Model.TownshipsDefault, "Description", "Description", Model.Townships), new { @class = "form-control", multiple = "multiple", data_icjia_ajax_url = "/Report/Townships", data_icjia_role = "chosen" })
+									</div>
+									<div class="form-group">
+										@Html.LabelFor(m => m.CountyIds)
+										@Html.DropDownListFor(model => model.CountyIds, new MultiSelectList(Model.CountiesDefault, "CodeId", "Description", Model.CountyIds), new { @class = "form-control", multiple = "multiple", data_icjia_ajax_url = "/Report/Counties", data_icjia_role = "chosen" })
+									</div>
+									<div class="form-group">
+										@Html.LabelFor(m => m.Zipcodes)
+										@Html.DropDownListFor(model => model.Zipcodes, new MultiSelectList(Model.ZipcodesDefault, "Description", "Description", Model.Zipcodes), new { @class = "form-control", multiple = "multiple", data_icjia_ajax_url = "/Report/Zipcodes", data_icjia_role = "chosen" })
+									</div>
+									<div class="form-group">
+										@Html.LabelFor(m => m.StateIds)
+										@Html.DropDownListFor(model => model.StateIds, new MultiSelectList(Model.StatesDefault, "CodeId", "Description", Model.StateIds), new { @class = "form-control", multiple = "multiple", data_icjia_ajax_url = "/Report/States", data_icjia_role = "chosen" })
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6 col-md-4">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<span class="panel-title">Other Filters</span>
+								</div>
+								<div class="panel-body">
+									<div class="form-group">
+										@Html.LabelFor(m => m.SvIds)
+										@Html.DropDownListFor(model => model.SvIds, new MultiSelectList(Model.StaffDefault, "SVID", "StaffName", Model.SvIds), new { @class = "form-control SVIDSelections", multiple = "multiple", data_icjia_role = "chosen" })
+									</div>
+									<div class="form-group">
+										@Html.LabelFor(m => m.ServiceIds)
+										@Html.DropDownListFor(model => model.ServiceIds, new MultiSelectList(Model.ServiceDefault, "CodeId", "Description", Model.ServiceIds), new { @class = "form-control", multiple = "multiple", data_icjia_ajax_url = "/Report/ServiceNames", data_icjia_role = "chosen" })
+									</div>
+									<div class="form-group">
+										@Html.LabelFor(m => m.OffenderRelationshipIds)
+										@Html.DropDownListFor(model => model.OffenderRelationshipIds, new MultiSelectList(Model.OffenderRelationshipDefault, "CodeId", "Description", Model.OffenderRelationshipIds), new { @class = "form-control", multiple = "multiple", data_icjia_role = "chosen" })
+									</div>
+									<div class="form-group">
+										@Html.LabelFor(m => m.FundingSourceIds)
+										@Html.DropDownListFor(model => model.FundingSourceIds, new MultiSelectList(Model.FundingSourcesDefault, "CodeId", "Description", Model.FundingSourceIds), new { @class = "form-control", multiple = "multiple", data_icjia_ajax_url = "/Report/FundingSources", data_icjia_role = "chosen" })
+									</div>
+									@if (Session.Center().Provider == Provider.DV) {
+										<div class="form-group">
+											@Html.LabelFor(m => m.ClientTypeIds)
+											@Html.DropDownListFor(model => model.ClientTypeIds, new MultiSelectList(Model.ClientTypeDefault, "CodeId", "Description", Model.ClientTypeIds), new { @class = "form-control", multiple = "multiple", data_icjia_role = "chosen" })
+										</div>
+									}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+@section Styles {
+	@Styles.Render("~/Content/ICJIA/checkbox.css", "~/Content/bootstrap-chosen.css", "~/Content/ICJIA/bootstrap-chosen-addons.css")
+	<style type="text/css">
+		.search-field {
+			border: none;
+		}
+
+		.reportStaff {
+			border-left: solid 8px;
+		}
+	</style>
+}
+
+@section Scripts {
+	@Scripts.Render("~/Scripts/chosen.jquery.min.js")
+	@Scripts.Render("~/Scripts/ICJIA/date-ranges.js")
+	@Scripts.Render("~/Scripts/Views/Reports/StandardReport.js")
+	@Scripts.Render("~/Scripts/Views/Reports/ReportFilter.js")
+	@Scripts.Render("~/Scripts/Views/Reports/ReportOutput.js")
+	@Scripts.Render("~/Scripts/ICJIA/system-growl.js")
+}

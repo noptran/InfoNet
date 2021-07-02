@@ -1,0 +1,25 @@
+﻿<div class="sessionTracker icjia-session-overlay" style="display:none"></div>
+<div id="sessionTrackerMainWrapper" class="sessionTracker icjia-session-grandparent-container" style="display:none" data-icjia-session-expire="@string.Format("{0:MM/dd/yyyy hh://:ss.fff}", DateTime.Now.AddMinutes(Session.Timeout).AddSeconds(-10))">
+	<div class="icjia-session-parent-container">
+		<div class="icjia-session-child-container">
+			<div id='sessionTimeoutWrapper' class="icjia-session-wrapper">
+				<div id="sessionTrackerText">
+					<div><span class="glyphicon glyphicon-warning-sign" style="font-size: 24px"></span></div>
+					<div><span>Your session will expire in:</span></div>
+					<div><span id='sessionTimeoutCountdown' class="icjia-session-countdown"></span></div>
+					<div>Click 'Continue' to keep working or 'Log Out' if you are finished</div>
+				</div>
+				<div id="sessionTrackerExpired" class="text-danger" style="display:none">
+					<div><span class="glyphicon glyphicon-exclamation-sign" style="font-size: 24px"></span></div>
+					<div style="font-size:18px">Session has expired</div>
+				</div>
+				<br />
+				<div>
+					<button type="button" id="sessiontrackerOk" class="btn btn-default" style="display:none">Ok</button>
+					<button type="button" id="sessiontrackerContinue" class="btn btn-default">Continue</button>
+				    @Html.ActionLink("Log Out", "LogOff", "Account", null, new { @class = "btn btn-danger", id = "sessiontrackerLogout", style="margin-left:15px" })
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

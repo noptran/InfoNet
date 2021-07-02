@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Infonet.Web.Controllers.AdHocController.QueryViewModel>
+
+<div class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h2 class="modal-title">Open Query...</h2>
+			</div>
+			<div class="modal-body" style="max-height: calc(100vh - 126px); overflow-y: auto">
+				<div class="table-responsive">
+					<table class="table table-condensed table-hover">
+						<thead>
+							<tr>
+								<th scope="col">Name</th>
+								<th scope="col">Last Modified</th>
+								<th scope="col" class="text-center">Run Count</th>
+								<th scope="col">Last Run</th>
+								<th scope="col"><span class="sr-only">Action</span></th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var each in Model) {
+								<tr>
+									<td>@each.Name</td>
+									<td>@each.RevisionStamp</td>
+									<td class="text-center">@each.RunCount</td>
+									<td>@each.LastRunDate</td>
+									<td class="text-right"><a href=@Url.Action("Index", "AdHoc", new { id = each.QueryId }) class="btn btn-xs btn-primary btn-outline" style="padding-left: 4px; padding-right: 4px">Open</a></td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

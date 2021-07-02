@@ -1,0 +1,75 @@
+﻿@model Infonet.Web.ViewModels.Services.HotlineSearchViewModel
+@using PagedList.Mvc;
+@{
+	ViewBag.Title = "Hotline Calls";
+}
+
+
+@using (Html.BeginForm("Search", "Hotline", FormMethod.Get, new { id = "main" })) {
+	@Html.Partial("_DateRangeSelect", Model, new ViewDataDictionary { { "rangeTitle", "Service Date Range" }, { "rangeTooltipTitle", "" } })
+
+	<div class="row">
+		<div class="col-sm-6 col-md-4">
+            <div class="form-group">
+                @Html.LabelFor(m => m.SVID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the name of the staff person/volunteer who responded to the call(s) from the drop-down menu" })
+                @Html.DropDownListFor(m => m.SVID, new SelectList(Data.Centers.GetStaffForCentersAndDateRange(Model.StartDate,Model.EndDate, Session.Center().Id), "SVID", "EmployeeName"), "<Pick One>", new { @class = "form-control staffData" })
+                @Html.ValidationMessageFor(m => m.SVID, "", new { @class = "help-block" })
+            </div>
+		</div>
+		<div class="col-sm-6 col-md-5">
+			<div class="form-group">
+				@Html.LabelFor(m => m.CallTypeID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the type of call from the drop-down menu. If more than one call is being documented for this record, ensure all calls were of the same type." })
+				@Html.LookupFor(m => m.CallTypeID, Session.Center().Provider, "<Pick One>", new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.CallTypeID, "", new { @class = "help-block" })
+			</div>
+		</div>
+	</div>
+			@Html.Partial("_SearchResetNewButtons", Model, new ViewDataDictionary { { "NewButtonUrl", "/Hotline/FormRedirect" }, { "NewButtonText", "New Hotline Call" } })
+}
+<table class="table table-hover table-responsive">
+	<tr>
+		<th scope="col">
+			Date
+		</th>
+		<th scope="col">
+			Staff/Volunteer
+		</th>
+		<th scope="col">
+			Call Type
+		</th>
+        <th scope="col"><span class="sr-only">Action</span></th>
+	</tr>
+	@foreach (var item in Model.HotlineList) {
+		<tr>
+			<td>
+				@Html.DisplayFor(m => item.Date)
+			</td>
+			<td>
+				@item.Staff
+			</td>
+			<td>
+				@(Lookups.HotlineCallType[item.CallTypeID]?.Description)
+			</td>
+			<td class="text-right">
+				@Html.ActionLink("Edit", "FormRedirect", new { id = item.PH_ID }, new { @class = "btn btn-xs btn-primary btn-outline" })
+			</td>
+		</tr>
+			}
+</table>
+@Html.Partial("_PagedListHiddenFields")
+
+<div class="row">
+	<div class="col-sm-12">
+		@Html.PagedListPager(Model.HotlineList, page => Url.Action(Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)), new {
+			page, Model.Range, StartDate = Model.StartDate.HasValue ? $"{Model.StartDate:MM/dd/yyyy}" : " ",
+			EndDate = Model.EndDate.HasValue ? $"{Model.EndDate:MM/dd/yyyy}" : " ", Model.CallTypeID, Model.SVID, Model.PageSize
+		}), Html.Snippets().PagedListRenderOptions())
+		@Html.Partial("_PagedListDropMenu", Model, new ViewDataDictionary { { "PagedListUrlAction", Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)) } })
+	</div>
+</div>
+
+@section Scripts {
+	<script src="~/Scripts/ICJIA/date-ranges.js"></script>
+	<script src="~/Scripts/ICJIA/pagedlist.js"></script>
+    <script src="~/Scripts/Views/Services/ServicesSearchUpdateStaffList.js"></script>
+}

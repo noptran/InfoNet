@@ -1,0 +1,144 @@
+﻿@model ClientCase
+
+@{
+	var offenderKey = (Key)ViewData["offenderKey"];
+	var chargeKey = (Key)ViewData["chargeKey"];
+	string chargeKeyPrefix = (string)ViewData["chargeKeyPrefix"];
+	bool isDeleted = "-~".Contains(chargeKeyPrefix);
+	string idPrefix = ("trialCharge" + offenderKey + "_" + chargeKey).Replace(':', '_');
+}
+
+<tr class=@(isDeleted ? "deleted" : null) data-toggle="collapse" data-target="#@(idPrefix)Collapse">
+	<td class="text-center">
+		<span id="@(idPrefix)ChargesFiledId"></span>
+	</td>
+	<td>
+		<span id="@(idPrefix)StatuteId"></span>
+	</td>
+	<td>
+		<span id="@(idPrefix)ChargeDate"></span>
+	</td>
+	<td>
+		<span id="@(idPrefix)DispositionId"></span>
+	</td>
+	<td>
+		<span id="@(idPrefix)DispositionDate"></span>
+	</td>
+	<td class="text-center">
+		<span data-icjia-role="offender.trialcharge.sentence.count"></span>
+	</td>
+	<td>
+		<button type="button" class="btn btn-primary btn-xs btn-icon collapsed @(isDeleted ? "hide" : null)" aria-label="Toggle Charge Editing" aria-controls="#@(idPrefix)Collapse" aria-expanded="false" data-icjia-role="offender.trialcharge.expand" data-toggle="collapse" data-target="#@(idPrefix)Collapse"><span class="glyphicon glyphicon-triangle-bottom rotate-90-if-collapsed"></span></button>
+		<button type="button" class="btn btn-primary btn-xs btn-icon @(isDeleted ? null : "hide")" aria-label="Restore Deleted Charge" data-icjia-role="offender.trialcharge.restore"><span class="glyphicon glyphicon-undo"></span></button>
+		@Html.Hidden(Html.NameFor(m => m.OffendersById[offenderKey].TrialChargesById) + ".index", chargeKeyPrefix + chargeKey, new { data_icjia_role = "offender.trialcharge.index" })
+	</td>
+</tr>
+<tr>
+	<td colspan="7" style="border-top: none; padding: 0">
+		<div id="@(idPrefix)Collapse" class="collapse well" style="position: relative; margin: 0 39.3667px 19.68335px">
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						@Html.LabelFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].ChargesFiledId, new { @class = "control-label", data_toggle = "tooltip", title = "Select if charges were filed by the state’s attorney from the drop-down menu. If this information is not known, select unknown." })
+						@Html.LookupFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].ChargesFiledId, "<Pick One>", true, new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "ChargesFiledId" })
+						@Html.ValidationMessageFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].ChargesFiledId, "", new { @class = "help-block" })
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].StatuteId, new { @class = "control-label", data_toggle = "tooltip", title = "Select the type of State's Attorney Charge from the drop-down menu.  If there are multiple charges against this offender, you can add more state's attorney charge records.  If the charge is not listed, select Other Charge from the third group." })
+						@Html.LookupFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].StatuteId, "<Pick One>", true, new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "StatuteId", data_icjia_role="charge" })
+						@Html.ValidationMessageFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].StatuteId, "", new { @class = "help-block" })
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].ChargeDate, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the date this charge was filed by the state's attorney/prosecutor." })
+						<div class="input-group date" data-provide="datepicker">
+							@Html.TextBoxFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].ChargeDate, true, new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "ChargeDate", onblur = $@"$('input[name=""{Html.NameFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].DispositionDate)}""]').valid();" })
+							<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+						</div>
+						@Html.ValidationMessageFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].ChargeDate, "", new { @class = "help-block" })
+					</div>
+				</div>
+				<div class="col-sm-6">
+                    @if (Model.Provider == Provider.CAC) {
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].ChargeTypeId, new { @class = "control-label", data_toggle = "tooltip", title = "Select the class of police charge (offense for which offender was/will be arrested) from the drop-down menu." })
+                            @Html.LookupFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].ChargeTypeId, "<Pick One>", true, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].ChargeTypeId, "", new { @class = "help-block" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].ChargeCounts, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the number of counts for the selected charge against the offender." })
+                            @Html.TextBoxFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].ChargeCounts, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].ChargeCounts, "", new { @class = "help-block" })
+                        </div>
+                    }
+					<div class="form-group">
+						@Html.LabelFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].DispositionId, new { @class = "control-label", data_toggle = "tooltip", title = "Select the Disposition, or case outcome, from the drop-down menu." })
+						@Html.LookupFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].DispositionId, "<Pick One>", true, new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "DispositionId" })
+						@Html.ValidationMessageFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].DispositionId, "", new { @class = "help-block" })
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].DispositionDate, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate the date the disposition or outcome of this charge was rendered by the justice system, if known." })
+						<div class="input-group date" data-provide="datepicker">
+							@Html.TextBoxFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].DispositionDate, true, new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "DispositionDate", onblur = $@"$('input[name=""{Html.NameFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].ChargeDate)}""]').valid();" })
+							<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+						</div>
+						@Html.ValidationMessageFor(m => m.OffendersById[offenderKey].TrialChargesById[chargeKey].DispositionDate, "", new { @class = "help-block" })
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-default" style="margin: 20px 0 10px">
+				<table class="table table-condensed table-borderless mb-0">
+					<caption class="text-center text-uppercase">Sentences</caption>
+					<colgroup>
+						<col style="width: 20%" />
+						<col />
+						<col style="width: 10%" />
+						<col style="width: 10%" />
+						<col style="width: 10%" />
+						<col style="width: 28.6667px" />
+					</colgroup>
+					<thead>
+						@{
+							var SAMPLE_SENTENCE = new Sentence();
+						}
+						<tr class="icjia-panel-subheader">
+							<th scope="col" class="pr-0 icjia-required" style="padding-left: 10px" data-toggle="tooltip" title="Enter the date offender's sentence for this charge was announced by the court.">@Html.DisplayNameFor(m => SAMPLE_SENTENCE.SentenceDate)</th>
+							<th scope="col" class="pr-0" data-toggle="tooltip" title="Select the type of sentence offender received for this charge from the drop-down menu.  If the offender received multiple sentences for this charge, enter additional sentences for each one received.  If this information is not known, select Unknown.">@Html.DisplayNameFor(m => SAMPLE_SENTENCE.SentenceId)</th>
+							<th scope="col" class="pr-0" data-toggle="tooltip" title="If the sentence includes a specific timeframe, enter the sentence length in years, months and days.">@Html.DisplayNameFor(m => SAMPLE_SENTENCE.YearsSentenced)</th>
+							<th scope="col" class="pr-0" data-toggle="tooltip" title="If the sentence includes a specific timeframe, enter the sentence length in years, months and days.">@Html.DisplayNameFor(m => SAMPLE_SENTENCE.MonthsSentenced)</th>
+							<th scope="col" class="pr-0" data-toggle="tooltip" title="If the sentence includes a specific timeframe, enter the sentence length in years, months and days.">@Html.DisplayNameFor(m => SAMPLE_SENTENCE.DaysSentenced)</th>
+                            <th scope="col"><span class="sr-only">Action</span></th>
+						</tr>
+						<tr aria-hidden="true"> @* for spacing only *@
+							<th scope="col" colspan="6" class="pb-0"></th>
+						</tr>
+					</thead>
+					<tbody>
+						@{
+							var sentences = Model.OffendersById[offenderKey].TrialChargesById[chargeKey].SentencesById;
+						}
+						@foreach (var each in sentences.KeysFor(sentences.Values.IncludingRestorable.OrderBy(c => c.Id, true).ThenBy(c => sentences.KeyFor(c).Occurrence))) {
+							bool isNew = each.Components[0] == null;
+							string prefix = sentences.ContainsKey(each) ? (isNew ? "+" : "=") : (isNew ? "~" : "-");
+							@Html.Partial("_Offender_TrialCharge_Sentence", Model, ViewData.CopyWith(new { sentenceKey = each, sentenceKeyPrefix = prefix }))
+						}
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="6" class="text-right">
+								<button type="button" class="btn btn-xs btn-primary btn-icon" aria-label="Add New Sentence" data-icjia-role="offender.trialcharge.sentence.add" data-icjia-mustache-next='{ "key": @Model.OffendersById[offenderKey].TrialChargesById[chargeKey].SentencesById.NextOccurrenceFor(null) }'>
+									<span class="glyphicon glyphicon-plus"></span>
+									@using (var mustache = Html.BeginMustache(chargeKey.IsTemplate ? "--d-!protect outer-p--script" : "script", "--ddd-", "-ppp--")) { @* reorder nested tags *@
+										@Html.Partial("_Offender_TrialCharge_Sentence", Model, ViewData.CopyWith(new { sentenceKey = Key.Template(null, mustache.Tag("key")), sentenceKeyPrefix = "+" }))
+									}
+								</button>
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+			<div class="icjia-well-footer text-right"> @* KMS DO prefix with icjia *@
+				<button type="button" class="btn btn-danger" aria-label="Delete This Charge" data-icjia-role="offender.trialcharge.delete"><span class="glyphicon glyphicon-trash"></span></button>
+			</div>
+		</div>
+	</td>
+</tr>

@@ -1,0 +1,25 @@
+﻿@model ClientCase
+
+@{
+	var panel = (CaseOutline.Panel)ViewData["panel"];
+}
+<div id="@panel.Id" class="icjia-bookmark">
+	<div class="panel panel-primary icjia-error-group @(panel.IsDeleted ? "deleted" : null)">
+		<div class="panel-heading @(panel.IsCollapsed ? "collapsed" : null)" data-toggle="collapse" data-target="#@(panel.Id)Collapse">
+			<h2 class="panel-title">
+				<span class="icjia-panel-title-text">@panel.Name</span>
+				<button type="button" class="btn btn-link icjia-h2-btn-link-icon pull-right @(panel.IsCollapsed ? "collapsed" : null) @(panel.IsDeleted ? "hide" : null)" data-toggle="collapse" data-target="#@(panel.Id)Collapse" data-icjia-role="panel.expand" aria-label="Toggle Panel" aria-controls="@(panel.Id)Collapse" aria-expanded="@(!panel.IsCollapsed)"><span class="glyphicon glyphicon-triangle-bottom rotate-90-if-collapsed"></span></button>
+				<button type="button" class="btn btn-link icjia-h2-btn-link-icon pull-right icjia-restore @(panel.IsDeleted ? null : "hide")" data-icjia-role="panel.restore" aria-label="Restore Deleted @panel.Name"><span class="glyphicon glyphicon-undo"></span></button>
+			</h2>
+		</div>
+		<div id="@(panel.Id)Collapse" class="panel-collapse collapse @(panel.IsCollapsed ? null : "in")">
+			@if (panel.Partial != null) {
+				if (panel.ViewData == null) {
+					@Html.Partial(panel.Partial, Model)
+				} else {
+					@Html.Partial(panel.Partial, Model, ViewData.CopyWith(panel.ViewData))
+				}
+			}
+		</div>
+	</div>
+</div>

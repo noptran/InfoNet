@@ -1,0 +1,52 @@
+﻿@model ClientCase
+
+<div class="panel-body pb-0">
+	<fieldset class="form-group mb-0">
+		<legend>Special Needs of Client (check as many as apply)</legend>
+		<div class="icjia-checkbox-group">
+			<div class="row" id="icjia-special-needs-body">
+				<div class="col-sm-6">
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientDisability.Deaf)
+						@Html.LabelFor(m => m.ClientDisability.Deaf)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientDisability.VisualProblem)
+						@Html.LabelFor(m => m.ClientDisability.VisualProblem)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientDisability.LimitedEnglish)
+						@Html.LabelFor(m => m.ClientDisability.LimitedEnglish)
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.ClientDisability.PrimaryLanguageID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the client’s primary language." })
+						@Html.LookupFor(m => m.ClientDisability.PrimaryLanguageID, "<Pick One>", new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.ClientDisability.PrimaryLanguageID, "", new { @class = "help-block" })
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientDisability.WheelChair)
+						@Html.LabelFor(m => m.ClientDisability.WheelChair)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientDisability.DevelopmentallyDisabled)
+						@Html.LabelFor(m => m.ClientDisability.DevelopmentallyDisabled)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientDisability.MentalDisability)
+						<label for="@Html.IdFor(m => m.ClientDisability.MentalDisability)">Has mental health disability, requires assistance</label>
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientDisability.OtherDisability)
+						<label for="@Html.IdFor(m => m.ClientDisability.OtherDisability)" data-toggle="tooltip" title="Specify the other disability. Do not enter information that could potentially identify the client.">Has other physical disability, requires assistance</label>
+					</div>
+					<div class="form-group">
+						@Html.TextBoxFor(m => m.ClientDisability.WhatOther, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.ClientDisability.WhatOther, "", new { @class = "help-block" })
+					</div>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+</div>

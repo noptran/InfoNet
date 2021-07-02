@@ -1,0 +1,288 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7550A24E-08AB-428A-BF9E-E8985E376DF2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Infonet.Data</RootNamespace>
+    <AssemblyName>InfonetData</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EFHooks, Version=2.3.0.0, Culture=neutral, PublicKeyToken=1386ae34114c35cf, processorArchitecture=MSIL">
+      <HintPath>..\packages\Atreyu.EFHooks.2.3.1\lib\net45\EFHooks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="LinqKit.EntityFramework, Version=1.1.9.0, Culture=neutral, PublicKeyToken=b6c8cfc71f7a6a80, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinqKit.EntityFramework.1.1.9.0\lib\net45\LinqKit.EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.2.5.0\lib\net46\Serilog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Entity\HelpAttribute.cs" />
+    <Compile Include="Entity\Validation\ResidenceMoveDateBeforeFirstContactAttribute.cs" />
+    <Compile Include="Helpers\AgencyListItem.cs" />
+    <Compile Include="Importing\DataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Importing\ImportException.cs" />
+    <Compile Include="Importing\ServicesImport.cs" />
+    <Compile Include="Importing\SqlCommandFactory.cs" />
+    <Compile Include="Importing\SqlParameters.cs" />
+    <Compile Include="Looking\ILookupIndex.cs" />
+    <Compile Include="Looking\ILookupSelection.cs" />
+    <Compile Include="Looking\IProvided.cs" />
+    <Compile Include="Looking\Lookup.cs" />
+    <Compile Include="Looking\LookupAttribute.cs" />
+    <Compile Include="Looking\LookupBuilder.cs" />
+    <Compile Include="Looking\LookupCode.cs" />
+    <Compile Include="Looking\LookupComparer.cs" />
+    <Compile Include="Looking\LookupGroup.cs" />
+    <Compile Include="Looking\Lookups.cs" />
+    <Compile Include="Looking\LookupSelection.cs" />
+    <Compile Include="Looking\Provider.cs" />
+    <Compile Include="Looking\ProviderMap.cs" />
+    <Compile Include="Mapping\Reporting\ReportJobApprovalMap.cs" />
+    <Compile Include="Mapping\Reporting\ReportJobMap.cs" />
+    <Compile Include="Mapping\Reporting\AdHocTrackingMap.cs" />
+    <Compile Include="Mapping\Reporting\AdHocQueryMap.cs" />
+    <Compile Include="Models\Centers\Agency.cs" />
+    <Compile Include="Models\Clients\Cancellation.cs" />
+    <Compile Include="Models\Centers\Center.cs" />
+    <Compile Include="Models\Centers\CenterAdminFundingSources.cs" />
+    <Compile Include="Models\Centers\CenterAdministrators.cs" />
+    <Compile Include="Models\Clients\FinancialResource.cs" />
+    <Compile Include="Models\Clients\AbuseNeglectPetition.cs" />
+    <Compile Include="Models\Clients\AbuseNeglectPetitionRespondent.cs" />
+    <Compile Include="CaseType.cs" />
+    <Compile Include="Models\Clients\Client.cs" />
+    <Compile Include="Models\Clients\ClientCase.cs" />
+    <Compile Include="Models\Clients\ChildBehavioralIssues.cs" />
+    <Compile Include="Models\Clients\ClientCJProcess.cs" />
+    <Compile Include="Models\Clients\ClientConflictScale.cs" />
+    <Compile Include="Models\Clients\ClientCourtAppearance.cs" />
+    <Compile Include="Models\Clients\ClientDeparture.cs" />
+    <Compile Include="Models\Clients\ClientDisability.cs" />
+    <Compile Include="Models\Clients\ClientIncome.cs" />
+    <Compile Include="Models\Clients\ClientMDT.cs" />
+    <Compile Include="Models\Clients\ClientNonCashBenefits.cs" />
+    <Compile Include="Models\Clients\ClientPoliceProsecution.cs" />
+    <Compile Include="Models\Clients\ClientRace.cs" />
+    <Compile Include="Models\Clients\ClientReferralDetail.cs" />
+    <Compile Include="Models\Clients\ClientReferralSource.cs" />
+    <Compile Include="Models\Clients\DCFSAllegation.cs" />
+    <Compile Include="Models\Clients\DCFSAllegationRespondent.cs" />
+    <Compile Include="Models\Reporting\ReportJobApproval.cs" />
+    <Compile Include="Models\Reporting\ReportJob.cs" />
+    <Compile Include="Models\Reporting\AdHocTracking.cs" />
+    <Compile Include="Models\Reporting\AdHocQuery.cs" />
+    <Compile Include="Models\Services\HivMentalSubstance.cs" />
+    <Compile Include="Models\Investigations\Investigation.cs" />
+    <Compile Include="Models\Investigations\InvestigationClient.cs" />
+    <Compile Include="Models\Investigations\InvestigationHouseHold.cs" />
+    <Compile Include="Models\Clients\OpActivity.cs" />
+    <Compile Include="Models\Clients\OrderOfProtection.cs" />
+    <Compile Include="Models\Clients\PresentingIssues.cs" />
+    <Compile Include="Models\Clients\PreviousServiceUse.cs" />
+    <Compile Include="Models\Clients\ServiceGot.cs" />
+    <Compile Include="Models\Clients\ServiceNeeds.cs" />
+    <Compile Include="Models\Clients\TwnTshipCounty.cs" />
+    <Compile Include="Models\Clients\VictimSensitiveInterview.cs" />
+    <Compile Include="Models\Clients\VSIObserver.cs" />
+    <Compile Include="Models\Centers\Contact.cs" />
+    <Compile Include="Models\Services\EventDetail.cs" />
+    <Compile Include="Models\Centers\FundingDate.cs" />
+    <Compile Include="Helpers\CenterHelper.cs" />
+    <Compile Include="Helpers\CenterInfo.cs" />
+    <Compile Include="Helpers\FundingForStaffHelper.cs" />
+    <Compile Include="Helpers\Staff.cs" />
+    <Compile Include="InfonetServerContext.cs" />
+    <Compile Include="Models\Looking\LookupListItemAssignment.cs" />
+    <Compile Include="Models\Looking\LookupListTable.cs" />
+    <Compile Include="Mapping\Centers\AgencyMap.cs" />
+    <Compile Include="Mapping\Clients\CancellationMap.cs" />
+    <Compile Include="Mapping\Centers\CenterMap.cs" />
+    <Compile Include="Mapping\Centers\CenterAdminFundingSourcesMap.cs" />
+    <Compile Include="Mapping\Centers\CenterAdministratorsMap.cs" />
+    <Compile Include="Mapping\Clients\FinancialResourceMap.cs" />
+    <Compile Include="Mapping\Clients\AbuseNeglectPetitionMap.cs" />
+    <Compile Include="Mapping\Clients\AbuseNeglectPetitionRespondentMap.cs" />
+    <Compile Include="Mapping\Clients\ClientCaseMap.cs" />
+    <Compile Include="Mapping\Clients\ChildBehavioralIssuesMap.cs" />
+    <Compile Include="Mapping\Clients\ClientCJProcessMap.cs" />
+    <Compile Include="Mapping\Clients\ClientConflictScaleMap.cs" />
+    <Compile Include="Mapping\Clients\ClientCourtAppearanceMap.cs" />
+    <Compile Include="Mapping\Clients\ClientDepartureMap.cs" />
+    <Compile Include="Mapping\Clients\ClientDisabilityMap.cs" />
+    <Compile Include="Mapping\Clients\ClientIncomeMap.cs" />
+    <Compile Include="Mapping\Clients\ClientMap.cs" />
+    <Compile Include="Mapping\Clients\ClientMDTMap.cs" />
+    <Compile Include="Mapping\Clients\ClientNonCashBenefitsMap.cs" />
+    <Compile Include="Mapping\Clients\ClientPoliceProsecutionMap.cs" />
+    <Compile Include="Mapping\Clients\ClientRaceMap.cs" />
+    <Compile Include="Mapping\Clients\ClientReferralDetailMap.cs" />
+    <Compile Include="Mapping\Clients\ClientReferralSourceMap.cs" />
+    <Compile Include="Mapping\Clients\DCFSAllegationMap.cs" />
+    <Compile Include="Mapping\Clients\DCFSAllegationRespondentMap.cs" />
+    <Compile Include="Mapping\Services\HivMentalSubstanceMap.cs" />
+    <Compile Include="Mapping\Investigations\InvestigationClientMap.cs" />
+    <Compile Include="Mapping\Investigations\InvestigationHouseHoldMap.cs" />
+    <Compile Include="Mapping\Clients\OpActivityMap.cs" />
+    <Compile Include="Mapping\Clients\OrderOfProtectionMap.cs" />
+    <Compile Include="Mapping\Clients\PresentingIssuesMap.cs" />
+    <Compile Include="Mapping\Clients\PreviousServiceUseMap.cs" />
+    <Compile Include="Mapping\Clients\ServiceGotMap.cs" />
+    <Compile Include="Mapping\Clients\ServiceNeedsMap.cs" />
+    <Compile Include="Mapping\Clients\TwnTshipCountyMap.cs" />
+    <Compile Include="Mapping\Clients\VictimSensitiveInterviewMap.cs" />
+    <Compile Include="Mapping\Clients\VSIObserverMap.cs" />
+    <Compile Include="Mapping\Centers\ContactMap.cs" />
+    <Compile Include="Mapping\Services\EventDetailMap.cs" />
+    <Compile Include="Mapping\Centers\FundingDateMap.cs" />
+    <Compile Include="Mapping\Investigations\InvestigationMap.cs" />
+    <Compile Include="Mapping\Looking\LookupListItemAssignmentMap.cs" />
+    <Compile Include="Mapping\Looking\LookupListTableMap.cs" />
+    <Compile Include="Mapping\Offenders\OffenderListingMap.cs" />
+    <Compile Include="Mapping\Offenders\OffenderMap.cs" />
+    <Compile Include="Mapping\Offenders\PoliceChargeMap.cs" />
+    <Compile Include="Mapping\Offenders\SentenceMap.cs" />
+    <Compile Include="Mapping\Offenders\TrialChargeMap.cs" />
+    <Compile Include="Mapping\Services\PhoneHotlineMap.cs" />
+    <Compile Include="Mapping\Services\ProgramDetailMap.cs" />
+    <Compile Include="Mapping\Services\PublicationDetailMap.cs" />
+    <Compile Include="Mapping\Obsolete\SecurityIdentityMap.cs" />
+    <Compile Include="Mapping\Obsolete\SecurityPrincipalMap.cs" />
+    <Compile Include="Mapping\Obsolete\SecurityPrivilegeMap.cs" />
+    <Compile Include="Mapping\Obsolete\SecurityRoleMap.cs" />
+    <Compile Include="Mapping\Obsolete\SecurityPrincipalPropertiesMap.cs" />
+    <Compile Include="Mapping\Services\ServiceDetailOfClientMap.cs" />
+    <Compile Include="Mapping\Services\EventDetailStaffMap.cs" />
+    <Compile Include="Mapping\Services\ProgramDetailStaffMap.cs" />
+    <Compile Include="Mapping\Services\PublicationDetailStaffMap.cs" />
+    <Compile Include="Mapping\Services\ServiceOutcomeMap.cs" />
+    <Compile Include="Mapping\Services\TurnAwayServiceMap.cs" />
+    <Compile Include="Mapping\Centers\StaffVolunteerMap.cs" />
+    <Compile Include="Mapping\Centers\SystemMessageMap.cs" />
+    <Compile Include="Mapping\Centers\FundServiceProgramOfStaffMap.cs" />
+    <Compile Include="Mapping\_TLU\HudServiceMappingMap.cs" />
+    <Compile Include="Mapping\Services\OtherStaffActivityMap.cs" />
+    <Compile Include="Mapping\_TLU\TLU_Codes_FundingSourceMap.cs" />
+    <Compile Include="Mapping\_TLU\TLU_Codes_HivMentalSubstanceMap.cs" />
+    <Compile Include="Mapping\_TLU\TLU_Codes_HUDServiceMap.cs" />
+    <Compile Include="Mapping\_TLU\TLU_Codes_OtherStaffActivityMap.cs" />
+    <Compile Include="Mapping\_TLU\TLU_Codes_ProgramsAndServicesMap.cs" />
+    <Compile Include="Mapping\_TLU\TLU_Codes_ServiceCategoryMap.cs" />
+    <Compile Include="Mapping\_TLU\TLU_Codes_ServiceOutcomeMap.cs" />
+    <Compile Include="Models\Offenders\Offender.cs" />
+    <Compile Include="Models\Offenders\OffenderListing.cs" />
+    <Compile Include="Models\Offenders\PoliceCharge.cs" />
+    <Compile Include="Models\Offenders\Sentence.cs" />
+    <Compile Include="Models\Offenders\TrialCharge.cs" />
+    <Compile Include="Models\Services\PhoneHotline.cs" />
+    <Compile Include="Models\Services\ProgramDetail.cs" />
+    <Compile Include="Models\Obsolete\SecurityIdentity.cs" />
+    <Compile Include="Models\Obsolete\SecurityPrincipal.cs" />
+    <Compile Include="Models\Obsolete\SecurityPrivilege.cs" />
+    <Compile Include="Models\Obsolete\SecurityRole.cs" />
+    <Compile Include="Models\Obsolete\SecurityPrincipalProperties.cs" />
+    <Compile Include="Models\Services\ServiceDetailOfClient.cs" />
+    <Compile Include="Models\Services\EventDetailStaff.cs" />
+    <Compile Include="Models\Services\ProgramDetailStaff.cs" />
+    <Compile Include="Models\Services\PublicationDetail.cs" />
+    <Compile Include="Models\Services\PublicationDetailStaff.cs" />
+    <Compile Include="Models\Services\ServiceOutcome.cs" />
+    <Compile Include="Models\Services\TurnAwayService.cs" />
+    <Compile Include="Models\Centers\StaffVolunteer.cs" />
+    <Compile Include="Models\Centers\SystemMessage.cs" />
+    <Compile Include="Models\Centers\FundServiceProgramOfStaff.cs" />
+    <Compile Include="Models\_TLU\HudServiceMapping.cs" />
+    <Compile Include="Models\Services\OtherStaffActivity.cs" />
+    <Compile Include="Models\_TLU\TLU_Codes_FundingSource.cs" />
+    <Compile Include="Models\_TLU\TLU_Codes_HivMentalSubstance.cs" />
+    <Compile Include="Models\_TLU\TLU_Codes_HUDService.cs" />
+    <Compile Include="Models\_TLU\TLU_Codes_OtherStaffActivity.cs" />
+    <Compile Include="Models\_TLU\TLU_Codes_ProgramsAndServices.cs" />
+    <Compile Include="Models\_TLU\TLU_Codes_ServiceCategory.cs" />
+    <Compile Include="Models\_TLU\TLU_Codes_ServiceOutcome.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InfonetCore\InfonetCore.csproj">
+      <Project>{46c182b8-8645-4754-8be6-30d68c7f5a91}</Project>
+      <Name>InfonetCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InfonetUspsData\InfonetUspsData.csproj">
+      <Project>{301f3673-c549-4aec-b64c-e2ce9fac42c6}</Project>
+      <Name>InfonetUspsData</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>powershell -ExecutionPolicy ByPass -File  $(SolutionDir.TrimEnd('\'))\scripts\InjectGitVersion.ps1 $(ProjectDir)</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

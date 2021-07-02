@@ -1,0 +1,29 @@
+﻿@model Infonet.Web.ViewModels.Services.PublicationViewModel
+
+@{ 
+	Model.PublicationDetailStaff = Model.PublicationDetailStaff ?? new List<PublicationDetailStaff>();
+	if (Model.PublicationDetailStaff.Count == 0) {
+		Model.PublicationDetailStaff.Add(new PublicationDetailStaff());
+	}
+}
+
+@for (int i = 0; i < Model.PublicationDetailStaff.Count; i++) {
+<tr class="staffInfo">
+    <td class="staffMainCells">
+        <div class="form-group">
+            @Html.HiddenFor(m => m.PublicationDetailStaff[i].ICS_Staff_ID, new { @class = "staffData" })
+            @Html.HiddenFor(m => m.PublicationDetailStaff[i].ICS_ID, new { @class = "staffData" })
+            @Html.DropDownListFor(m => m.PublicationDetailStaff[i].SVID, new SelectList(Data.Centers.GetStaffForCenterAndDateRetainCurrentSvid(Model.PDate, Session.Center().Id, Model.PublicationDetailStaff[i].SVID), "SVID", "EmployeeName", Model.PublicationDetailStaff[i].SVID), "<Pick One>", new { @class = "form-control staffData" })
+            @Html.ValidationMessageFor(m => m.PublicationDetailStaff[i].SVID, "", new { @class = "help-block" })
+        </div>
+    </td>
+    <td class="staffMainCells">
+        <div class="form-group">
+            @Html.TextBoxFor(m => m.PublicationDetailStaff[i].HoursPrep, new { @class = "form-control staffData" })
+            @Html.ValidationMessageFor(m => m.PublicationDetailStaff[i].HoursPrep, "", new { @class = "help-block" })
+        </div>
+    </td>
+    <td class="deleteStaffRow deleteButton"><button class="btn btn-danger" type="button"><span class="glyphicon glyphicon-trash"></span></button></td>
+    <td class="restoreStaffRow hide" style="border:none; padding-top: 0px"><button type="button" class="btn btn-primary" aria-label="Restore Deleted Staff" data-icjia-role="staff.restore"><span class="glyphicon glyphicon-undo"></span></button></td>
+</tr>
+}

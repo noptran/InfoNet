@@ -1,0 +1,58 @@
+﻿@model ClientCase
+<div class="panel-body">
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="form-group">
+				@Html.LabelFor(model => model.ClientIncome.PrimaryIncomeId, new { @class = "control-label", data_toggle = "tooltip", title = "Select the primary income source of the client." })
+				@Html.LookupFor(model => model.ClientIncome.PrimaryIncomeId, "<Pick One>", new { @class = "form-control" })
+			</div>
+		</div>
+	</div>
+    <fieldset class="form-group mb-0">
+		<legend data-toggle="tooltip" title="Check as many other income sources your client has.">Other Income Sources (check as many as apply)</legend>
+		<div class="icjia-checkbox-group">	
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="checkbox">
+						@Html.CheckBoxFor(model => model.ClientIncome.Employment)
+						@Html.LabelFor(model => model.ClientIncome.Employment)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(model => model.ClientIncome.GeneralAssistance)
+						@Html.LabelFor(model => model.ClientIncome.GeneralAssistance)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(model => model.ClientIncome.SocialSecurity)
+						@Html.LabelFor(model => model.ClientIncome.SocialSecurity)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(model => model.ClientIncome.AlimonyChildSupport)
+						@Html.LabelFor(model => model.ClientIncome.AlimonyChildSupport)
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="checkbox">
+						@Html.CheckBoxFor(model => model.ClientIncome.AFDC)
+						@Html.LabelFor(model => model.ClientIncome.AFDC)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(model => model.ClientIncome.SSI)
+						@Html.LabelFor(model => model.ClientIncome.SSI)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(model => model.ClientIncome.Unknown)
+						@Html.LabelFor(model => model.ClientIncome.Unknown)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(model => model.ClientIncome.OtherIncome)
+						@Html.LabelFor(model => model.ClientIncome.OtherIncome, new {data_toggle = "tooltip", title = "Describe what other source(s) of income this client receives." })
+					</div>
+					<div class="form-group">
+						@Html.TextBoxFor(model => model.ClientIncome.WhatOther, new { @class = "form-control", @readonly = "readonly" })
+						@Html.ValidationMessageFor(model => model.ClientIncome.WhatOther, "", new { @class = "help-block" })
+					</div>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+</div>

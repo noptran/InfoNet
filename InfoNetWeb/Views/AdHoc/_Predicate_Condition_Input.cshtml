@@ -1,0 +1,94 @@
+﻿@using Infonet.Reporting.AdHoc
+@using Newtonsoft.Json.Linq
+@model Model
+
+@{
+	JObject json = ViewBag.Json;
+	var field = Model.Field(json["field"].Value<string>());
+	var fieldType = field.Type;
+	var condition = json["condition"].Enum<Condition>();
+	var input = condition.Input();
+	Func<Field, IEnumerable<Option>> optionsFor = ViewBag.Options;
+	long unique = Session.NextFieldId();
+	string inputFieldA = "inputA-" + unique;
+	string inputFieldB = "inputB-" + unique;
+}
+
+<div class="col-sm-5" style="padding-left: 5px; padding-right: 34px" data-icjia-role="predicateInput">
+	@* 34px = trashcan button 24 + padding 5 * 2 *@
+	<div class="form-group mb-0">
+		@switch (input) {
+			case ConditionInput.None:
+				break;
+			case ConditionInput.Value:
+				if (fieldType == FieldType.Date) {
+					<div class="input-group date" data-provide="datepicker">
+						<input name="@inputFieldA" type="text" value="@json["value"]" data-icjia-name="value" placeholder="Some @fieldType.Label" class="form-control validate-even-hidden" data-val="true" data-val-required="The field must contain a value." data-val-date="The value must be a valid date.">
+						<span class="input-group-addon">
+							<span class="glyphicon glyphicon-calendar"></span>
+						</span>
+					</div>
+				} else if (fieldType.Numeric) {
+					<input name="@inputFieldA" type="number" value="@json["value"]" data-icjia-name="value" step="@fieldType.Step" placeholder="Some @fieldType.Label" class="form-control validate-even-hidden" data-val="true" data-val-number="The field must be a number." data-val-required="The field must contain a value.">
+				} else {
+					string placeholder = condition == Condition.IsLike || condition == Condition.NotLike ? "SQL Template" : fieldType.Label;
+					<input name="@inputFieldA" type="text" value="@json["value"]" data-icjia-name="value" placeholder="Some @placeholder" class="form-control validate-even-hidden" data-val="true" data-val-required="The field must contain a value."/>
+				}
+				break;
+			case ConditionInput.Range:
+				if (fieldType == FieldType.Date) {
+					<div class="input-daterange input-group" data-provide="datepicker">
+						<input name="@inputFieldA" type="text" value="@json["min"]" data-icjia-name="min" placeholder="Any @fieldType.Label" class="form-control validate-even-hidden" data-val="true" data-val-required="The field must contain a value." data-val-date="The value must be a valid date.">
+						<span class="input-group-addon">and</span>
+						<input name="@inputFieldB" type="text" value="@json["max"]" data-icjia-name="max" placeholder="Any @fieldType.Label" class="form-control validate-even-hidden" data-val="true" data-val-required="The field must contain a value." data-val-date="The value must be a valid date.">
+					</div>
+				} else if (fieldType.Numeric) {
+					<div class="input-group">
+						<input name="@inputFieldA" type="number" value="@json["min"]" data-icjia-name="min" placeholder="Any @fieldType.Label" step="@fieldType.Step" class="form-control validate-even-hidden" data-val="true" data-val-number="The field must be a number." data-val-required="The field must contain a value.">
+						<span class="input-group-addon">and</span>
+						<input name="@inputFieldB" type="number" value="@json["max"]" data-icjia-name="max" placeholder="Any @fieldType.Label" step="@fieldType.Step" class="form-control validate-even-hidden" data-val="true" data-val-number="The field must be a number." data-val-required="The field must contain a value.">
+					</div>
+				} else {
+					<div class="input-group">
+						<input name="@inputFieldA" type="text" value="@json["min"]" data-icjia-name="min" placeholder="Any @fieldType.Label" class="form-control validate-even-hidden" data-val="true" data-val-required="The field is required.">
+						<span class="input-group-addon">and</span>
+						<input name="@inputFieldB" type="text" value="@json["max"]" data-icjia-name="max" placeholder="Any @fieldType.Label" class="form-control validate-even-hidden" data-val="true" data-val-required="The field is required.">
+					</div>
+				}
+				break;
+			case ConditionInput.MultiSelect:
+				<select name="@inputFieldA" data-icjia-name="list" multiple="multiple" class="validate-even-hidden" data-placeholder="Select Some Options" data-val="true" data-val-required="The field must contain a value.">
+					@{
+						var options = optionsFor(field);
+						var selected = new HashSet<string>();
+						if (json["list"] != null && json["list"].HasValues) {
+							selected.AddRange(json["list"].Values<string>());
+						}
+					}
+					@if (options != null) {
+						string currentGroup = null;
+						foreach (var each in options) {
+							if (each.Group != currentGroup) {
+								if (currentGroup != null) {
+									@:</optgroup>
+								}
+								currentGroup = each.Group;
+								if (currentGroup != null) {
+									@:<optgroup label="@each.Group">
+								}
+							}
+							<option value="@each.Value" @(selected.Contains(Convert.ToString(each.Value)) ? "selected" : null)>@(each.Label ?? each.Value)</option>
+						}
+						if (currentGroup != null) {
+							@:</optgroup>
+						}
+					}
+				</select>
+				break;
+			default:
+				throw new NotSupportedException($"ConditionInput {input} not supported");
+		}
+		<span class="field-validation-valid help-block" data-valmsg-for="@inputFieldA" data-valmsg-replace="true"></span>
+		<span class="field-validation-valid help-block" data-valmsg-for="@inputFieldB" data-valmsg-replace="true"></span>
+	</div>
+</div>

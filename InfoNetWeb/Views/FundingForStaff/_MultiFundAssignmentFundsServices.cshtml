@@ -1,0 +1,12 @@
+﻿@model Infonet.Web.ViewModels.Admin.FundingForStaff
+
+@{
+	if (Model != null) {
+		<div class="col-md-6" id="fundingSelectionTable" style="display:block; overflow:auto;">
+			@Html.Partial("_MultiFundServicesSelection")
+		</div>
+		<div class="col-md-6" id="servicesSelectionTable" style="display:block; overflow:auto;">
+			@Html.Partial("_MultiFundFundingSelection")
+		</div>
+	}
+}

@@ -1,0 +1,160 @@
+﻿@model Infonet.Web.ViewModels.Admin.PersonnelSearchViewModel
+@using PagedList.Mvc;
+
+@{
+	ViewBag.Title = "Personnel Information";
+}
+
+@using (Html.BeginForm("Search", "Personnel", FormMethod.Get, new { id = "main", autocomplete = "off" })) {
+	<div class="row">
+		<div class="form-group col-sm-8 col-md-6">
+			@Html.Label("Start", "Employment Date Range", new { @class = "control-label" })
+			<div class="input-daterange input-group" id="datepicker" data-provide="datepicker" data-date-end-date=@DateTime.Today.ToShortDateString()>
+				@Html.TextBoxFor(model => model.StartDate, "{0:MM/dd/yyyy}", new { @class = "form-control", autocomplete = "off", id = "Start" })
+				<span class="input-group-addon"><b>to</b></span>
+				@Html.TextBoxFor(model => model.EndDate, "{0:MM/dd/yyyy}", new { @class = "form-control", autocomplete = "off", id = "End" })
+			</div>
+		</div>
+		<div class="form-group col-sm-4 col-md-3">
+			@Html.Label("rangePeriodChosen", "Ranges", new { @class = "control-label" })
+			<select class="form-control col-md-3" name="Range" id="rangePeriodChosen" data-icjia-role="dateRanges" data-icjia-start="#Start" data-icjia-end="#End" data-icjia-default-range="@Model.Range">
+				@Html.Partial("_DateRangeOptions1-8_13-15")
+			</select>
+		</div>
+	</div>
+			<div class="row">
+				<div class="col-md-9 col-md-offset-3 col-md-pull-3">
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								@Html.LabelFor(m => m.FirstName, new { @class = "control-label" })
+								@Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+								@Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "help-block" })
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								@Html.LabelFor(m => m.LastName, new { @class = "control-label" })
+								@Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+								@Html.ValidationMessageFor(m => m.LastName, "", new { @class = "help-block" })
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-9 col-md-offset-3 col-md-pull-3">
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="form-group">
+								@Html.LabelFor(m => m.Status, new { @class = "control-label" })
+								@Html.DropDownListFor(m => m.Status, new SelectList(Model.StatusList, "ID", "Name", Model.Status), "<Pick One>", new { @class = "form-control" })
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								@Html.LabelFor(m => m.TypeID, new { @class = "control-label" })
+								@Html.DropDownListFor(m => m.TypeID, new SelectList(ViewBag.Types, "ID", "Name", Model.TypeID), "<Pick One>", new { @class = "form-control" })
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								@Html.LabelFor(m => m.PersonnelTypeID, new { @class = "control-label" })
+								@Html.LookupFor(m => m.PersonnelTypeID, Session.Center().Provider, "<Pick One>", true, new { @class = "form-control" })
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-9 col-md-offset-3 col-md-pull-3">
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="form-group">
+								@Html.LabelFor(m => m.RaceId, new { @class = "control-label" })
+								@Html.LookupFor(m => m.RaceId, Session.Center().Provider, "<Pick One>", true, new { @class = "form-control" })
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								@Html.LabelFor(m => m.SexId, new { @class = "control-label" })
+								@Html.LookupFor(m => m.SexId, Lookups.Sex[Session.Center().Provider].Exclude(3), "<Pick One>", true, new { @class = "form-control" })
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								@Html.LabelFor(m => m.CollegeUnivStudent, new { @class = "control-label" })
+								@Html.LookupFor(m => m.CollegeUnivStudent, Session.Center().Provider, "<Pick One>", new { @class = "form-control" })
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin-bottom: 20px">
+				<div class="col-xs-8 col-sm-8 col-md-10">
+					@Html.Partial("_SearchResetButtons")
+				</div>
+				<div class="col-xs-4 col-sm-4 col-md-2">
+					<div class="pull-right">
+						<a class="btn btn-primary" role="button" href="~/Personnel/FormRedirect">
+							<span class="glyphicon glyphicon-plus-sign"></span> Add New Personnel
+						</a>
+					</div>
+				</div>
+			</div>
+}
+
+<table class="table table-hover table-responsive">
+	<tr>
+		<th scope="col">Full Name</th>
+		<th scope="col">Staff Type</th>
+		<th scope="col">Personnel Type</th>
+		<th scope="col">Start Date</th>
+		<th scope="col">Termination Date</th>
+		<th scope="col" class="text-center">Student</th>
+        <th scope="col"><span class="sr-only">Action</span></th>
+	</tr>
+	@foreach (var item in Model.staffList) {
+		<tr>
+			<td>@item.LastName, @item.FirstName</td>
+			<td>@item.Type</td>
+			<td>
+				@(Lookups.PersonnelType[item.PersonnelTypeId]?.Description)
+			</td>
+			<td>
+				@(item.StartDate?.ToString("MM/dd/yyyy"))
+			</td>
+			<td>
+				@(item.TerminationDate?.ToString("MM/dd/yyyy"))
+			</td>
+			<td class="text-center">
+				@if (item.CollegeUnivStudent) {
+					<span class="glyphicon glyphicon-check" style="color: #888888" aria-label="yes"></span>
+				} else {
+					<span class="glyphicon glyphicon-unchecked" style="color: #888888" aria-label="no"></span>
+				}
+			</td>
+			<td class="text-right">
+				@Html.ActionLink("Edit", "FormRedirect", new { id = item.SvId }, new { @class = "btn btn-xs btn-primary btn-outline" })
+			</td>
+		</tr>
+	}
+</table>
+
+@Html.PagedListPager(Model.staffList, page => Url.Action(Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)), new {
+		page,
+		Model.Range,
+		StartDate = Model.StartDate == null ? " " : Model.StartDate.GetValueOrDefault().ToShortDateString(),
+		EndDate = Model.EndDate == null ? " " : Model.EndDate.GetValueOrDefault().ToShortDateString(),
+		Model.FirstName,
+		Model.LastName,
+		Model.TypeID,
+		Model.PersonnelTypeID,
+		Model.CollegeUnivStudent,
+		Model.RaceId,
+		Model.SexId,
+		Model.Status,
+		Model.PageSize
+	}), Html.Snippets().PagedListRenderOptions())
+@Html.Partial("_PagedListDropMenu", Model, new ViewDataDictionary { { "PagedListUrlAction", Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)) } })
+
+@section scripts {
+	@Scripts.Render("~/Scripts/ICJIA/date-ranges.js")
+	@Scripts.Render("~/Scripts/ICJIA/pagedlist.js")
+}

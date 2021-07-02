@@ -1,0 +1,50 @@
+﻿@model Infonet.Web.ViewModels.Services.ServiceOutcomeViewModel
+@for (int index = 0; index < Model.displayForPaging.Count; index++) {
+	string removeDisabled = index == 0 ? "removeDisabled" : "";
+	string setFocus = index == 0 ? " setFocus" : "";
+	<tr class="newOutcomeRow" data-addCount="@Model.AddCount">
+		<td>
+			@Html.HiddenFor(m => m.displayForPaging[index].shouldAdd, new { @class = "rowData newOutcomeRowData", Value = "true" })
+			@Html.HiddenFor(m => m.displayForPaging[index].ID, new { @class = "rowData newOutcomeRowData" })
+			<div class="form-group">
+				<div class="input-group date" data-provide="datepicker" data-date-end-date=@DateTime.Today.ToShortDateString()>
+					@Html.TextBoxFor(m => m.displayForPaging[index].OutcomeDate, true, new { @class = "form-control rowData newOutcomeRowData " + removeDisabled, disabled = "disabled", style = "display:none" })
+					<span class="input-group-addon @removeDisabled" style="display:none"><span class="glyphicon glyphicon-calendar"></span></span>
+				</div>
+				@Html.ValidationMessageFor(m => m.displayForPaging[index].OutcomeDate, "", new { @class = "help-block" })
+			</div>
+		</td>
+		<td>
+			<div class="form-group">
+				@Html.LookupFor(m => m.displayForPaging[index].ServiceID, Provider.DV, "<Pick One>", true, new { @class = "form-control rowData newOutcomeRowData newSelectList " + removeDisabled + setFocus, disabled = "disabled", style = "display:none", data_val_serviceoutcomeclientservicegroup = "At least one Yes/No is required for this service group." })
+				@Html.ValidationMessageFor(m => m.displayForPaging[index].ServiceID, "", new { @class = "help-block" })
+			</div>
+		</td>
+		<td>
+			<div class="form-group">
+				@Html.DisplayFor(m => m.displayForPaging[index].OutcomeList[index].Description)
+				<input class="rowData newOutcomeRowData" data-val="true" data-val-number="The field CodeID must be a number." id="displayForPaging_0__OutcomeList_0__CodeID" name="displayForPaging[0].OutcomeID" type="hidden" value="@Model.displayForPaging[index].OutcomeList[index].CodeID">
+				@Html.ValidationMessageFor(m => m.displayForPaging[index].OutcomeID, "", new { @class = "help-block" })
+			</div>
+		</td>
+		<td>
+			<div class="form-group">
+				@Html.TextBoxFor(m => m.displayForPaging[index].ResponseYes, new { @class = "form-control rowData newOutcomeRowData", type = "number", data_val_serviceoutcomeyesno = "No. of YES Responses required." })
+				@Html.ValidationMessageFor(m => m.displayForPaging[index].ResponseYes, "", new { @class = "help-block" })
+			</div>
+		</td>
+		<td>
+			<div class="form-group">
+				@Html.TextBoxFor(m => m.displayForPaging[index].ResponseNo, new { @class = "form-control rowData newOutcomeRowData", type = "number", data_val_serviceoutcomeyesno = "No. of NO Responses required." })
+				@Html.ValidationMessageFor(m => m.displayForPaging[index].ResponseNo, "", new { @class = "help-block" })
+			</div>
+		</td>
+		<td style="border:none; padding-top: 0">
+			@if (index == 0) {
+				<button class="btn btn-danger delete" type="button"><span class="glyphicon glyphicon-trash"></span></button>
+				}
+		</td>
+	</tr>
+}
+
+

@@ -1,0 +1,29 @@
+﻿@model DirectServicesSearchDates
+
+<div class="row">
+	<div class="col-lg-6">
+		<div class="form-group">
+			@Html.Label("DirectServicesDateRangeStart", "Date Range", new { @class = "control-label", data_toggle = "tooltip", title = "Enter the date range containing service records you want to view." })
+			<div class="input-daterange input-group" id="datepickerDirectServices" data-provide="datepicker">
+				@Html.TextBoxFor(m => m.DirectServicesDateRangeStart, "{0:MM/dd/yyyy}", new { @class = "form-control directServicesDateRange dirtyignore", autocomplete = "off" })
+				<span class="input-group-addon"><b>to</b></span>
+				@Html.TextBoxFor(m => m.DirectServicesDateRangeEnd, "{0:MM/dd/yyyy}", new { @class = "form-control directServicesDateRange dirtyignore", autocomplete = "off" })
+			</div>
+			<div>@Html.ValidationMessageFor(m => m.DirectServicesDateRangeStart)</div>
+			<div>@Html.ValidationMessageFor(m => m.DirectServicesDateRangeEnd)</div>
+		</div>
+	</div>
+	<div class="form-group col-lg-3">
+		<label for="directServicesDateRangesSelect" class="control-label">Date Ranges</label>
+		<select class="form-control directServicesDateRange dirtyignore" name="Range" id="directServicesDateRangesSelect" data-icjia-role="dateRanges" data-icjia-start="#directServiceSearchDates_0__DirectServicesDateRangeStart" data-icjia-end="#directServiceSearchDates_0__DirectServicesDateRangeEnd" data-icjia-default-range="0">
+			@Html.Partial("_DateRangeOptions1-8")
+		</select>
+	</div>
+
+	<div class="form-group col-lg-3 icjia-search-reset">
+		<button type="button" id="directServiceSearch" class="btn btn-primary icjia-has-spinner"> <span class="icjia-spinner"><img src="~/Content/Images/ajax-loader.gif" width="12" height="12"></span>Search <span class="glyphicon glyphicon-search"></span></button>
+		<button type="button" class="btn btn-warning cancel" id="directServiceReset">
+			Reset <span class="glyphicon glyphicon-refresh"></span>
+		</button>
+	</div>
+</div>

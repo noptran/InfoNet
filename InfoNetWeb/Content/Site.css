@@ -1,0 +1,423 @@
+﻿/*
+	****************************** HTML TWEAKS ********************************
+*/
+html {
+	overflow-y: scroll; /* force vertical scroll bar always */
+	position: relative; /* required for icjia-sticky-footer */
+	min-height: 100%; /* required for icjia-sticky-footer */
+}
+
+body {
+	/* position: relative; */ /* recommended for scrollspy BUT breaks sticky footer AND scrollspy still works */
+	padding-top: 80px; /* navbar-fixed height offset (not including bottom-border) + 30px bar above navbar */
+	padding-right: 0 !important; /* fixes page jittering when opening/closing modals */
+	margin-bottom: 50px; /* icjia-sticky-footer height (including margins) */
+}
+
+h2, .h2 {
+	font-size: 24px;
+}
+
+input::-webkit-input-placeholder {
+	color: #767676 !important; /* lightest accessible grey (on white) */
+	font-style: italic;
+}
+
+input:-ms-input-placeholder {
+	color: #767676 !important; /* lightest accessible grey (on white) */
+	font-style: italic;
+}
+
+/* ReSharper disable once CssNotResolved */
+.placeholder,
+input::placeholder {
+	color: #767676 !important; /* lightest accessible grey (on white) */
+	font-style: italic;
+}
+
+
+/*
+	**************************** BOOTSTRAP TWEAKS *****************************
+*/
+span.help-block:empty {
+	display: none;
+}
+
+/* Add pointer to any element that initiates a collapse */
+[data-toggle="collapse"] {
+	cursor: pointer;
+}
+
+.tooltip-inner {
+	text-align: left;
+}
+
+.page-header {
+	margin-top: 20px; /* reduced from 40px */
+}
+
+.panel-title {
+	font-weight: bold;
+}
+
+/* Bottom border on heading causes "border-doubling" when panels are collapsed and border-color is distinguishable from background colors. */
+.panel-heading {
+	border-bottom-width: 0;
+}
+
+/* Footer will match heading above. */
+.panel-footer {
+	border-top-width: 0;
+}
+
+/* Preparing borders for icjia-modal classes. */
+.modal-header {
+	border-bottom-width: 0;
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+}
+
+/* Footer will match header above. */
+.modal-footer {
+	border-top-width: 0;
+}
+
+.navbar-nav > li > a {
+	font-weight: bold;
+}
+
+caption {
+	color: #707070; /* accessible on f5f5f5 */
+}
+
+/*
+	**************************** GLYPHICON TWEAKS *****************************
+*/
+.glyphicon-undo::before {
+	content: "\e030";
+}
+
+.glyphicon-undo {
+	transform: scale(-1, 1);
+}
+
+.btn.btn-xs .glyphicon-undo {
+	top: 0;
+	vertical-align: middle;
+	height: 13px;
+}
+
+.btn .glyphicon-trash {
+	top: 0;
+	vertical-align: middle;
+	height: 16px;
+}
+
+.btn.btn-xs .glyphicon-trash {
+	vertical-align: middle;
+	bottom: 0;
+	top: 2px;
+}
+
+.btn.btn-xs .glyphicon-plus {
+	top: 0;
+	vertical-align: middle;
+	height: 15px;
+	width: 12px;
+	padding-left: 1px;
+}
+
+.btn.btn-xs .glyphicon-triangle-bottom {
+	top: 2px;
+}
+
+
+/*
+	*********************** BOOTSTRAP DATEPICKER TWEAKS ***********************
+*/
+.datepicker table tr td.highlighted.disabled {
+	/* Disabled Weekend Date */
+	color: #696969; /* Lightest accessable grey on #d9edf7 bacground color */
+}
+
+
+/*
+	**************************** JQUERY VALIDATION ****************************
+	In situations where 'has-error' is not used on a 'form-group' to style
+	'field-validation-error's created by jquery validations, those errors will
+	be styled as follows.  NOTE: The rules below were adapted from 'text-danger'
+	and 'has-error form-control'.
+*/
+.field-validation-error {
+	color: #a94442;
+}
+
+a.field-validation-error:hover,
+a.field-validation-error:focus {
+	color: #843534;
+}
+
+.input-validation-error {
+	border-color: #a94442;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+
+/*
+	***************************** ICJIA REQUIRED ******************************
+	Appends the required asterisk.
+*/
+.icjia-required::after {
+	content: '*';
+	line-height: 14px; /* reduced from 20px */
+	padding-left: 3px;
+	vertical-align: sub;
+	font-size: 20px; /* increased from 14px */
+	font-weight: bold;
+	color: #a94442; /* text-danger */
+}
+
+
+/*
+	***************************** ICJIA BOOKMARK ******************************
+	Offsets bookmark arrivals for navbar height.
+*/
+.icjia-bookmark::before {
+	content: '';
+	display: block;
+	position: relative;
+	width: 0;
+	visibility: hidden;
+	z-index: -1000;
+	height: 100px; /* navbar-fixed height + panel margin-bottom (20px) + 30px bar above navbar */
+	margin-top: -100px; /* offset above height */
+}
+
+.icjia-bookmark > * {
+	position: relative; /* prevents click issues when bookmarks overlap */
+}
+
+
+/*
+	******************************* ICJIA LOGO ********************************
+*/
+.navbar-brand {
+	height: 50px;
+	width: 92.0353982300885px;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+/* Find the default logo in its respective system file "icjia-logo-(dv, sa, cac)" */
+
+.navbar-default .navbar-brand:focus, .navbar-default .navbar-brand:hover {
+	background-image: url("/Content/Images/logo-icjia-ffffff.png");
+}
+
+
+/*
+	*********************** ICJIA PROVIDER PRIMARY LABELS ************************
+*/
+.label-dv {
+	background-color: #663399;
+}
+.label-dv[href]:hover,
+.label-dv[href]:focus {
+	background-color: #4c2673;
+}
+
+.label-sa {
+	background-color: #007373;
+}
+
+.label-sa[href]:hover,
+.label-sa[href]:focus {
+	background-color: #004040;
+}
+
+.label-cac {
+	background-color: #005db9;
+}
+.label-cac[href]:hover,
+.label-cac[href]:focus {
+	background-color: #004386;
+}
+
+.label-admin {
+  background-color: #1d262d;
+}
+.label-admin[href]:hover,
+.label-admin[href]:focus {
+  background-color: #090c0e;
+}
+
+
+/*
+	**************************** ICJIA DROPDOWN XS ****************************
+*/
+.icjia-dropdown-menu-xs {
+	font-size: 12px;
+	line-height: 1.5;
+	padding: 2px 0;
+	min-width: unset; /* not supported by IE11 */
+}
+
+.icjia-dropdown-menu-xs > li > a {
+	padding: 2.5px 3px 2.5px 24px;
+}
+
+.icjia-dropdown-menu-xs > li.divider {
+	margin: 2.5px 0 2.5px;
+}
+
+/* anchor color for link can be found in the icjia-misc-dv.css file */
+
+
+/*
+	************************** ICJIA H2 BUTTON LINK ICON  **************************
+*/
+/* Find states in respective system file "icjia-panel-header-btn-(dv, sa, cac)" */
+.icjia-h2-btn-link-icon {
+	border: none;
+	line-height: 1;
+	padding: 0;
+	font-size: 16px;
+}
+
+
+/*
+	************************* ICJIA TABLE BORDERLESS **************************
+*/
+.icjia-table-borderless > thead > tr > th {
+	border: 0;
+}
+
+.icjia-table-borderless > tbody > tr > td {
+	border: none;
+	padding-top: 0;
+}
+
+.icjia-table-borderless > tfoot > tr > td {
+	border: none;
+	padding-top: 0;
+}
+
+.icjia-table-borderless {
+	margin-left: -8px;
+}
+
+
+/*
+	******************************* ICJIA MISC ********************************
+*/
+.icjia-spinner {
+	opacity: 0;
+	display: none;
+	width: 20px;
+	height: 10px;
+	-webkit-transition: opacity 0.25s, max-width 0.45s;
+	-moz-transition: opacity 0.25s, max-width 0.45s;
+	-o-transition: opacity 0.25s, max-width 0.45s;
+	transition: opacity 0.25s, max-width 0.45s;
+}
+
+.icjia-has-spinner.icjia-spinner-active {
+	cursor: progress;
+}
+
+.icjia-has-spinner.icjia-spinner-active .icjia-spinner {
+	display: inline-block;
+	opacity: 1;
+	max-width: 50px;
+}
+
+
+/*
+	****************************** SEARCH RESET *******************************
+*/
+.icjia-search-reset {
+	width: 220px;
+	text-align: right;
+	float: right;
+}
+
+@media only screen and (min-width : 1200px) {
+	.icjia-search-reset {
+		margin-top: 25px;
+	}
+}
+
+
+/*
+	***************************** DROPDOWN TWEAKS *****************************
+*/
+.dropdown-menu.icjia-btn-dropdown > li, .dropdown-menu.icjia-btn-dropdown > li, .dropdown-menu.icjia-btn-dropdown > li, .dropdown-menu.icjia-btn-dropdown > li {
+	margin: -5px 0;
+}
+
+.dropdown-menu.icjia-btn-dropdown > li > a {
+	cursor: pointer;
+	padding: 6px 20px;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.dropdown-menu > li > a.btn-success {
+	background-color: #dff0d8;
+	border-color: #93bb83;
+	color: #307a00;
+}
+
+.dropdown-menu > li > a.btn-success:hover {
+	background-color: #c1e2b3;
+	border-color: #acd899;
+	color: #2B6C00;
+}
+
+.dropdown-menu > li > a.btn-success:active {
+	color: #276300;
+	background-color: #acd899;
+	border-color: #84c569;
+}
+
+.dropdown-menu.icjia-dropdown-warning > li > a.btn-warning {
+	background-color: #f9f0cd;
+	color: #307a00;
+}
+
+.dropdown-menu.icjia-dropdown-danger > li > a.btn-danger {
+	background-color: #dff0d8;
+	color: #307a00;
+}
+
+
+/*
+	******************************** PAGED LIST *******************************
+*/
+.icjia-pagedlist-drop-menu {
+	float: left;
+	margin: 20px 0;
+	width: auto !important;
+	margin-left: 10px;
+}
+
+.icjia-pagedlist-page-of {
+	float: right;
+	margin: 28px 0;
+}
+
+.pagination-container {
+	float:left;
+	width: auto !important;
+}
+
+
+/*
+	******************************* JAVASCRIPT FLAGS *****************************
+*/
+/* ReSharper disable once DeclarationIsEmpty */
+.validate-ignore,
+.validate-even-hidden {
+	/* prevents devenv warnings about using undefined classes */
+}

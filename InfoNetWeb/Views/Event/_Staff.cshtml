@@ -1,0 +1,41 @@
+﻿@model Infonet.Web.ViewModels.Services.EventViewModel
+
+@{
+	Model.EventDetailStaff = (Model.EventDetailStaff == null) ? new List<EventDetailStaff>() : Model.EventDetailStaff;
+	if (Model.EventDetailStaff.Count == 0) {
+		Model.EventDetailStaff.Add(new EventDetailStaff());
+	}
+}
+
+@for (int i = 0; i < Model.EventDetailStaff.Count; i++) {
+<tr class="staffInfo">
+    <td class="staffMainCells">
+        <div class="form-group">
+            @Html.HiddenFor(m => m.EventDetailStaff[i].ICS_Staff_ID, new { @class = "staffData" })
+            @Html.HiddenFor(m => m.EventDetailStaff[i].ICS_ID, new { @class = "staffData" })
+            @Html.DropDownListFor(m => m.EventDetailStaff[i].SVID, new SelectList(Data.Centers.GetStaffForCenterAndDateRetainCurrentSvid(Model.EventDate, Session.Center().Id, Model.EventDetailStaff[i].SVID), "SVID", "EmployeeName", Model.EventDetailStaff[i].SVID), "<Pick One>", new { @class = "form-control staffData" })
+            @Html.ValidationMessageFor(m => m.EventDetailStaff[i].SVID, "", new { @class = "help-block" })
+        </div>
+    </td>
+    <td class="staffMainCells">
+        <div class="form-group">
+            @Html.TextBoxFor(m => m.EventDetailStaff[i].HoursConduct, new { @class = "form-control staffData", type = "number", step = ".25" })
+            @Html.ValidationMessageFor(m => m.EventDetailStaff[i].HoursConduct, "", new { @class = "help-block" })
+        </div>
+    </td>
+    <td class="staffMainCells">
+        <div class="form-group">
+            @Html.TextBoxFor(m => m.EventDetailStaff[i].HoursPrep, new { @class = "form-control staffData", type = "number", step = ".25" })
+            @Html.ValidationMessageFor(m => m.EventDetailStaff[i].HoursPrep, "", new { @class = "help-block" })
+        </div>
+    </td>
+    <td class="staffMainCells">
+        <div class="form-group">
+            @Html.TextBoxFor(m => m.EventDetailStaff[i].HoursTravel, new { @class = "form-control staffData", type = "number", step = ".25" })
+            @Html.ValidationMessageFor(m => m.EventDetailStaff[i].HoursTravel, "", new { @class = "help-block" })
+        </div>
+    </td>
+    <td class="deleteStaffRow deleteButton"><button class="btn btn-danger" type="button"><span class="glyphicon glyphicon-trash"></span></button></td>
+    <td class="restoreStaffRow hide" style="border:none; padding-top: 0px"><button type="button" class="btn btn-primary" aria-label="Restore Deleted Staff" data-icjia-role="staff.restore"><span class="glyphicon glyphicon-undo"></span></button></td>
+</tr>
+}

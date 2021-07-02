@@ -1,0 +1,11 @@
+﻿@model PagedList.IPagedList
+
+<input id="pagedListRecordCount" type="hidden" value="@Model.TotalItemCount"/>
+
+@if (ViewData["isMultiples"] != null) {
+	@Html.DropDownListFor(m => m.PageSize, new SelectList(new[] { 5, 10, 20, 50 }, Model.PageSize), Html.Attributes(new { Name = ViewData["name"], id = ViewData["id"], @class = "dirtyignore form-control icjia-pagedlist-drop-menu " + ViewData["class"], aria_invalid = "false", data_pagination_multiples = true, data_pagination_for = ViewData["paginationFor"] }).AndIf(Model.TotalItemCount == 0, new { style = "display:none" }))
+} else {
+	@Html.DropDownListFor(m => m.PageSize, new SelectList(new[] { 10, 20, 50, 100 }, Model.PageSize), Html.Attributes(new { id = "icjia-pagedlist-drop-menu", @class = "dirtyignore form-control icjia-pagedlist-drop-menu", aria_invalid = "false" }).AndIf(Model.TotalItemCount == 0, new { style = "display:none" }))
+}
+
+<span class="icjia-pagedlist-page-of">Displaying @(Model.TotalItemCount == 0 ? 0 : Model.FirstItemOnPage) to @Model.LastItemOnPage of @Model.TotalItemCount Record@(Model.TotalItemCount == 1 ? "" : "s")</span>

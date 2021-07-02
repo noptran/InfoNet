@@ -1,0 +1,39 @@
+﻿@model CancellationsAdd
+
+<tr @(Model.IsDeleted ? "style=display:none;" : "")>
+	<td width="175">
+		<div class="form-group" style="margin:0px; min-width: 225px;">
+			@Html.LookupFor(m => Model.ServiceID, Lookups.DirectOrGroupServices[Session.Center().Provider], "<Pick One>", new { Class = "form-control", data_icjia_role = "services.id", data_val_servicegrouprequired = "The Service field is required." })
+			@Html.HiddenFor(m => Model.IsAdded)
+			@Html.HiddenFor(m => Model.IsDeleted)
+			@Html.HiddenFor(m => Model.IsEmpty)
+			@Html.ValidationMessageFor(m => Model.ServiceID, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td width="100">
+		<div class="form-group" style="margin:0px; min-width:120px;">
+			@Html.LookupFor(model => Model.ReasonID, Lookups.CancellationReason[Provider.DV], "<Pick One>",
+			Html.Attributes(new { Class = "form-control group1", data_val_servicegrouprequired = "The Reason field is required." }))
+			@Html.ValidationMessageFor(m => Model.ReasonID, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td width="100">
+		<div class="form-group" style="margin:0px; min-width:250px;">
+			@Html.DropDownListFor(m => Model.SVID, new SelectList(Data.Centers.GetStaffForCenterAndDateRetainCurrentSvid(DateTime.Now, Session.Center().Id, null), "SVID", "EmployeeName", ""), "<Pick One>",
+			Html.Attributes(new { Class = "form-control group1", data_val_servicegrouprequired = "The Staff field is required." }))
+			@Html.ValidationMessageFor(m => Model.SVID, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td width="100">
+		<div class="form-group" style="margin:0px; min-width:105px;">
+			@Html.TextBoxFor(m => Model.Date, "{0:MM/dd/yyyy}",
+			Html.Attributes(new { data_provide = "datepicker", data_date_end_date = @DateTime.Today.ToShortDateString(), Class = "inline-date form-control date group1", onfocusout = "cancellationsCheckIfEmpty(this, 'group1')", data_val_firstcontactdate = "Cannot be earlier than the case's First Contact Date.", data_val_servicegrouprequired = "The Date field is required." }))
+			@Html.ValidationMessageFor(m => Model.Date, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td class="removeCancellation" style="text-align: center;">
+		<div style="width:70px;">
+			<button class="btn btn-danger" type="button" onclick="addHideRow(this);"><span class="glyphicon glyphicon-trash"></span></button>
+		</div>
+	</td>
+</tr>

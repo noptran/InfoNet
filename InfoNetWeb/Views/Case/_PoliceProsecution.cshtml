@@ -1,0 +1,9 @@
+﻿@model ClientCase
+@switch (Session.Center().Provider) {
+    case Provider.DV:
+        @Html.Partial("~/Views/Case/_DV_PoliceProsecution.cshtml", Model)
+        break;
+    case Provider.SA:
+        @Html.Partial("~/Views/Case/_SA_PoliceProsecution.cshtml", Model)
+        break;
+}

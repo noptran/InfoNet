@@ -1,0 +1,117 @@
+﻿@using PagedList.Mvc;
+@using PagedList;
+@model IPagedList<DirectServiceEdit>
+
+<div class="row">
+	<div class="col-sm-12">
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered table-list" id="serviceDetailTableEdit" data-assigned-id="@Model">
+				<thead>
+					<tr>
+						<th scope="col" class="col-md-2">Action</th>
+						<th scope="col" class="col-md-3"><span class="icjia-required" data-toggle="tooltip" title="Select the service client received from the drop-down menu.">Service</span></th>
+						<th scope="col" class="col-md-3"><span class="icjia-required" data-toggle="tooltip" title="Select the Staff member who provided this service from the drop-down menu.">Staff/Volunteer</span></th>
+						<th scope="col" class="col-md-2"><span class="icjia-required" data-toggle="tooltip" title="Enter the Date this service was provided.">Date</span></th>
+						<th scope="col" class="col-md-2"><span class="icjia-required" data-toggle="tooltip" title="Enter the number of hours the service lasted.  Estimate to the nearest quarter hour.">Hours</span></th>
+					</tr>
+				</thead>
+				<tbody>
+
+					@{
+						if (Model != null) {
+							for (var i = 0; i < Model.Count(); i++) {
+								var setIndex = ((Model[i].Index != null) ? Model[i].Index : i);
+								var serviceList = Model[i].ICS_ID == null ? "DirectServiceEditDirectServices" : "DirectServiceEditGroupServices";
+
+								if (i == 0) {
+									@Html.LookupFor(model => model[i].ServiceID, Lookups.DirectServices[Session.Center().Provider], "<Pick One>", false, new { @class = "form-control hidden", Id = "DirectServiceEditDirectServices", Name = "DirectServiceEditDirectServices" })
+									@Html.LookupFor(model => model[i].ServiceID, Lookups.GroupServices[Session.Center().Provider], "<Pick One>", new { @class = "form-control hidden", Id = "DirectServiceEditGroupServices", Name = "DirectServiceEditGroupServices" })
+								}
+								<tr>
+									<td class="text-center">
+										<div class="form-group" style="margin:0px; width:130px;">
+											@{if (Model[i].ICS_ID == null) {
+													if (Model[i].LocationID == Session.Center().Id) {
+														<label>
+															@Html.CheckBox("DirectServicesEdit[" + setIndex + "].IsEdited", Model[i].IsEdited, new { Id = "DirectServicesEdit_" + setIndex + "__IsEdited", Onchange = "checkboxEnableRow(this); actionCheckboxUncheck(this)" })
+															Edit
+														</label>
+														<span style="padding-right:10px;"></span>
+														<label>
+															@Html.CheckBox("DirectServicesEdit[" + setIndex + "].IsDeleted", Model[i].IsDeleted, new { Id = "DirectServicesEdit_" + setIndex + "__IsDeleted", Onchange = "directServiceCheckboxDisableRow(this); actionCheckboxUncheck(this);", data_icjia_role = "direct.service.isdeleted" })
+															Delete
+														</label>
+													} else {
+														<h4><span class="label label-info" style="vertical-align:top;">Read Only</span></h4>
+													}
+												} else {
+													<button type="button" class="btn btn-sm btn-primary btn-outline" onclick="location.href='/GroupService/Form/@(Model[i].ICS_ID)'" @(Model[i].LocationID != Session.Center().Id ? " disabled=disabled " : "")>
+														Edit Group
+													</button>
+												}
+											}
+
+											<input type="hidden" name="DirectServicesEdit[@(setIndex)].Index" value="@Model[i].Index" />
+											<input type="hidden" name="DirectServicesEdit[@(setIndex)].ICS_ID" value="@Model[i].ICS_ID" />
+											<input type="hidden" name="DirectServicesEdit[@(setIndex)].LocationID" value="@Model[i].LocationID" />
+											<input type="hidden" name="DirectServicesEdit[@(setIndex)].ServiceDetailID" value="@Model[i].ServiceDetailID" />
+										</div>
+									</td>
+									<td>
+										<div class="form-group" style="margin:0px; min-width:225px;">
+											@Html.LookupFor(model => model[i].ServiceID, Model[i].ICS_ID == null ? Model[i].IsEdited ? Lookups.DirectServices[Session.Center().Provider] : (IEnumerable<LookupCode>)new[] { Lookups.DirectServices[Model[i].ServiceID] } : Model[i].IsEdited ? Lookups.GroupServices[Session.Center().Provider] : (IEnumerable<LookupCode>)new[] { Lookups.GroupServices[Model[i].ServiceID] }
+												, "<Pick One>", true,
+												Html.Attributes(new { @class = "form-control", Name = "DirectServicesEdit[" + setIndex + "].ServiceID", Id = "DirectServicesEdit_" + setIndex + "__ServiceID", data_icjia_change_dropdown = serviceList })
+													.AndIf(!Model[i].IsEdited, new { Disabled = true }))
+											@Html.ValidationMessage("DirectServicesEdit[" + setIndex + "].ServiceID", "", new { @class = "help-block" })
+										</div>
+									</td>
+									<td>
+										<div class="form-group" style="margin:0px; min-width:250px;">
+											@Html.DropDownListFor(model => model[i].SVID, new SelectList(
+												Model[i].IsEdited == false ? Model[i].SVID == null ? Enumerable.Empty<Infonet.Data.Helpers.Staff>() : new[] { Data.Centers.GetStaffFromSvId((int)Model[i].SVID) } : Data.Centers.GetStaffForCenterAndDateRetainCurrentSvid(Model[i].ServiceDate, Session.Center().Id, Model[i].SVID),
+								"SVID", "EmployeeName", Model[i].SVID),
+								Model[i].ICS_ID == null ? "<Pick One>" : "",
+								Html.Attributes(new { @class = "form-control group1", Name = "DirectServicesEdit[" + setIndex + "].SVID", Id = "DirectServicesEdit_" + setIndex + "__SVID", data_icjia_service_staff = true })
+							.AndIf(!Model[i].IsEdited, new { Disabled = true }))
+											@Html.ValidationMessage("DirectServicesEdit[" + setIndex + "].SVID", "", new { @class = "help-block" })
+										</div>
+									</td>
+									<td>
+										<div class="form-group" style="margin:0px; min-width:100px">
+											@Html.TextBoxFor(model => model[i].ServiceDate, "{0:MM/dd/yyyy}",
+							Html.Attributes(new { data_provide = "datepicker", data_date_end_date = DateTime.Today.ToShortDateString(), Class = "form-control date group1 inline-date", Name = "DirectServicesEdit[" + setIndex + "].ServiceDate", Id = "DirectServicesEdit_" + setIndex + "__ServiceDate", data_val_firstcontactdate = "Cannot be earlier than the case's First Contact Date.", data_icjia_service_date = true })
+							.AndIf(!Model[i].IsEdited, new { Disabled = true }))
+											@Html.ValidationMessage("DirectServicesEdit[" + setIndex + "].ServiceDate", "", new { @class = "help-block" })
+										</div>
+									</td>
+									<td>
+										<div class="form-group" style="margin:0px; min-width:80px;">
+											@Html.TextBoxFor(model => model[i].ReceivedHours,
+							 Html.Attributes(new { Class = "form-control group1", type = "number", min = 0, max = 100, step = 0.25, Name = "DirectServicesEdit[" + setIndex + "].ReceivedHours", Id = "DirectServicesEdit_" + setIndex + "__ReceivedHours" })
+							 .AndIf(!Model[i].IsEdited, new { Disabled = true }))
+											@Html.ValidationMessage("DirectServicesEdit[" + setIndex + "].ReceivedHours", "", new { @class = "help-block" })
+											<input type="hidden" name="DirectServicesEdit[@(setIndex)].ServiceID" value="@Model[i].ServiceID" />
+											<input type="hidden" name="DirectServicesEdit[@(setIndex)].SVID" value="@Model[i].SVID" />
+											<input type="hidden" name="DirectServicesEdit[@(setIndex)].ServiceDate" value='@(Model[i].ServiceDate.HasValue? Model[i].ServiceDate.Value.ToShortDateString() : "") ' />
+											<input type="hidden" name="DirectServicesEdit[@(setIndex)].ReceivedHours" value="@Model[i].ReceivedHours" />
+										</div>
+									</td>
+								</tr>
+												}
+
+								}
+					}
+
+				</tbody>
+			</table>
+			<div class="form-group" id="directServicesPagedList" data-pagination-link="@Url.Action("DirectServicesSearch")">
+				@Html.PagedListPager(Model, page => Url.Action("DirectServicesSearch", "Case",  new {
+			   page,
+		   }), Html.Snippets().PagedListRenderOptions(new[] { "directServicesPagedList", "dirtyignore" }, new[] { "pagedListMultiples" }))
+				@Html.Partial("_PagedListFooter", Model, new ViewDataDictionary { { "isMultiples", true }, { "id", "DirectServiceSearchDates_[0]__PageSize" }, { "name", "DirectServiceSearchDates[0].PageSize" }, { "class", "" }, { "paginationFor", "direct.services" } })
+				@Html.Hidden("DirectServiceSearchDates[0].Page", Model.PageNumber)
+			</div>
+		</div>
+	</div>
+</div>

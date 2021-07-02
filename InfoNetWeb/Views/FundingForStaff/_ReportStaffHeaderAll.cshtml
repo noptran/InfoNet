@@ -1,0 +1,25 @@
+﻿@model Infonet.Web.ViewModels.Admin.FundingForStaff
+
+@{ 
+	var ReportName = "";
+	if (Model.FFSReports.ReportName == "FUNDINGHISTORY") { ReportName = "- Funding History"; }
+	if (Model.FFSReports.ReportName == "SELECTEDFUNDING") { ReportName = "- Selected Funding"; }
+}
+
+<div class="row">
+	<div class="col-xs-12 ffs-report-div ffs-report-center-staff bg-primary">@Session.Center().Name @ReportName - All Staff</div>
+</div>
+<div class="row">
+	<div class="col-xs-12 ffs-report-fundingdate ffs-report-div">Funding Date</div>
+</div>
+<div class="row">
+	<div class="col-xs-11 col-xs-offset-1 ffs-report-staffmember ffs-report-div">Staff Member</div>
+</div>
+<div class="row">
+	<div class="col-xs-10 col-xs-offset-2 ffs-report-programservice ffs-report-div">Program/Service</div>
+</div>
+<div class="row">
+	<div class="col-sm-7 col-xs-5 col-xs-offset-3 ffs-report-fund ffs-report-div">Funding Source</div>
+	<div class="col-sm-2 col-xs-4 ffs-report-fundpercent-header ffs-report-div">Funding</div>
+</div>
+

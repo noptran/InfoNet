@@ -1,0 +1,547 @@
+﻿@model ClientCase
+
+<div class="panel-body pb-0">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.PresentingIssues.PrimaryPresentingIssueID, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(model => model.PresentingIssues.PrimaryPresentingIssueID) })
+                @Html.LookupFor(model => model.PresentingIssues.PrimaryPresentingIssueID, "<Pick One>", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PresentingIssues.PrimaryPresentingIssueID, "", new { @class = "help-block" })
+            </div>
+			@if (Model.Provider == Provider.DV) {
+	            <div class="form-group">
+					@Html.LabelFor(model => model.PresentingIssues.DateOfPrimOffense, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(model => model.PresentingIssues.DateOfPrimOffense) })
+	                <div class="input-group date" data-provide="datepicker">
+						@Html.TextBoxFor(model => model.PresentingIssues.DateOfPrimOffense, true, new { @class = "form-control", data_val_betweennineteenfiftytoday = "The field Primary Offense Date must be between 1/1/1950 and today."})
+						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+	                </div>
+	                @Html.ValidationMessageFor(model => model.PresentingIssues.DateOfPrimOffense, "", new { @class = "help-block" })
+	            </div>
+			} else {
+				 <div class="form-group">
+					@Html.LabelFor(model => model.PresentingIssues.StartDateOfAbuse, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(model => model.PresentingIssues.StartDateOfAbuse) })
+	                <div class="input-group date" data-provide="datepicker">
+						@Html.TextBoxFor(model => model.PresentingIssues.StartDateOfAbuse, true,
+							Model.Provider == Provider.SA
+								? new { @class = "form-control", data_val_betweennineteenthirtytoday = "The field Approximate Abuse/Offense Date (or start of abuse) must be between 1/1/1930 and today." }
+								: (object)new { @class = "form-control", data_val_notgreaterthanfirstcontactdate = "Approximate Abuse/Offense Date (or start of abuse) cannot be later than CAC Case Open Date.", data_val_betweennineteenseventytoday = "The field Approximate Abuse/Offense Date (or start of abuse) must be between 1/1/1970 and today." })
+						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+	                </div>
+	                @Html.ValidationMessageFor(model => model.PresentingIssues.StartDateOfAbuse, "", new { @class = "help-block" })
+	            </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PresentingIssues.EndDateOfAbuse, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the approximate end date of abuse/offense." })
+					<div class="input-group date" data-provide="datepicker">
+						@Html.TextBoxFor(model => model.PresentingIssues.EndDateOfAbuse, true,
+							Model.Provider == Provider.SA
+								? new { @class = "form-control", data_val_betweennineteenthirtytoday = "The field End of Abuse/Offense Date (if applicable) must be between 1/1/1930 and today." }
+								: (object)new { @class = "form-control", data_val_betweennineteenseventytoday = "The field End of Abuse/Offense Date (if applicable) must be between 1/1/1970 and today." })
+						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+					</div>
+                    @Html.ValidationMessageFor(model => model.PresentingIssues.EndDateOfAbuse, "", new { @class = "help-block" })
+                </div>
+            }
+            @if (Model.Provider == Provider.CAC) {
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PresentingIssues.LocOfPrimOffenseID, new { @class = "control-label", data_toggle = "tooltip", title = "For the most recent abuse/offense referenced above, select the location of the latest incident." })
+                    @Html.LookupFor(model => model.PresentingIssues.LocOfPrimOffenseID, "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PresentingIssues.LocOfPrimOffenseID, "", new { @class = "help-block" })
+                </div>
+            }
+        </div>
+        <div class="col-sm-6">
+            @if (Model.Provider != Provider.CAC) {
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PresentingIssues.LocOfPrimOffenseID, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(model => model.PresentingIssues.LocOfPrimOffenseID) })
+                    @Html.LookupFor(model => model.PresentingIssues.LocOfPrimOffenseID, "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PresentingIssues.LocOfPrimOffenseID, "", new { @class = "help-block" })
+                </div>
+            }
+            @if (Model.Provider != Provider.DV) {
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PresentingIssues.StateID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the state where the abuse/offense occurred." })
+                    @Html.DropDownListFor(model => model.PresentingIssues.StateID, new SelectList(Data.Usps.States, "ID", "StateName", Model.PresentingIssues == null ? Data.Usps.Illinois.ID : Model.PresentingIssues.StateID), new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PresentingIssues.StateID, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PresentingIssues.CountyID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the county where the abuse/offense occurred." })
+					@Html.DropDownListFor(model => model.PresentingIssues.CountyID, new SelectList(Data.Usps.GetCountiesByState(Model.PresentingIssues?.StateID ?? Data.Usps.Illinois.ID), "ID", "CountyName", Model.PresentingIssues == null ? 0 : Model.PresentingIssues.CountyID), "<Pick One>", new { @class = "form-control" })
+					@Html.ValidationMessageFor(model => model.PresentingIssues.CountyID, "", new { @class = "help-block" })
+                </div>
+                if (Model.Provider == Provider.CAC) {
+					<div class="form-group">
+						@Html.LabelFor(model => model.PresentingIssues.CityID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the city/town where the abuse/offense occurred." })
+						@Html.DropDownListFor(model => model.PresentingIssues.CityID, new SelectList(Data.Usps.GetCitiesByStateAndCounty(Model.PresentingIssues?.StateID ?? Data.Usps.Illinois.ID, Model.PresentingIssues?.StateID == null || Model.PresentingIssues.CountyID == null ? null: Model.PresentingIssues.CountyID), "ID", "CityName", Model.PresentingIssues == null ? 0 : Model.PresentingIssues.CityID), "<Pick One>", new { @class = "form-control" })
+						@Html.ValidationMessageFor(model => model.PresentingIssues.CityID, "", new { @class = "help-block" })
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(model => model.PresentingIssues.TownshipID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the township where the abuse/offense occurred." })
+						@Html.DropDownListFor(model => model.PresentingIssues.TownshipID, new SelectList(Data.Usps.GetTownshipsByStateAndCounty(Model.PresentingIssues?.StateID ?? Data.Usps.Illinois.ID, Model.PresentingIssues?.StateID == null ? null : Model.PresentingIssues.CountyID), "ID", "TownshipName", Model.PresentingIssues == null ? 0 : Model.PresentingIssues.CountyID), "<Pick One>", new { @class = "form-control" })
+						@Html.ValidationMessageFor(model => model.PresentingIssues.TownshipID, "", new { @class = "help-block" })
+					</div>
+                }
+            }
+        </div>
+    </div>
+    @if (Model.Provider != Provider.DV) {
+        <div class="row">
+            <div class="form-group col-xs-12">
+                @Html.LabelFor(model => model.PresentingIssues.Comment, new { @class = "control-label", data_toggle = "tooltip", title = "Provide any additional information important to know about this case. Do not enter anything that could potentially identify this client." })
+                @Html.TextAreaFor(model => model.PresentingIssues.Comment, new { @class = "form-control", style = "resize: vertical;" })
+                <div id="c">&nbsp;<span id="pi_charRemaining">256</span> characters remaining</div>
+                @Html.ValidationMessageFor(model => model.PresentingIssues.Comment, "", new { @class = "help-block" })
+            </div>
+        </div>
+    }
+    @if (Model.Provider != Provider.CAC) {
+        <fieldset class="form-group">
+            <legend data-toggle="tooltip" title="Check as many other presenting issues that occurred along with the primary presenting issue.">Other Presenting Issues (check as many as apply)</legend>
+			<div class="icjia-checkbox-group">
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="checkbox">
+							@Html.CheckBoxFor(model => model.PresentingIssues.IsAdultSurvivor)
+							@Html.LabelFor(model => model.PresentingIssues.IsAdultSurvivor)
+						</div>
+						<div class="checkbox">
+							@Html.CheckBoxFor(model => model.PresentingIssues.IsAggravatedDomesticBattery)
+							@Html.LabelFor(model => model.PresentingIssues.IsAggravatedDomesticBattery)
+						</div>
+						<div class="checkbox">
+							@Html.CheckBoxFor(model => model.PresentingIssues.IsAssaultAndOrBattery)
+							@Html.LabelFor(model => model.PresentingIssues.IsAssaultAndOrBattery)
+						</div>
+						<div class="checkbox">
+							@Html.CheckBoxFor(model => model.PresentingIssues.IsAttemptedHomicide)
+							@Html.LabelFor(model => model.PresentingIssues.IsAttemptedHomicide)
+						</div>
+						<div class="checkbox">
+							@Html.CheckBoxFor(model => model.PresentingIssues.IsBattery)
+							@Html.LabelFor(model => model.PresentingIssues.IsBattery)
+						</div>
+						<div class="checkbox">
+							@Html.CheckBoxFor(model => model.PresentingIssues.IsBurglary)
+							@Html.LabelFor(model => model.PresentingIssues.IsBurglary)
+						</div>
+						<div class="checkbox">
+							@Html.CheckBoxFor(model => model.PresentingIssues.IsChildAbuse)
+							@Html.LabelFor(model => model.PresentingIssues.IsChildAbuse)
+						</div>
+						<div class="checkbox">
+							@Html.CheckBoxFor(model => model.PresentingIssues.IsChildNeglect)
+							@Html.LabelFor(model => model.PresentingIssues.IsChildNeglect)
+						</div>
+						<div class="checkbox">
+							@Html.CheckBoxFor(model => model.PresentingIssues.IsChildSexualAssault)
+							@Html.LabelFor(model => model.PresentingIssues.IsChildSexualAssault)
+						</div>
+						<div class="checkbox">
+							@Html.CheckBoxFor(model => model.PresentingIssues.IsDateRape)
+							@Html.LabelFor(model => model.PresentingIssues.IsDateRape)
+						</div>
+						<div class="checkbox">
+							@Html.CheckBoxFor(model => model.PresentingIssues.IsDomesticBattery)
+							@Html.LabelFor(model => model.PresentingIssues.IsDomesticBattery)
+						</div>
+						@if (Model.Provider == Provider.DV) {
+							<div class="checkbox">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsDrugged)
+								@Html.LabelFor(model => model.PresentingIssues.IsDrugged)
+							</div>
+							<div class="checkbox">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsDwiDui)
+								@Html.LabelFor(model => model.PresentingIssues.IsDwiDui)
+							</div>
+						}
+						<div class="checkbox">
+							@Html.CheckBoxFor(model => model.PresentingIssues.IsElderAbuse)
+							@Html.LabelFor(model => model.PresentingIssues.IsElderAbuse)
+						</div>
+						<div class="checkbox">
+							@Html.CheckBoxFor(model => model.PresentingIssues.IsEmotionalDomesticViolence)
+							@Html.LabelFor(model => model.PresentingIssues.IsEmotionalDomesticViolence)
+						</div>
+                        @if (Model.Provider == Provider.DV) {
+                            <div class="checkbox">
+                                @Html.CheckBoxFor(model => model.PresentingIssues.IsFinancialAbuse)
+                                @Html.LabelFor(model => model.PresentingIssues.IsFinancialAbuse)
+                            </div>
+                        }                        
+					</div>
+					<div class="col-sm-6">
+						@if (Model.Provider == Provider.DV) {
+							<div class="checkbox">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsHarassment)
+								@Html.LabelFor(model => model.PresentingIssues.IsHarassment)
+							</div>
+						}
+						<div class="checkbox">
+							@Html.CheckBoxFor(model => model.PresentingIssues.IsHateCrime)
+							@Html.LabelFor(model => model.PresentingIssues.IsHateCrime)
+						</div>
+						<div class="checkbox">
+							@Html.CheckBoxFor(model => model.PresentingIssues.IsHomeInvasion)
+							@Html.LabelFor(model => model.PresentingIssues.IsHomeInvasion)
+						</div>
+						<div class="checkbox">
+							@Html.CheckBoxFor(model => model.PresentingIssues.IsHomicide)
+							@Html.LabelFor(model => model.PresentingIssues.IsHomicide)
+						</div>
+                        <div class="checkbox">
+                            @Html.CheckBoxFor(model => model.PresentingIssues.IsHumanLaborTrafficking)
+                            @Html.LabelFor(model => model.PresentingIssues.IsHumanLaborTrafficking)
+                        </div>
+                        <div class="checkbox">
+                            @Html.CheckBoxFor(model => model.PresentingIssues.IsHumanSexTrafficking)
+                            @Html.LabelFor(model => model.PresentingIssues.IsHumanSexTrafficking)
+                        </div>                        
+						<div class="checkbox">
+							@Html.CheckBoxFor(model => model.PresentingIssues.IsPhysicalDomesticViolence)
+							@Html.LabelFor(model => model.PresentingIssues.IsPhysicalDomesticViolence)
+						</div>
+						 @if (Model.Provider == Provider.DV) {
+							<div class="checkbox">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsRapeOrSexualAssault)
+								@Html.LabelFor(model => model.PresentingIssues.IsRapeOrSexualAssault)
+							</div>
+						 }
+						<div class="checkbox">
+							@Html.CheckBoxFor(model => model.PresentingIssues.IsRobbery)
+							@Html.LabelFor(model => model.PresentingIssues.IsRobbery)
+						</div>
+						@if (Model.Provider == Provider.SA) {
+							<div class="checkbox">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsRapeOrSexualAssault)
+								@Html.LabelFor(model => model.PresentingIssues.IsRapeOrSexualAssault, "Sexual Assault or Abuse")
+							</div>
+						}
+						<div class="checkbox">
+							@Html.CheckBoxFor(model => model.PresentingIssues.IsSexualDomesticViolence)
+							@Html.LabelFor(model => model.PresentingIssues.IsSexualDomesticViolence)
+						</div>
+						@if (Model.Provider == Provider.SA) {
+							<div class="checkbox">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsHarassment)
+								@Html.LabelFor(model => model.PresentingIssues.IsHarassment, "Sexual Harassment")
+							</div>
+						}
+                        @if (Model.Provider == Provider.DV) {
+                            <div class="checkbox">
+                                @Html.CheckBoxFor(model => model.PresentingIssues.IsSpiritualAbuse)
+                                @Html.LabelFor(model => model.PresentingIssues.IsSpiritualAbuse)
+                            </div>
+                        }
+						<div class="checkbox">
+							@Html.CheckBoxFor(model => model.PresentingIssues.IsStalking)
+							@Html.LabelFor(model => model.PresentingIssues.IsStalking)
+						</div>                       
+						<div class="checkbox">
+							@Html.CheckBoxFor(model => model.PresentingIssues.IsViolationOfOOP)
+							@Html.LabelFor(model => model.PresentingIssues.IsViolationOfOOP)
+						</div>
+						<div class="checkbox">
+							@Html.CheckBoxFor(model => model.PresentingIssues.IsAssault)
+							@Html.LabelFor(model => model.PresentingIssues.IsAssault)
+						</div>
+						<div class="checkbox">
+							@Html.CheckBoxFor(model => model.PresentingIssues.IsOtherOffenseAgPerson)
+							@Html.LabelFor(model => model.PresentingIssues.IsOtherOffenseAgPerson)
+						</div>
+						<div class="checkbox">
+							@Html.CheckBoxFor(model => model.PresentingIssues.IsOtherOffense)
+							@Html.LabelFor(model => model.PresentingIssues.IsOtherOffense)
+						</div>
+						<div class="checkbox">
+							@Html.CheckBoxFor(model => model.PresentingIssues.IsUnknownOffense)
+							@Html.LabelFor(model => model.PresentingIssues.IsUnknownOffense)
+						</div>
+					</div>
+				</div>
+			</div>
+        </fieldset>
+    } else {
+        <div class="row">
+            <div class="col-md-6">
+                <fieldset class="form-group mb-0">
+                    <legend data-toggle="tooltip" title="Select the type of sexual abuse experienced by the client. Check all that apply.">Sexual Abuse</legend>
+					<div class="icjia-checkbox-group label-weight-normal">
+						<div class="row">
+							<div class="col-xs-8 col-sm-6 col-md-8">
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								<strong>
+									Passive
+								</strong>
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								<strong>
+									Active
+								</strong>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-8 col-sm-6 col-md-8">
+								@Html.LabelFor(model => model.PresentingIssues.IsExploitationPassive)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsExploitationPassive)
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-8 col-sm-6 col-md-8">
+								@Html.LabelFor(model => model.PresentingIssues.IsSolicitationPassive)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsSolicitationPassive)
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-8 col-sm-6 col-md-8">
+								@Html.LabelFor(model => model.PresentingIssues.IsFondlingOverClothesPassive)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsFondlingOverClothesPassive)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsFondlingOverClothesActive)
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-8 col-sm-6 col-md-8" >
+								@Html.LabelFor(model => model.PresentingIssues.IsFondlingUnderClothesPassive)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsFondlingUnderClothesPassive)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsFondlingUnderClothesActive)
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-8 col-sm-6 col-md-8">
+								@Html.LabelFor(model => model.PresentingIssues.IsIntercourseVaginalPassive)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsIntercourseVaginalPassive)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsIntercourseVaginalActive)
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-8 col-sm-6 col-md-8">
+								@Html.LabelFor(model => model.PresentingIssues.IsIntercourseAnalPassive)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsIntercourseAnalPassive)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsIntercourseAnalActive)
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-8 col-sm-6 col-md-8">
+								@Html.LabelFor(model => model.PresentingIssues.IsMasturbationPassive)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsMasturbationPassive)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsMasturbationActive)
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-8 col-sm-6 col-md-8">
+								@Html.LabelFor(model => model.PresentingIssues.IsOralPassive)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsOralPassive)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsOralActive)
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-8 col-sm-6 col-md-8">
+								@Html.LabelFor(model => model.PresentingIssues.IsPenetrationDigitalPassive)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsPenetrationDigitalPassive)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsPenetrationDigitalActive)
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-8 col-sm-6 col-md-8">
+								@Html.LabelFor(model => model.PresentingIssues.IsPenetrationObjectilePassive)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsPenetrationObjectilePassive)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsPenetrationObjectileActive)
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-8 col-sm-6 col-md-8">
+								@Html.LabelFor(model => model.PresentingIssues.IsSexualOtherPassive, new { data_toggle = "tooltip", title = "Describe the active and/or passive other type of sexual abuse." })
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsSexualOtherPassive)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsSexualOtherActive)
+							</div>
+						</div>
+					
+						<div class="form-group">
+							@Html.TextBoxFor(model => model.PresentingIssues.SexualComment, new { @class = "form-control", @readonly = "readonly" })
+							@Html.ValidationMessageFor(model => model.PresentingIssues.SexualComment, "", new { @class = "help-block" })
+						</div>
+					</div>
+
+					<div class="form-group text-info" style="padding-left: 4px">
+						Active&nbsp;&nbsp;&nbsp;: Victim to Subject<br/>
+						Passive: Subject to Victim
+					</div>
+				</fieldset>
+            </div>
+            <div class="col-md-6">
+                <fieldset class="form-group">
+                    <legend data-toggle="tooltip" title="Select the type(s) of physical abuse experienced by the client. Check all that apply.">Physical Abuse</legend>
+					<div class="icjia-checkbox-group label-weight-normal">
+						<div class="row" style="margin-top: 20px;">
+							<div class="col-xs-10 col-sm-9 col-md-10">
+								@Html.LabelFor(model => model.PresentingIssues.IsBoneFractures)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsBoneFractures)
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-10 col-sm-9 col-md-10">
+								@Html.LabelFor(model => model.PresentingIssues.IsBrainDamage)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsBrainDamage)
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-10 col-sm-9 col-md-10">
+								@Html.LabelFor(model => model.PresentingIssues.IsBurn)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsBurn)
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-10 col-sm-9 col-md-10">
+								@Html.LabelFor(model => model.PresentingIssues.IsDeath)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsDeath)
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-10 col-sm-9 col-md-10">
+								@Html.LabelFor(model => model.PresentingIssues.IsInternalInjuries)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsInternalInjuries)
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-10 col-sm-9 col-md-10">
+								@Html.LabelFor(model => model.PresentingIssues.IsPoison)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsPoison)
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-10 col-sm-9 col-md-10">
+								@Html.LabelFor(model => model.PresentingIssues.IsSprains)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsSprains)
+							</div>
+						</div>
+
+
+						<div class="row">
+							<div class="col-xs-10 col-sm-9 col-md-10">
+								@Html.LabelFor(model => model.PresentingIssues.IsShaken)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsShaken)
+							</div>
+						</div>
+
+
+						<div class="row">
+							<div class="col-xs-10 col-sm-9 col-md-10">
+								@Html.LabelFor(model => model.PresentingIssues.IsSubduralHematoma)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsSubduralHematoma)
+							</div>
+						</div>
+
+
+						<div class="row">
+							<div class="col-xs-10 col-sm-9 col-md-10">
+								@Html.LabelFor(model => model.PresentingIssues.IsTorture)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsTorture)
+							</div>
+						</div>
+
+
+						<div class="row">
+							<div class="col-xs-10 col-sm-9 col-md-10">
+								@Html.LabelFor(model => model.PresentingIssues.IsWounds)
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsWounds)
+							</div>
+						</div>
+
+
+						<div class="row">
+							<div class="col-xs-10 col-sm-9 col-md-10">
+								@Html.LabelFor(model => model.PresentingIssues.IsPhysicalOther, new {  data_toggle = "tooltip", title = "Describe the other type of physical abuse experienced by the client." })
+							</div>
+							<div class="col-xs-2 col-sm-3 col-md-2 text-center">
+								@Html.CheckBoxFor(model => model.PresentingIssues.IsPhysicalOther)
+							</div>
+						</div>
+
+						<div class="form-group">
+							@Html.TextBoxFor(model => model.PresentingIssues.PhysicalComment, new { @class = "form-control", @readonly = "readonly" })
+							@Html.ValidationMessageFor(model => model.PresentingIssues.PhysicalComment, "", new { @class = "help-block"})
+						</div>
+					</div>
+                </fieldset>
+            </div>
+
+        </div>
+    }
+</div>

@@ -1,0 +1,66 @@
+﻿/*
+	************************** ICJIA PANEL SUBHEADER & FOOTER **************************
+*/
+.panel-primary .icjia-panel-subheader {
+	background-color: #e6fbf8;
+}
+
+.panel-primary > .panel-footer,
+.panel-primary > .panel-collapse > .panel-footer {
+	background-color: #e6fbf8;
+}
+
+/*
+	******************************** DROPDOWNS ********************************
+*/
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+    color: #007373; /* was #002c2d: brand link hover color */
+	background-color: #e6fbf8;
+}
+
+/*
+	******************************* BORDER COLORS ********************************
+*/
+.border-primary {
+    border-color: #007373;
+}
+
+/*
+	**************************** CAROUSEL INDICATORS *****************************
+*/
+.carousel-indicators .indicator.indicator-primary {
+    border-color: #007373;
+    background-color: #007373;
+}
+
+/*
+	**************************** BTN-LINK COLORS *****************************
+*/
+.btn-link-primary {
+    color: #007373;
+}
+
+.btn-link-primary:hover,
+.btn-link-primary:focus {
+    color: #002727;
+}
+
+.btn-link-primary[disabled]:hover,
+fieldset[disabled] .btn-link-primary:hover,
+.btn-link-primary[disabled]:focus,
+fieldset[disabled] .btn-link-primary:focus {
+    color: #777777;
+}
+
+/*
+	***************************** MARQUEE COLORS ******************************
+*/
+.icjia-navbar-marquee {
+	background-color: #002727; /* a:hover color */
+	color: #cbece7; /* .navbar-default .navbar-brand color */
+}
+
+.icjia-navbar-marquee .icjia-navbar-marquee-overlay {
+	background-color: #005252; /* .navbar-default .navbar-nav > .open > a background-color */
+}

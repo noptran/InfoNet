@@ -1,0 +1,46 @@
+﻿@model Infonet.Web.ViewModels.Account.RoleSearchViewModel
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Manage Roles";
+}
+@using (Html.BeginForm("Index", "RolesAdmin", FormMethod.Get, new { id = "main" })) {
+	<table class="table table-hover table-responsive">
+		<tr>
+			<th scope="col" class="text-left">
+				Name
+			</th>
+			<th scope="col" class="text-left">
+				Description
+			</th>
+            <th scope="col"><span class="sr-only">Action</span></th>
+		</tr>
+		@foreach (var item in Model.RoleList) {
+			<tr>
+				<td class="text-left">
+					@Html.DisplayFor(modelItem => item.Name)
+				</td>
+				<td class="text-left">
+					@Html.DisplayFor(modelItem => item.Description)
+				</td>
+				<td class="text-right">
+					@Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-xs btn-primary btn-outline" })
+				</td>
+			</tr>
+		}
+	</table>
+
+	<div class="row">
+		<div class="col-sm-12">
+			@Html.PagedListPager(Model.RoleList, page => Url.Action(Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)),
+				new {
+					page, Model.PageSize
+				}),
+				Html.Snippets().PagedListRenderOptions())
+			@Html.Partial("_PagedListDropMenu", Model, new ViewDataDictionary { { "PagedListUrlAction", Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)) } })
+		</div>
+	</div>
+}
+@section scripts {
+	<script src="~/Scripts/ICJIA/pagedlist.js"></script>
+}

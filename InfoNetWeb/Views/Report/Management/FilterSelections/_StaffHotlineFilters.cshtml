@@ -1,0 +1,56 @@
+﻿@using Infonet.Reporting.Enumerations
+@model Infonet.Reporting.ViewModels.ManagementReportViewModel
+
+<div class="panel panel-primary icjia-error-group reportProperty @SubReportSelection.MngRptStaffServiceHotline.GetShortName()" style="display:none">
+	<div class="panel-heading">
+		<h2 class="panel-title">
+			<span class="icjia-panel-title-text">Filters</span>
+		</h2>
+	</div>
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-sm-6 col-md-4">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<span class="panel-title">Hotline Filters</span>
+					</div>
+					<div class="panel-body">
+						<div class="form-group">
+							@Html.LabelFor(m => m.StaffHotlineStaffSelections)
+							@Html.DropDownListFor(model => model.StaffHotlineStaffSelections, new MultiSelectList(Model.StaffDefault, "SVID", "StaffName", Model.StaffHotlineStaffSelections), new { @class = "form-control chosen staffSelection", multiple = "multiple" })
+						</div>
+						<div class="form-group">
+							@Html.LabelFor(m => m.StaffHotlineHotlineTypeSelections)
+							@Html.DropDownListFor(model => model.StaffHotlineHotlineTypeSelections, new MultiSelectList(Model.HotlineTypeDefault, "CodeId", "Description", Model.StaffHotlineHotlineTypeSelections), new { @class = "form-control chosen", multiple = "multiple", data_icjia_ajax_url = "/Report/HotlineCallTypes" })
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6 col-md-4">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<span class="panel-title">Client Location Filters</span>
+					</div>
+					<div class="panel-body">
+						<div class="form-group">
+							@Html.LabelFor(m => m.StaffHotlineCitySelections)
+							@Html.DropDownListFor(model => model.StaffHotlineCitySelections, new MultiSelectList(Model.CityOrTownsDefault, "Description", "Description", Model.ClientDetailCityOrTownSelections), new { @class = "form-control chosen", multiple = "multiple", data_icjia_ajax_url = "/Report/CityOrTowns" })
+						</div>
+						<div class="form-group">
+							@Html.LabelFor(m => m.StaffHotlineTownshipSelections)
+							@Html.DropDownListFor(model => model.StaffHotlineTownshipSelections, new MultiSelectList(Model.TownshipsDefault, "Description", "Description", Model.ClientDetailTownshipSelections), new { @class = "form-control chosen", multiple = "multiple", data_icjia_ajax_url = "/Report/Townships" })
+						</div>
+						<div class="form-group">
+							@Html.LabelFor(m => m.StaffHotlineCountySelections)
+							@Html.DropDownListFor(model => model.StaffHotlineCountySelections, new MultiSelectList(Model.CountiesDefault, "CodeId", "Description", Model.ClientDetailCountySelections), new { @class = "form-control chosen", multiple = "multiple", data_icjia_ajax_url = "/Report/Counties" })
+						</div>
+						<div class="form-group">
+							@Html.LabelFor(m => m.StaffHotlineZipCodeSelections)
+							@Html.DropDownListFor(model => model.StaffHotlineZipCodeSelections, new MultiSelectList(Model.ZipcodesDefault, "Description", "Description", Model.ClientDetailZipCodeSelections), new { @class = "form-control chosen", multiple = "multiple", data_icjia_ajax_url = "/Report/Zipcodes" })
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

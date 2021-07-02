@@ -1,0 +1,67 @@
+﻿.ffs-report-fundingdate {
+	background-color: lightgray;
+	font-weight: bold;
+}
+
+.ffs-report-programservice {
+	background-color: #afd9ee;
+	font-weight: bold;
+}
+
+.ffs-report-programservice-fundingpercent-not100 {
+	background-color: #e4b9b9;
+	font-weight: bold;
+	text-align: right;
+	padding-right: 15px;
+}
+
+.ffs-report-programservice-fundingpercent-100 {
+	background-color: palegreen;
+	font-weight: bold;
+	text-align: right;
+	padding-right: 15px;
+}
+
+.ffs-report-fund {
+}
+
+.ffs-report-fund-percent {
+	background-color: #f7f4d3;
+	text-align: right;
+}
+
+.ffs-report-fundpercent-header {
+	font-weight: bold;
+}
+
+.ffs-report-center-staff {
+	font-size: larger;
+	padding: 5px 10px;
+}
+
+.ffs-report-staffmember {
+	font-weight: bold;
+	background-color: papayawhip;
+}
+
+.ffs-report-div {
+	border: solid 1px rgb(221, 221, 221);
+	padding: 2px 10px;
+}
+
+#reportStaffFundingHistoryModal .modal-dialog, #reportSelectedFundingModal .modal-dialog, #reportStaffSelectedFundingModal .modal-dialog, #reportFundingModal .modal-dialog, #reportFundingHistorySelectionModal .modal-dialog, #reportFundingHistoryModal .modal-dialog {
+	margin: 10px auto;
+}
+
+.ffs-reportModalBody {
+	height: 88% !important;
+	overflow: auto;
+}
+
+@media screen and (max-width: 768px) {
+	.ffs-reportModalBody {
+		height: 75% !important;
+	}
+}
+
+

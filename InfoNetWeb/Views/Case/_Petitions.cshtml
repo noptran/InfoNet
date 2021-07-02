@@ -1,0 +1,52 @@
+﻿@model ClientCase
+
+@{
+	var SAMPLE_PETITION = new AbuseNeglectPetition();
+}
+	@if ((bool)ViewBag.HasRelatedClientsOrOffenders) {
+		<div class="table-responsive">
+			<table id="tbl_petitions" class="table">
+				<thead class="icjia-panel-subheader">
+					<tr>
+						<th scope="col" style="padding-left: 40px">@Html.DisplayNameFor(m => SAMPLE_PETITION.Respondents)</th>
+						<th scope="col">@Html.DisplayNameFor(m => SAMPLE_PETITION.AbuseNeglectPetitionId)</th>
+						<th scope="col">@Html.DisplayNameFor(m => SAMPLE_PETITION.PetitionDate)</th>
+						<th scope="col">@Html.DisplayNameFor(m => SAMPLE_PETITION.AdjudicatedId)</th>
+						<th scope="col">@Html.DisplayNameFor(m => SAMPLE_PETITION.AdjudicatedDate)</th>
+                        <th scope="col"><span class="sr-only">Action</span></th>
+					</tr>
+				</thead>
+				<tbody>
+					@{
+						var abusePetitions = Model.AbuseNeglectPetitionsById;
+					}
+					@foreach (var each in abusePetitions.KeysFor(abusePetitions.Values.Concat(abusePetitions.Values.Restorable).OrderByDescending(t => t.Id.HasValue).ThenBy(t => t.Id).ThenBy(t => abusePetitions.KeyFor(t).Occurrence))) {
+					bool isNew = each.Components[0] == null;
+					string action = abusePetitions.ContainsKey(each) ? (isNew ? "+" : "=") : (isNew ? "~" : "-");
+						@Html.Partial("_Petitions_Form", Model, ViewData.CopyWith(new { petitionKey = each, petitionAction = action }))
+				}
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="6" class="text-right">
+							<button type="button" class="btn btn-primary btn-xs btn-icon" aria-label="Add New Petition"
+									data-icjia-role="petition.add" data-icjia-mustache-next='{ "key": @Model.AbuseNeglectPetitionsById.NextOccurrenceFor(null) }'>
+								<span class="glyphicon glyphicon-plus"></span>
+								@using (var mustache = Html.BeginMustache("script", "--d-", "-p--")) {
+									@Html.Partial("_Petitions_Form", Model, ViewData.CopyWith(new { petitionKey = Key.Template(null, mustache.Tag("key")), petitionAction = "+" }))
+								}
+							</button>
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+} else {
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="well text-center" style="margin:0; color:#767676; font-weight: bold">No Related Clients or Offenders Found</div>
+			</div>
+		</div>
+	</div>
+}

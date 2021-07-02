@@ -1,0 +1,60 @@
+﻿@using Infonet.Reporting.AdHoc
+@using Newtonsoft.Json.Linq
+@model Model
+
+@{
+	JObject json = ViewBag.Json;
+	bool isRoot = ViewBag.IsRoot;
+	bool isAnd = json["operator"].Enum<PredicateOperator>() == PredicateOperator.And;
+	long unique = Session.NextFieldId();
+}
+
+<div id="@(isRoot ? "where" : null)" class="panel panel-@(isRoot ? "primary" : "default") icjia-error-group @(isAnd ? null : "or-panel")" style="@(isRoot ? null : "margin-bottom: 0; border-color: #e3e3e3; box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05)")" data-icjia-role="conjunction">
+	@if (isRoot) {
+		<div class="panel-heading" data-toggle="collapse" data-target="#whereCollapse">
+			<h2 class="panel-title">
+				Where...
+				<button type="button" class="btn btn-link icjia-h2-btn-link-icon pull-right" data-toggle="collapse" data-target="#whereCollapse" aria-label="Toggle Panel" aria-controls="whereCollapse" aria-expanded="true"><span class="glyphicon glyphicon-triangle-bottom rotate-90-if-collapsed"></span></button>
+			</h2>
+		</div>
+	}
+	<div id="@(isRoot ? "whereCollapse" : null)" class="panel-collapse collapse @(isRoot ? "" : "in")">
+		<div class="panel-body">
+			@for (var en = Lookahead.New(json["predicates"]); en.MoveNext();) {
+				if (!en.IsFirst) {
+					<div class="and-or">@(isAnd ? "AND" : "OR")</div>
+				}
+				if (en.Current["predicates"] == null) {
+					@Html.Action("Predicate", new { perspective = ViewBag.Perspective, predicateJson = en.Current.ToString() })
+				} else {
+					@Html.Action("Conjunction", new { perspective = ViewBag.Perspective, conjunctionJson = en.Current.ToString(), isRoot = false /* must specify false to override inherited true */})
+				}
+			}
+		</div>
+		<div class="panel-footer pt-0" style="background-color: transparent; padding-bottom: 7px;">
+			<div class="row" style="margin: 0 -23px">
+				<div class="col-xs-6 col-sm-3">
+					<div class="btn-group btn-group-sm btn-block">
+						<button type="button" class="btn btn-primary btn-white" style="width: calc(70% + 0.5px)" data-icjia-role="addPredicate"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;Condition</button>
+						<button type="button" class="btn btn-primary btn-white" style="width: calc(30% + 0.5px)" data-icjia-role="addConjunction">(...)</button>
+					</div>
+				</div>
+				<div class="col-xs-6 col-sm-offset-6 col-sm-3">
+					<div class="btn-group btn-group-sm btn-block" data-toggle="buttons">
+						<label class="btn btn-primary btn-white @(isAnd ? "active" : null)" style="width: calc(50% @(isRoot ? "+ 0.5px" : "- 16px")">
+							<input type="radio" name="andOr@(unique)" checked="@(isAnd ? "checked" : null)" data-icjia-role="and"> and
+						</label>
+						<label class="btn btn-primary btn-white @(isAnd ? null : "active")" style="width: calc(50% @(isRoot ? "+ 0.5px" : "- 16px")">
+							<input type="radio" name="andOr@(unique)" checked="@(isAnd ? null : "checked")" data-icjia-role="or"> or
+						</label>
+						@if (!isRoot) {
+							<button type="button" class="btn btn-xs btn-danger" style="width: 34px" aria-label="Delete This Conjunction" data-icjia-role="deleteConjunction">
+								<span class="glyphicon glyphicon-trash" style="transform: translateY(-0.3px)"></span>
+							</button>
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,152 @@
+﻿@model ServiceOutcomeViewModel
+@using Infonet.Web.ViewModels.Services
+@using PagedList.Mvc;
+
+@{
+	ViewBag.Title = "Service Outcomes";
+}
+
+@using (Html.BeginForm("Search_Edit", "ServiceOutcome", FormMethod.Post, new { @class = "main", id = "addForm", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+	@Html.AntiForgeryToken()
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="panel panel-primary" style="margin: 0; margin-top:5px;">
+				<div class="panel-heading">
+					<div class="row">
+						<div class="col-sm-8">
+							<h3 class="panel-title">Add Service Outcomes</h3>
+						</div>
+					</div>
+				</div>
+				<div class="panel-body newOutcomes">
+					<input id="recordCount" type="hidden" value="@Model.displayForPaging.Count" aria-hidden="true" />
+					<input id="addCount" type="hidden" value="0" aria-hidden="true" />
+					<p class="text-info"><b>Note:</b> Service outcome data should be entered at least once per quarter.</p>
+					<table id="newOutcomes" class="table table-responsive icjia-table-borderless" style="margin-bottom: 0;">
+						<thead>
+							<tr>
+								<th scope="col" width="17%" style="min-width:152px">
+									<span data-toggle="tooltip" title="Enter the date for the survey results grouping, typically entered as the last day of the month or quarter for surveys received that month/quarter.">Date</span>
+								</th>
+								<th scope="col" width="26%" style="min-width:160px">
+									<span data-toggle="tooltip" title="Select the group client was in when survey was completed.">Client Service Group</span>
+								</th>
+								<th scope="col" width="26%">
+									<span data-toggle="tooltip" title="List of questions for the selected client service group.">Survey Question</span>
+								</th>
+								<th scope="col" width="13%">
+									<span data-toggle="tooltip" title="Enter the number of yes responses to this survey question.">No. of YES Responses</span>
+								</th>
+								<th scope="col" width="13%">
+									<span data-toggle="tooltip" title="Enter the number of no responses to this survey question.">No. of NO Responses</span>
+								</th>
+								<th scope="col" width="5%" style="min-width:40px"><span class="sr-only"></span></th>
+							</tr>
+						</thead>
+						<tbody>
+							@Html.Partial("_NewOutcomePartial", new ServiceOutcomeViewModel())
+						</tbody>
+					</table>
+					<button id="outcomeAddNew" type="button" class="btn btn-default btn-outline"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;&nbsp;Add New Service Outcome</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br/>
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="pull-right">
+				@Html.Snippets().SaveButton(new { onclick = "submitMyForms()", data_icjia_role = "preventDuplicateRequest", accesskey = "s" })
+				@Html.Snippets().UndoLink(Url.Action(), new { accesskey = "u" })
+			</div>
+		</div>
+	</div>
+}
+<hr />
+@using (Html.BeginForm("Search_Edit", "ServiceOutcome", FormMethod.Get, new { autocomplete = "off", id="main" })) {
+	@Html.Partial("_DateRangeSelect", Model, new ViewDataDictionary { { "rangeTitle", "Service Outcome Date Range" }, { "rangeTooltipTitle", "" } })
+	@Html.Partial("_SearchResetButtons")
+}
+
+@using (Html.BeginForm("Search_Edit_Post", "ServiceOutcome", FormMethod.Post, new { @class = "main", id = "searchResults", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+	@Html.AntiForgeryToken()
+	<table id="searchResults" class="table table-bordered table-striped table-responsive" style="margin-top: 20px">
+		<tr>
+			<th scope="col" class="text-center" width="10%" style="min-width:124px">
+				Action
+			</th>
+			<th scope="col" width="15%" style="min-width:152px" data-toggle="tooltip" title="Enter the date for the survey results grouping, typically entered as the last day of the month or quarter for surveys received that month/quarter.">
+				Date
+			</th>
+			<th scope="col" width="27%" data-toggle="tooltip" title="Select the group client was in when survey was completed.">
+				Client Service Group
+			</th>
+			<th scope="col" width="27%" data-toggle="tooltip" title="List of questions for the selected client service group.">
+				Survey Question
+			</th>
+			<th scope="col" width="8%" data-toggle="tooltip" title="Enter the number of yes responses to this survey question.">
+				No. of YES Responses
+			</th>
+			<th scope="col" width="8%" data-toggle="tooltip" title="Enter the number of no responses to this survey question.">
+				No. of NO Responses
+			</th>
+		</tr>
+		@if (Model.OutcomesList != null) {
+					for (int i = 0; i < Model.displayForPaging.Count; i++) {
+				<tr class="rowClass" style="vertical-align:middle">
+					<td valign="middle">
+						<label>
+							Edit
+							@Html.CheckBoxFor(modelItem => Model.displayForPaging[i].shouldEdit, new { @class = "editRecord rowData" })
+						</label>
+						<label>
+							Delete
+							@Html.CheckBoxFor(modelItem => Model.displayForPaging[i].shouldDelete, new { @class = "deleteRecord rowData" })
+						</label>
+						@Html.HiddenFor(m => m.displayForPaging[i].ID, new { @class = "rowData" })
+					</td>
+					<td>
+						<div class="input-group date" data-provide="datepicker" data-date-end-date=@DateTime.Today.ToShortDateString()>
+							@Html.TextBoxFor(m => m.displayForPaging[i].OutcomeDate, true, new { @class = "form-control rowData", disabled = "disabled" })
+							<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+						</div>
+						@Html.ValidationMessageFor(m => m.displayForPaging[i].OutcomeDate, "", new { @class = "help-block" })
+					</td>
+					<td>
+						@Html.LookupFor(m => m.displayForPaging[i].ServiceID, Provider.DV, "<Pick One>", true, new { @class = "form-control rowData", disabled = "disabled" })
+						@Html.ValidationMessageFor(m => m.displayForPaging[i].ServiceID, "", new { @class = "help-block" })
+					</td>
+					<td>
+						@Html.DropDownListFor(m => m.displayForPaging[i].OutcomeID, new SelectList(Model.displayForPaging[i].OutcomeList, "CodeID", "Description", Model.displayForPaging[i].OutcomeID), "<Pick One>", new { @class = "form-control rowData", disabled = "disabled" })
+						@Html.ValidationMessageFor(m => m.displayForPaging[i].OutcomeID, "", new { @class = "help-block" })
+					</td>
+					<td>
+						@Html.TextBoxFor(m => m.displayForPaging[i].ResponseYes, new { @class = "form-control rowData", disabled = "disabled", type = "number", data_val_required= "No. of YES Responses is required"})
+						@Html.ValidationMessageFor(m => m.displayForPaging[i].ResponseYes, "", new { @class = "help-block" })
+					</td>
+					<td>
+						@Html.TextBoxFor(m => m.displayForPaging[i].ResponseNo, new { @class = "form-control rowData", disabled = "disabled", type = "number", data_val_required = "No. of NO Responses is required" })
+						@Html.ValidationMessageFor(m => m.displayForPaging[i].ResponseNo, "", new { @class = "help-block" })
+					</td>
+				</tr>
+					}
+				}
+	</table>
+
+	<div id="addFormPlaceholder" style="display:none"></div>
+	@Html.Partial("_PagedListHiddenFields")
+}
+
+<div class="row">
+	<div class="col-sm-12">
+		@Html.PagedListPager(Model.OutcomesList, page => Url.Action(Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)), Html.Snippets().PagedListPagerRouteValues(page, Model)), Html.Snippets().PagedListRenderOptions())
+		@Html.Partial("_PagedListDropMenu", Model, new ViewDataDictionary { { "PagedListUrlAction", Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)) } })
+	</div>
+</div>
+
+@section scripts {
+	<script src="~/Scripts/ICJIA/date-ranges.js"></script>
+	<script src="~/Scripts/ICJIA/pagedlist.js"></script>
+	<script src="~/Scripts/Views/Shared/_SearchEdit.js"></script>
+	<script src="~/Scripts/Views/Services/_Outcome.js"></script>
+}

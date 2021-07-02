@@ -1,0 +1,226 @@
+﻿@model Infonet.Web.ViewModels.Admin.FundingForStaff
+
+@{
+	var cntAssignedServices = Model.FFSAssignServices.AssignedServices == null ? 0 : Model.FFSAssignServices.AssignedServices.Count;
+	ViewBag.Title = "Funding For Staff";
+}
+
+
+@using (Html.BeginForm("Index", "FundingForStaff", FormMethod.Post, new { id = "main", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+	@Html.AntiForgeryToken()
+	<div class="row">
+		<div class="panel panel-default panel-body">
+			<div class="row">
+				<div class="col-lg-3 col-md-4 form-group">
+					@Html.Label("SelectedFundIssueDateId", "Date Issued", new { @class = "control-label", data_toggle = "tooltip", title = "Click Add to create a new funding statement.  Click Delete to delete the latest funding statement." })
+					<div class="input-group">
+						@Html.HiddenFor(m => m.SelectedFundIssueDate)
+						@Html.DropDownListFor(m => m.SelectedFundIssueDateId, Model.FundIssueDatesList, new { Class = "form-control" })
+						<div class="input-group-btn">
+							<button type="button" data-icjia-role="ffs.fundDate.add" class="btn btn-primary dirtyignore" aria-label="Add Funding Issue Date" data-toggle="tooltip" title="Click to create a new funding statement.">
+								<span class="glyphicon glyphicon-plus-sign"></span> Add
+							</button>
+							<button type="button" class="btn btn-danger dirtyignore" data-icjia-role="ffs.fundDate.delete" aria-label="Delete Funding Issue Date" data-toggle="tooltip" title="Click to delete the latest funding statement.">Delete</button>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6 col-md-5 form-group">
+					@Html.Label("AssignedStaffList", "Staff", new { @class = "control-label", data_toggle = "tooltip", title = "List of staff included in the selected funding statement. Click Edit Staff List button to modify the staff list." })
+					<span id="cntStaff" class="icjia-results"></span>
+					<div class="input-group">
+						@Html.HiddenFor(m => m.SelectedStaffSVID)
+						@Html.DropDownListFor(m => m.AssignedStaffList, new SelectList(ViewBag.FFSAssignedStaff, "SVID", "Name", ""), new { Class = "form-control" })
+						<div class="input-group-btn">
+							<button type="button" id="editStaffList" class="btn btn-primary dirtyignore" aria-label="Edit Staff List" data-toggle="tooltip" title="Select to modify the staff list.">
+								<span class="glyphicon glyphicon-pencil"></span> Edit Staff List
+							</button>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-2 col-md-3 form-group" style="margin-top:25px;">
+					<div class="btn-group">
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" data-icjia-role="ffs.reports">
+								Reports <span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" role="menu">
+								<li><a data-icjia-role="ffs.reports.selectedfunding" data-toggle="tooltip" title="Select to view all the funding information for the current funding statement.">Selected Funding</a></li>
+								<li><a data-icjia-role="ffs.reports.staffselectedfunding" data-toggle="tooltip" title="Click to view the funding information for an individual staff/volunteer during the current funding period.">Staff Selected Funding</a></li>
+								<li><a data-icjia-role="ffs.reports.fundinghistory" data-toggle="tooltip" title="Click to view current and/or previous funding statements.">Funding History</a></li>
+								<li><a data-icjia-role="ffs.reports.stafffundinghistory" data-toggle="tooltip" title="A report with all funding information for a particular staff/volunteer.">Staff Funding History</a></li>
+							</ul>
+						</div>
+						<input type=button class="btn btn-primary btn-outline" onClick="parent.open('Content/FFS_Guidebook_3-18-15.pdf')" data-toggle="tooltip" title="Select to open the Help Guide for InfoNet's Funding for Staff utility." value='Help'>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="panel panel-primary icjia-error-group">
+			<div class="panel-heading clearfix">
+				<h2 class="panel-title pull-left" style="padding-top: 7.5px;">
+					<span class="icjia-panel-title-text">Services/Programs</span>
+				</h2>
+				<div class="btn-group-sm pull-right">
+					<button type="button" name="btnAssignServices" class="btn btn-primary btn-white" data-icjia-role='ffs.assignServices' aria-label="Assign Services" data-toggle="tooltip" title="Select to assign services to the selected staff member.">Assign Services</button>
+					<button type="button" class="btn btn-primary btn-white" data-icjia-role="ffs.multiFundAssignment" aria-label="Multi-Fund Assignment" data-toggle="tooltip" title="Select to assign identical funding sources and proportions to multiple services on the selected staff.">Multi-Fund Assignment</button>
+				</div>
+			</div>
+			<div class="panel-body" style="padding: 0px;">
+				<div class="table" style="border-right:15px; border-left:15px; margin:0px;">
+					<table class="table" id="servicesPrograms" style="margin:0px;">
+						<thead class="icjia-panel-subheader">
+							<tr>
+								<th scope="col">Name - <span class="icjia-results" id="cntServicesPrograms">(Results: @cntAssignedServices)</span></th>
+								<th scope="col" width="100">Percent</th>
+                                <th scope="col"><span class="sr-only">Action</span></th>
+							</tr>
+						</thead>
+						<tbody>
+							@Html.Partial("_Services")
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+@Html.Partial("_Modal", Model, new ViewDataDictionary {
+		 { "baseName", "addFundingIssueDate" }, { "modalSize", "sm"}, { "title", "Add Funding Date"}
+	 })
+
+@Html.Partial("_Modal", Model, new ViewDataDictionary {
+		 { "baseName", "editStaffList" }, { "modalSize", "lg"}, { "title", "Edit Staff List - Available Staff"}
+	 })
+
+@Html.Partial("_Modal", Model, new ViewDataDictionary {
+		 { "baseName", "assignServices" }, { "modalSize", "lg"}, { "title", "Program/Service Selection"}
+	 })
+
+@Html.Partial("_Modal", Model, new ViewDataDictionary {
+		 { "baseName", "multiFundAssignment" }, { "modalSize", "lg"}, { "title", "Multi-Fund Assignment"}
+	 })
+
+@Html.Partial("_Modal", Model, new ViewDataDictionary {
+		 { "baseName", "assignFundingSource" }, { "modalSize", "lg"}, { "title", "Funding Selection"}
+	 })
+
+@Html.Partial("_Modal", Model, new ViewDataDictionary {
+		 { "baseName", "reportFundingHistorySelection" }, { "modalSize", "lg"}, { "title", "Funding History Selection"}
+	 })
+
+@Html.Partial("_Modal", Model, new ViewDataDictionary {
+		 { "baseName", "reportSelectedFunding" }, { "modalSize", "lg"}, { "title", "Selected Funding"}, { "isReport", true }
+	 })
+
+@Html.Partial("_Modal", Model, new ViewDataDictionary {
+		 { "baseName", "reportStaffSelectedFunding" }, { "modalSize", "lg"}, { "title", "Staff Selected Funding"}, { "isReport", true }
+	 })
+
+@Html.Partial("_Modal", Model, new ViewDataDictionary {
+		 { "baseName", "reportFundingHistory" }, { "modalSize", "lg"}, { "title", "Funding History"}, { "isReport", true }
+	 })
+
+@Html.Partial("_Modal", Model, new ViewDataDictionary {
+		 { "baseName", "reportStaffFundingHistory" }, { "modalSize", "lg"}, { "title", "Staff Funding History"}, { "isReport", true }
+	 })
+
+<div class="icjia-loading" style="display:none;">Loading&#8230;</div>
+
+@section Styles {
+	<link rel="stylesheet" href="~/Content/ICJIA/full-screen-spinner.css" type="text/css">
+	<link rel="stylesheet" href="~/Content/ICJIA/multiselect.css" type="text/css" />
+	<link rel="stylesheet" href="~/Content/Views/FundingForStaff/Reports.css" type="text/css" />
+	<link rel="stylesheet" href="~/Content/Views/FundingForStaff/main.css" type="text/css" />
+
+	@{
+		string DVBgColor = "#e8d6ff";
+		string DVBorderColor = "#e1caff";
+		string DVColor = "#663399";
+
+		string SABgColor = "#cef6f0";
+		string SABorderColor = "#b3e8e8";
+		string SAColor = "#007373";
+
+		string CACBgColor = "#dbe9f6";
+		string CACBorderColor = "#c2daf3";
+		string CACColor = "#005db9";
+	}
+
+	@switch (Convert.ToInt32(Session.Center().ProviderId)) {
+		case 1: //DV
+			<style>
+			.ms-options-wrap > .ms-options > ul li:hover:after {
+				background: @DVBgColor;
+			}
+
+			.icjia-ffs-scrollable > table > thead, .icjia-ffs-scrollable > table > tfoot {
+				background-color:@DVBgColor;
+				border-color: @DVBorderColor;
+				/*color: @DVColor;*/
+			}
+			.ffs-title {
+				background-color: @DVBgColor;
+			}
+			</style>
+			break;
+		case 2: //SA
+			<style>
+			.ms-options-wrap > .ms-options > ul li:hover:after {
+				background: @SABgColor;
+			}
+
+			.icjia-ffs-scrollable > table > thead, .icjia-ffs-scrollable > table > tfoot {
+				background-color: @SABgColor;
+				border-color: @SABorderColor;
+				/*color: @SAColor;*/
+
+			}
+			.ffs-title {
+				background-color: @SABgColor;
+			}
+			</style>
+			break;
+		case 6: //CAC
+			<style>
+			.ms-options-wrap > .ms-options > ul li:hover:after {
+				background: @CACBgColor;
+			}
+
+			.icjia-ffs-scrollable > table > thead, .icjia-ffs-scrollable > table > tfoot {
+				background-color: @CACBgColor;
+				border-color: @CACBorderColor;
+				/*color: @CACColor;*/
+			}
+			.ffs-title {
+				background-color: @CACBgColor;
+			}
+			</style>
+			break;
+		default:
+			break;
+			<style>
+				.ms-options-wrap > .ms-options > ul li:hover:after {
+					background: #ececec;
+				}
+
+				.icjia-ffs-scrollable > table > thead, .icjia-ffs-scrollable > table > tfoot {
+					background-color: #ececec;
+				}
+
+				.ffs-title {
+					background-color: #ececec;
+				}
+			</style>
+	}
+
+}
+
+@section scripts{
+	<script src="~/Scripts/ICJIA/debounce.js"></script>
+	<script src="~/Scripts/ICJIA/jquery.multiselect.js"></script>
+	<script src="~/Scripts/Views/FundingForStaff/_Index.js"></script>
+	<script src="~/Scripts/ICJIA/icjia-loading.js"></script>
+}
+

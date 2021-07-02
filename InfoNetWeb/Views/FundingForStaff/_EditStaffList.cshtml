@@ -1,0 +1,18 @@
+﻿@model Infonet.Web.ViewModels.Admin.FundingForStaff
+
+<div class="row ffs-title">
+	<div class="col-md-12">
+		<span style="font-weight:bold;">Center: </span><span>@Session.Center().Name</span>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<span class="text-info">* Indicates entry which can not be removed.</span>
+	</div>
+</div>
+
+<div class="form-group" id="editStaffListMultiSelect">
+	@Html.LabelFor(m => m.FFSEditStaffList.AvailableAndAssignedStaffSVIDs, new { @class = "control-label" })
+	@Html.ListBoxFor(m => m.FFSEditStaffList.AvailableAndAssignedStaffSVIDs, Model.FFSEditStaffList.AvailableAndAssignedStaff, new { @class = "form-control" })
+</div>

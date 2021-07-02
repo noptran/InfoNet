@@ -1,0 +1,39 @@
+﻿@using Infonet.Data
+@model ClientCase
+
+@{
+	var templateKey = Key.Template(null, "--dd-key-pp--");
+	int nextNewOccurrence = Model.OffendersById.NextOccurrenceFor(null);
+	var template = new CaseOutline.Panel(("offender" + templateKey).Replace(':', '_'), CaseType.Any) {
+		Name = "Someone",
+		Partial = "_Offender",
+		ViewData = Html.Attributes(new { offenderKey = templateKey, offenderKeyPrefix = "+" })
+	};
+}
+<div class="row">
+	@if (Model.Provider == Provider.CAC) {
+		@:<div class="col-sm-offset-2 col-sm-4 col-md-offset-3 col-md-3">
+	} else {
+		@:<div class="col-sm-offset-3 col-sm-6 col-md-offset-4 col-md-4">
+	}
+	<div class="form-group">
+		<button type="button" class="btn btn-block btn-primary" data-icjia-role="offender.add" data-icjia-mustache-next='{ "key": @nextNewOccurrence }'>
+			<span class="glyphicon glyphicon-plus-sign"></span>&nbsp;&nbsp;New Offender
+			@using (Html.BeginMustache("--dd-", "-pp--")) {
+				@Html.Partial("_EditPanel", Model, ViewData.CopyWith(new { panel = template }))
+			}
+		</button>
+	</div>
+	@if (Model.Provider == Provider.CAC) {
+		@:</div>
+		<div class="col-sm-4 col-md-3">
+			<div class="form-group">
+				<button type="button" class="btn btn-block btn-primary" id="searchOffender" data-toggle="modal" data-target="#searchOffenderModal">
+					<span class="glyphicon glyphicon-search"></span>&nbsp;&nbsp;Existing Offenders
+				</button>
+			</div>
+		</div>
+	} else {
+		@:</div>
+	}
+</div>

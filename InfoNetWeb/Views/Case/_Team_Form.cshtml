@@ -1,0 +1,65 @@
+﻿@model ClientCase
+
+@{
+	var mdteamKey = (Key)ViewData["mdteamKey"];
+	string mdteamAction = (string)ViewData["mdteamAction"];
+	string idPrefix = ("allegation_" + mdteamKey + "_").Replace(':', '_');
+	bool isDeleted = "-~".Contains(mdteamAction);
+}
+
+<tr class=@(isDeleted ? "deleted" : null) data-toggle="collapse" data-target="#@(idPrefix)Collapse">
+	<td style="padding-left: 40px">
+		<span id="@(idPrefix)Contact"></span>
+	</td>
+	<td>
+		<span id="@(idPrefix)Agency"></span>
+	</td>
+	<td>
+		<span id="@(idPrefix)Position"></span>
+	</td>
+	<td width="40px">
+		@Html.Hidden(Html.NameFor(m => m.ClientMDTById) + ".index", mdteamAction + mdteamKey, new { data_icjia_role = "mdteam.index" })
+		<button type="button" class="btn btn-primary btn-xs btn-icon collapsed @(isDeleted ? "hide" : null)" aria-label="Toggle Team Member Editing" aria-controls="#@(idPrefix)Collapse" aria-expanded="false" data-icjia-role="mdteam.expand" data-toggle="collapse" data-target="#@(idPrefix)Collapse"><span class="glyphicon glyphicon-triangle-bottom rotate-90-if-collapsed"></span></button>
+		<button type="button" class="btn btn-primary btn-xs btn-icon @(isDeleted ? null : "hide")" aria-label="Restore Deleted Team Member" data-icjia-role="mdteam.restore"><span class="glyphicon glyphicon-undo"></span></button>
+	</td>
+</tr>
+<tr class="dataRow">
+	<td colspan="4" style="border-top: none; padding: 0">
+		<div id="@(idPrefix)Collapse" class="collapse well" style="position: relative; margin: 0 39.3667px 19.68335px">
+			@Html.HiddenFor(model => model.ClientMDTById[mdteamKey].MDT_ID)
+			@Html.HiddenFor(model => model.ClientMDTById[mdteamKey].ClientID)
+			@Html.HiddenFor(model => model.ClientMDTById[mdteamKey].CaseID)
+
+			<div class="row">
+				<div class="col-md-4">
+					<div class="form-group">
+						@Html.LabelFor(model => model.ClientMDTById[mdteamKey].ContactID, new { data_toggle = "tooltip", title = "Select the name of the person who is part of this client’s multi-disciplinary team (MDT). If the person is not listed, the drop-down menu can be edited from the drop-down in the top-right of the page. You must have permissions to access this function." })
+						@Html.DropDownListFor(model => model.ClientMDTById[mdteamKey].ContactID, new SelectList(ViewBag.ContactLookup, "ID", "Name", Model.ClientMDTById[mdteamKey].ContactID), "<Pick One>", new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "Contact" })
+						@Html.ValidationMessageFor(model => model.ClientMDTById[mdteamKey].ContactID, "", new { @class = "help-block" })
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						@Html.LabelFor(model => model.ClientMDTById[mdteamKey].AgencyID, new { data_toggle = "tooltip", title = "Select the agency this MDT specific member works with. If this agency is not listed, the drop-down menu can be edited from the drop-down in the top-right of the page. You must have permissions to access this function." })						
+                        @Html.DropDownListFor(model => model.ClientMDTById[mdteamKey].AgencyID, new SelectList(Data.Centers.GetAgencyForCenterinCurrentAgencyId(Session.Center().ProviderId, Session.Center().Id, Model.ClientMDTById[mdteamKey].AgencyID), "AgencyID", "AgencyName", Model.ClientMDTById[mdteamKey] == null ? 0 : Model.ClientMDTById[mdteamKey].AgencyID), "<Pick One>", new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "Agency" })
+						@Html.ValidationMessageFor(model => model.ClientMDTById[mdteamKey].AgencyID, "", new { @class = "help-block" })
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						@Html.LabelFor(model => model.ClientMDTById[mdteamKey].PositionID, new { data_toggle = "tooltip", title = "Select the position/field this specific MDT member represents. If their position is not listed, select Other." })
+						@Html.LookupFor(model => model.ClientMDTById[mdteamKey].PositionID, Session.Center().Provider, "<Pick One>", true, new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "Position" })
+						@Html.ValidationMessageFor(model => model.ClientMDTById[mdteamKey].PositionID, "", new { @class = "help-block" })
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="form-group">
+						<button type="button" class="btn btn-danger pull-right" aria-label="Delete This Team Member" data-icjia-role="mdteam.delete"><span class="glyphicon glyphicon-trash"></span></button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</td>
+</tr>

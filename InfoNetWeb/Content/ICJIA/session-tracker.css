@@ -1,0 +1,49 @@
+﻿/*
+	************************** ICJIA VERTICAL ALIGN ***************************
+*/
+.icjia-session-overlay {
+	position:fixed; 
+	top:0; 
+	left:0; 
+	opacity:0.5; 
+	background-color:#000000; 
+	z-index:999998; 
+	margin:0; 
+	display:block
+}
+
+.icjia-session-grandparent-container {
+	display: table;
+	height:100%;
+	margin: 0 auto;
+	position:fixed; 
+	top:0; 
+	left:0; 
+	z-index:999999; 
+}
+
+.icjia-session-parent-container {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.icjia-session-child-container {
+	width: 100%;
+	text-align:center;
+    box-shadow: 0 0 6px 15px rgba(249, 240, 205, 1);
+}
+
+.icjia-session-wrapper{
+	width:100%; 
+	background-color:#f9f0cd; 
+	color:#856939; 
+	padding:15px 0 15px 0; 
+	font-weight:bold;
+	text-align:center;
+	font-size:18px;
+	margin-top:29px;
+}
+
+.icjia-session-countdown{
+	font-size:36px;
+}

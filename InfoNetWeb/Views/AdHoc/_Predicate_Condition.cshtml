@@ -1,0 +1,25 @@
+﻿@using Infonet.Reporting.AdHoc
+@using Newtonsoft.Json.Linq
+@model Model
+
+@{
+	JObject json = ViewBag.Json;
+	string fieldId = json["field"].Value<string>();
+	var condition = json["condition"]?.Enum<Condition?>();
+	string conditionField = "condition-" + Session.NextFieldId();
+}
+
+<div class="col-sm-3" style="padding-left: 5px; padding-right: 5px" data-icjia-role="predicateCondition">
+	<div class="form-group mb-0">
+		<select name="@conditionField" class="validate-even-hidden" data-placeholder="Select a Condition" data-val="true" data-val-required="The field must contain a value.">
+			<option value=""></option>
+			@foreach (var each in Model.Fields[fieldId].AvailableConditions) {
+				<option value="@each" selected="@(each == condition ? "selected" : null)">@each.Label()</option>
+			}
+		</select>
+		<span class="field-validation-valid help-block" data-valmsg-for="@conditionField" data-valmsg-replace="true"></span>
+	</div>
+</div>
+@if (condition != null) {
+	@Html.Action("PredicateInput", new { perspective = ViewBag.Perspective, predicateJson = json.ToString() })
+}

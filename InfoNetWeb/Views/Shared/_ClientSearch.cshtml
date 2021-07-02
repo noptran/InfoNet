@@ -1,0 +1,86 @@
+﻿@model Infonet.Web.ViewModels.Shared.ClientSearchViewModel
+<div class="modal fade" id="searchModal" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Search and Add Clients</h4>
+			</div>
+			<div class="modal-body">
+				@if (Model.useServiceSearch) {
+					<div class="row">
+						<div class="form-group col-md-8">
+							@Html.Label("ServiceDateStart", "Group Service Date Range", new { @class = "control-label", data_toggle = "tooltip", title = Model.ServiceDateRangeTooltip })
+							<div class="input-daterange input-group" id="servicedatepicker" data-provide="datepicker">
+								@Html.TextBoxFor(model => model.ServiceStart, "{0:MM/dd/yyyy}", new { @class = "form-control", autocomplete = "off", id = "ServiceDateStart" })
+								<span class="input-group-addon"><b>to</b></span>
+								@Html.TextBoxFor(model => model.ServiceEnd, "{0:MM/dd/yyyy}", new { @class = "form-control", autocomplete = "off", id = "ServiceDateEnd" })
+							</div>
+						</div>
+						<div class="form-group col-md-4">
+							@Html.LabelFor(m => m.ServiceRange, new { @class = "control-label", data_toggle = "tooltip", title = Model.RangeTooltip, @for = "serviceRangeChosen" })
+							<select class="form-control col-md-3" name="ServiceRange" id="serviceRangeChosen" data-icjia-role="dateRanges" data-icjia-start="#ServiceDateStart" data-icjia-end="#ServiceDateEnd" data-icjia-default-range="@Model.ServiceRange">
+								@Html.Partial("_DateRangeOptions1-8_13-15")
+							</select>
+						</div>
+					</div>
+				}
+				@if (Model.useClientSearch) {
+					<div class="row">
+						<div class="form-group col-md-8">
+							@Html.LabelFor(m => m.FCD_StartDate, new { @class = "control-label", data_toggle = "tooltip", title = Model.FCDDateRangeTooltip, @for = "FirstContactDateStart" })
+							<div class="input-daterange input-group" id="firstcontactdatepicker" data-provide="datepicker">
+								@Html.TextBoxFor(model => model.FCD_StartDate, "{0:MM/dd/yyyy}", new { @class = "form-control", autocomplete = "off", id = "FirstContactDateStart" })
+								<span class="input-group-addon"><b>to</b></span>
+								@Html.TextBoxFor(model => model.FCD_EndDate, "{0:MM/dd/yyyy}", new { @class = "form-control", autocomplete = "off", id = "FirstContactDateEnd" })
+							</div>
+						</div>
+						<div class="form-group col-md-4">
+							@Html.LabelFor(m => m.FCDRange, new { @class = "control-label", data_toggle = "tooltip", title = Model.RangeTooltip, @for = "firstContactDateRangeChosen" })
+							<select class="form-control col-md-3" name="FCD_Range" id="firstContactDateRangeChosen" data-icjia-role="dateRanges" data-icjia-start="#FirstContactDateStart" data-icjia-end="#FirstContactDateEnd" data-icjia-default-range="@Model.FCDRange">
+								@Html.Partial("_DateRangeOptions1-8_13-15")
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col-md-4" autocomplete="off">
+							@Html.LabelFor(m => m.ClientID, new { @class = "control-label", data_toggle = "tooltip", title = Model.ClientIDTooltip, @for = "ClientCode_Search" })
+							@Html.TextBox("ClientCode_Search", "", new { @class = "form-control", type = "text", autocomplete = "off" })
+						</div>
+						<div class="form-group col-md-4">
+							@Html.LabelFor(m => m.ClientType, new { @class = "control-label", data_toggle = "tooltip", title = Model.ClientTypeTooltip, @for = "TypeId_Search" })
+							@Html.DropDownList("TypeId_Search", Lookups.ClientType[Session.Center().Provider].ToSelectList(), "", new { @class = "form-control", autocomplete = "off" })
+						</div>
+					</div>
+				}
+				<div class="row">
+					<div class="form-group col-xs-12">
+						<button type="button" id="searchClients" class="btn btn-primary icjia-has-spinner"> <span class="icjia-spinner"><img src="~/Content/Images/ajax-loader.gif" width="12" height="12"></span>Search <span class="glyphicon glyphicon-search"></span></button>
+						<span id="icjia-results" class="icjia-results" style="font-size:14px;display:none"> (Displaying <span id="clientResultCount">0</span>  of  <span id="clientSearchTotal">0</span> results)</span>
+					</div>
+				</div>
+				<table class="clientCases table table-responsive" style="display:none;">
+					<thead>
+						<tr>
+                            <th scope="col"><span class="sr-only">Action</span></th>
+							<th scope="col">Client ID</th>
+							<th scope="col">Case ID</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+					<tfoot>
+						<tr>
+							<td colspan="100">
+								<button type="button" class="btn btn-default btn-block hidden" id="loadMore">Load More &raquo;</button>
+								<div class="well text-center noResultsAlert" role="alert" style="display:none;color:#767676;font-weight:bold">
+									No Results
+								</div>
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

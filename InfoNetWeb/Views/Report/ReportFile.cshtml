@@ -1,0 +1,11 @@
+﻿@using Infonet.Core.IO
+
+@{
+	bool isPdf = ViewBag.IsPDF ?? false;
+	Layout = isPdf ? "~/Views/Shared/Reports/_ReportPDFLayout.cshtml" : "~/Views/Shared/Reports/_ReportHTMLLayout.cshtml";
+
+	Html.RenderPartial("~/Views/Report/_ReportStyles.cshtml");
+	using (var sr = new StreamReader(File.Open(ViewBag.FilePath, FileMode.Open, FileAccess.Read, FileShare.Read))) {
+		sr.CopyTo(Html.ViewContext.Writer);
+	}
+}

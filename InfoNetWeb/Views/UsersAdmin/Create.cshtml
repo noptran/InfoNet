@@ -1,0 +1,70 @@
+﻿@using Infonet.Web
+@using Microsoft.AspNet.Identity.Owin
+@model Infonet.Web.ViewModels.Account.RegisterViewModel
+
+@{
+	ViewBag.Title = "Create User";
+	var applicationRoles = Context.GetOwinContext().Get<ApplicationRoleManager>().Roles.OrderBy(r => r.Name);
+}
+
+@using (Html.BeginForm("Create", "UsersAdmin", FormMethod.Post, new { id = "main", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+	<div class="row">
+		<div class="col-sm-6">
+			@Html.AntiForgeryToken()
+			<div class="form-group">
+				@Html.LabelFor(m => m.Username, new { @class = "control-label" })
+				@Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.Username)
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.CenterId, new { @class = "control-label" })
+				@Html.DropDownListFor(m => m.CenterId, new SelectList(Data.Centers.GetAllCenters(), "CenterId", "CenterName", Model.CenterId), "<Pick One>", new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.CenterId)
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.Email, new { @class = "control-label" })
+				@Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.Email)
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.Password, new { @class = "control-label" })
+				@Html.TextBoxFor(m => m.Password, new { @class = "form-control", type = "password" })
+				@Html.ValidationMessageFor(m => m.Password)
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.ConfirmPassword, new { @class = "control-label" })
+				@Html.TextBoxFor(m => m.ConfirmPassword, new { @class = "form-control", type = "password" })
+				@Html.ValidationMessageFor(m => m.ConfirmPassword)
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<fieldset class="form-group" aria-required="true">
+				<legend class="icjia-required">User Roles</legend>
+				<div class="icjia-checkbox-group">
+					@foreach (var each in new SelectList(applicationRoles, "Name", "Name")) {
+						<div class="checkbox">
+							<label class="control-label">
+								<input id="@("role" + each.Value)" type="checkbox" name="Roles" value="@each.Value" checked="@Model.Roles.Contains(each.Value)" data-val="true" data-val-mandatory="At least one User Role must be selected."/>
+								@each.Value
+							</label>
+						</div>
+					}
+				</div>
+				@Html.ValidationMessage("Roles", new { @class = "help-block" })
+			</fieldset>
+		</div>
+	</div>
+	<div class="form-group">
+		@Html.Snippets().SaveButton(new { Value = "Create", id = "saveMain", data_icjia_role = "preventDuplicateRequest", accesskey = "s" })
+		@Html.Snippets().UndoLink(Url.Action(), new { accesskey = "u" })
+	</div>
+	<a href="@Url.Action("Index")"><span class='glyphicon glyphicon-chevron-left' aria-hidden='true'></span><span class='glyphicon glyphicon-chevron-left' style='margin-left:-6px' aria-hidden='true'></span>Back to Manage Users</a>
+}
+
+@section Scripts{
+	<script>
+		$(document.body).on('click', "#saveMain", function () {
+			$("#main").submit();
+		});
+	</script>
+}

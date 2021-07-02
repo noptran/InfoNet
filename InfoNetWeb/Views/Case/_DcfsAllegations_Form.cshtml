@@ -1,0 +1,78 @@
+﻿@model ClientCase
+
+@{
+	var allegationKey = (Key)ViewData["allegationKey"];
+	string allegationAction = (string)ViewData["allegationAction"];
+	string idPrefix = ("allegation_" + allegationKey + "_").Replace(':', '_');
+	bool isDeleted = "-~".Contains(allegationAction);
+	List<string> selectedRespondents = null;
+	if (!allegationKey.IsTemplate) {
+		var respondentsDictionary = (Dictionary<Key, List<string>>)ViewBag.AllegationRespondentsDictionary;
+		selectedRespondents = respondentsDictionary[allegationKey];
+	}
+}
+
+<tr class=@(isDeleted ? "deleted" : null) data-toggle="collapse" data-target="#@(idPrefix)Collapse">
+	<td style="padding-left: 40px">
+		<span id="@(idPrefix)Respondents"></span>
+	</td>
+	<td>
+		<span id="@(idPrefix)AbuseAllegation"></span>
+	</td>
+	<td>
+		<span id="@(idPrefix)Finding"></span>
+	</td>
+	<td>
+		<span id="@(idPrefix)FindingDate"></span>
+	</td>
+	<td width="40px">
+		<button type="button" class="btn btn-primary btn-xs btn-icon collapsed @(isDeleted ? "hide" : null)" aria-label="Toggle Allegation Editing" aria-controls="#@(idPrefix)Collapse" aria-expanded="false" data-icjia-role="allegation.expand" data-toggle="collapse" data-target="#@(idPrefix)Collapse"><span class="glyphicon glyphicon-triangle-bottom rotate-90-if-collapsed"></span></button>
+		<button type="button" class="btn btn-primary btn-xs btn-icon @(isDeleted ? null : "hide")" aria-label="Restore Deleted Allegation" data-icjia-role="allegation.restore"><span class="glyphicon glyphicon-undo"></span></button>
+		@Html.Hidden(Html.NameFor(m => m.DCFSAllegationsById) + ".index", allegationAction + allegationKey, new { data_icjia_role = "allegation.index" })
+	</td>
+</tr>
+<tr class="dataRow">
+	<td colspan="5" style="border-top: none; padding: 0">
+		<div id="@(idPrefix)Collapse" class="collapse well" style="position: relative; margin: 0 39.3667px 19.68335px">
+			@Html.HiddenFor(model => model.DCFSAllegationsById[allegationKey].Id)
+			@Html.HiddenFor(model => model.DCFSAllegationsById[allegationKey].ClientId)
+			@Html.HiddenFor(model => model.DCFSAllegationsById[allegationKey].CaseId)
+			<div class="row">
+				<div class="col-md-6">				
+					<div class="form-group">
+						@Html.LabelFor(model => model.DCFSAllegationsById[allegationKey].RespondentArray, new { data_toggle = "tooltip", title = "Select the ID number(s) of the person(s) named as respondents on the allegation." })	
+						@Html.DropDownListFor(model => model.DCFSAllegationsById[allegationKey].RespondentArray, new MultiSelectList(ViewBag.Respondents, "ID", "Display", selectedRespondents), new { @class = "form-control allegationChosen", data_icjia_broadcast = "#" + idPrefix + "Respondents", multiple = "multiple" })
+						@Html.ValidationMessageFor(model => model.DCFSAllegationsById[allegationKey].RespondentArray, "", new { @class = "help-block" })
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						@Html.LabelFor(model => model.DCFSAllegationsById[allegationKey].AbuseAllegationId, new { data_toggle = "tooltip", title = "Select the DCFS Allegation. If the allegation does not match any of the displayed options, select Other." })
+						@Html.LookupFor(model => model.DCFSAllegationsById[allegationKey].AbuseAllegationId, Session.Center().Provider, "<Pick One>", true, new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "AbuseAllegation" })
+						@Html.ValidationMessageFor(model => model.DCFSAllegationsById[allegationKey].AbuseAllegationId, "", new { @class = "help-block" })
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(model => model.DCFSAllegationsById[allegationKey].FindingId, new { data_toggle = "tooltip", title = "Select the DCFS Allegation finding. If finding is not known, select Unknown." })
+						@Html.LookupFor(model => model.DCFSAllegationsById[allegationKey].FindingId, Session.Center().Provider, "<Pick One>", true, new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "Finding" })
+						@Html.ValidationMessageFor(model => model.DCFSAllegationsById[allegationKey].FindingId, "", new { @class = "help-block" })
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(model => model.DCFSAllegationsById[allegationKey].FindingDate, new { data_toggle = "tooltip", title = "Enter the date of the finding." })
+						<div class="input-group date" data-provide="datepicker" data-date-end-date=@DateTime.Today.ToShortDateString()>
+							@Html.TextBoxFor(model => model.DCFSAllegationsById[allegationKey].FindingDate, "{0:MM/dd/yyyy}", new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "FindingDate", data_val_firstcontactdate = "The Finding Date must be on or after the case's First Contact Date." })
+							<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+						</div>
+						@Html.ValidationMessageFor(model => model.DCFSAllegationsById[allegationKey].FindingDate, "", new { @class = "help-block" })
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="form-group">
+						<button type="button" class="btn btn-danger pull-right" aria-label="Delete This Allegation" data-icjia-role="allegation.delete"><span class="glyphicon glyphicon-trash"></span></button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</td>
+</tr>

@@ -1,0 +1,20 @@
+﻿@using Infonet.Reporting.Enumerations
+@model Infonet.Reporting.ViewModels.ManagementReportViewModel
+
+<div class="panel panel-primary icjia-error-group reportProperty @SubReportSelection.MngRptStaffServiceCrisisIntervention.GetShortName()" style="display:none">
+    <div class="panel-heading">
+        <h2 class="panel-title">
+            <span class="icjia-panel-title-text">Filters</span>
+        </h2>
+    </div>
+    <div class="panel-body">
+        <div class="form-group">
+            @Html.LabelFor(m => m.StaffHotlineStaffSelections)
+            @Html.DropDownListFor(model => model.StaffHotlineStaffSelections, new MultiSelectList(Model.StaffDefault, "SVID", "StaffName", Model.StaffHotlineStaffSelections), new { @class = "form-control chosen staffSelection", multiple = "multiple" })
+        </div>
+        <div class="form-group">
+            <label for="@Html.IdFor(model => model.StaffHotlineHotlineTypeSelections)">Type of Intervention</label>
+            @Html.DropDownListFor(model => model.StaffHotlineHotlineTypeSelections, new MultiSelectList(Model.HotlineTypeDefault, "CodeId", "Description", Model.StaffHotlineHotlineTypeSelections), new { @class = "form-control chosen", multiple = "multiple", data_icjia_ajax_url = "/Report/HotlineCallTypes" })
+        </div>
+    </div>
+</div>

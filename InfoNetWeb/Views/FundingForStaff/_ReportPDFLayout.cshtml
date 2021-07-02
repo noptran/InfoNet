@@ -1,0 +1,19 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head -->
+    <title>@(string.IsNullOrEmpty(ViewBag.Title) ? "" : ViewBag.Title + " - ")ICJIA InfoNet</title>
+    @Styles.Render("~/Content/css/ICJIA/" + (Session.Center().Provider != Provider.None ? Session.Center().Provider.ToString() : "ADMIN"))
+	<link rel="stylesheet" href="~/Content/Views/FundingForStaff/main.css" type="text/css" />
+	<link rel="stylesheet" href="~/Content/Views/FundingForStaff/Reports.css" type="text/css" />
+	@RenderSection("Styles", false)
+</head>
+<body>
+	<div class="container">
+		@RenderBody()
+	</div>
+</body>
+</html>

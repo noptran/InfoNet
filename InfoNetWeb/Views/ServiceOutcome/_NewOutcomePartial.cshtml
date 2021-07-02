@@ -1,0 +1,38 @@
+﻿@using Infonet.Data.Models._TLU
+@model Infonet.Web.ViewModels.Services.ServiceOutcomeViewModel
+<tr class="newOutcomeRow" data-addCount="999">
+	<td>
+		<div class="form-group">
+			<div class="input-group date" data-provide="datepicker" data-date-end-date=@DateTime.Today.ToShortDateString()>
+				@Html.TextBoxFor(m => m.displayForPaging[0].OutcomeDate, true, new { @class = "form-control rowData newOutcomeRowData", data_val_ignore = "true", data_val="false" })
+				<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+			</div>
+			@Html.ValidationMessageFor(m => m.displayForPaging[0].OutcomeDate, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td>
+		<div class="form-group">
+			@Html.LookupFor(m => m.displayForPaging[0].ServiceID, Provider.DV, "<Pick One>", new { @class = "form-control rowData newOutcomeRowData", disabled = "disabled", data_val_serviceoutcomeclientservicegroup = "At least one Yes/No is required for this service group." })
+			@Html.ValidationMessageFor(m => m.displayForPaging[0].ServiceID, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td>
+		<div class="form-group">
+			@Html.DropDownListFor(m => m.displayForPaging[0].OutcomeID, new SelectList(new List<TLU_Codes_ServiceOutcome>(), "CodeID", "Description"), "<Pick One>", new { @class = "form-control newOutcomeRowData", disabled = "disabled" })
+			@Html.ValidationMessageFor(m => m.displayForPaging[0].OutcomeID, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td>
+		<div class="form-group">
+			@Html.TextBoxFor(m => m.displayForPaging[0].ResponseYes, new { @class = "form-control rowData newOutcomeRowData cntIfEmpty", disabled = "disabled", type = "number" })
+			@Html.ValidationMessageFor(m => m.displayForPaging[0].ResponseYes, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td>
+		<div class="form-group">
+			@Html.TextBoxFor(m => m.displayForPaging[0].ResponseNo, new { @class = "form-control rowData newOutcomeRowData cntIfEmpty", disabled = "disabled", type = "number" })
+			@Html.ValidationMessageFor(m => m.displayForPaging[0].ResponseNo, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td></td>
+</tr>

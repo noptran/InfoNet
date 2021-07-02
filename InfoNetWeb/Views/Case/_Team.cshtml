@@ -1,0 +1,40 @@
+﻿@model ClientCase
+
+@{
+	var SAMPLE_MDT = new ClientMDT();
+}
+<div class="table-responsive">
+<table id="tbl_team" class="table">
+	<thead class="icjia-panel-subheader">
+		<tr>
+			<th scope="col" style="padding-left: 40px">@Html.DisplayNameFor(m => SAMPLE_MDT.ContactID)</th>
+			<th scope="col">@Html.DisplayNameFor(m => SAMPLE_MDT.AgencyID)</th>
+			<th scope="col">@Html.DisplayNameFor(m => SAMPLE_MDT.PositionID)</th>
+            <th scope="col"><span class="sr-only">Action</span></th>
+		</tr>
+	</thead>
+	<tbody>
+		@{
+			var mdteam = Model.ClientMDTById;
+		}
+		@foreach (var each in mdteam.KeysFor(mdteam.Values.Concat(mdteam.Values.Restorable).OrderByDescending(t => t.MDT_ID.HasValue).ThenBy(t => t.MDT_ID).ThenBy(t => mdteam.KeyFor(t).Occurrence))) {
+		bool isNew = each.Components[0] == null;
+		string action = mdteam.ContainsKey(each) ? (isNew ? "+" : "=") : (isNew ? "~" : "-");
+			@Html.Partial("_Team_Form", Model, ViewData.CopyWith(new { mdteamKey = each, mdteamAction = action }))
+	}
+	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan="4" class="text-right">
+				<button type="button" class="btn btn-primary btn-xs btn-icon" aria-label="Add New Team Member"
+						data-icjia-role="mdteam.add" data-icjia-mustache-next='{ "key": @Model.ClientMDTById.NextOccurrenceFor(null) }'>
+					<span class="glyphicon glyphicon-plus"></span>
+					@using (var mustache = Html.BeginMustache("script", "--d-", "-p--")) {
+						@Html.Partial("_Team_Form", Model, ViewData.CopyWith(new { mdteamKey = Key.Template(null, mustache.Tag("key")), mdteamAction = "+" }))
+					}
+				</button>
+			</td>
+		</tr>
+	</tfoot>
+</table>
+</div>

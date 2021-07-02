@@ -1,0 +1,130 @@
+﻿@model ClientCase
+
+@{
+	var interviewKey = (Key)ViewData["interviewKey"];
+	string interviewKeyPrefix = (string)ViewData["interviewKeyPrefix"];
+	bool isDeleted = "-~".Contains(interviewKeyPrefix);
+	string idPrefix = ("interview_" + interviewKey + "_").Replace(':', '_');
+}
+
+<tr class=@(isDeleted ? "deleted" : null) data-toggle="collapse" data-target="#@(idPrefix)Collapse">
+	<td style="padding-left: 40px">
+		<span id="@(idPrefix)InterviewDate"></span>
+	</td>
+	<td>
+		<span id="@(idPrefix)SiteLocationId"></span>
+	</td>
+	<td>
+		<span id="@(idPrefix)InterviewerID"></span>
+	</td>
+	<td>
+		<span id="@(idPrefix)RecordTypeID"></span>
+	</td>
+	<td>
+		<span id="@(idPrefix)IsCourtesyInterview"></span>
+	</td>
+	<td>
+		<span id="@(idPrefix)Observers"></span>
+	</td>
+	<td width="40px">
+		<button type="button" class="btn btn-xs btn-primary btn-icon collapsed @(isDeleted ? "hide" : null)" aria-label="Toggle Interview Editing" aria-controls="#@(idPrefix)Collapse" aria-expanded="false" data-icjia-role="interview.expand" data-toggle="collapse" data-target="#@(idPrefix)Collapse"><span class="glyphicon glyphicon-triangle-bottom rotate-90-if-collapsed"></span></button>
+		<button type="button" class="btn btn-xs btn-primary btn-icon @(isDeleted ? null : "hide")" aria-label="Restore Deleted Interview" data-icjia-role="interview.restore"><span class="glyphicon glyphicon-undo"></span></button>
+	</td>
+</tr>
+<tr>
+	<td colspan="7" style="border-top: none; padding: 0">
+        <div id="@(idPrefix)Collapse" class="collapse well" style="position: relative; margin: 0 39.3667px 19.68335px;">
+            @Html.Hidden(Html.NameFor(m => m.VictimSensitiveInterviewsById) + ".index", interviewKeyPrefix + interviewKey, new { data_icjia_role = "interview.index" })
+            @Html.HiddenFor(m => m.VictimSensitiveInterviewsById[interviewKey].LocationID, new { Value = interviewKeyPrefix == "+" ? Session.Center().Id : Model.VictimSensitiveInterviewsById[interviewKey].LocationID })
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.VictimSensitiveInterviewsById[interviewKey].InterviewDate, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the date the interview occurred or is scheduled to occur if the interview has not yet been conducted." })
+                        <div class="input-group date" data-provide="datepicker">
+                            @Html.TextBoxFor(m => m.VictimSensitiveInterviewsById[interviewKey].InterviewDate, "{0:MM/dd/yyyy}", new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "InterviewDate" })
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                        @Html.ValidationMessageFor(m => m.VictimSensitiveInterviewsById[interviewKey].InterviewDate, "", new { @class = "help-block" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.VictimSensitiveInterviewsById[interviewKey].SiteLocationId, new { @class = "control-label", data_toggle = "tooltip", title = "Select the location where the interview took place or is scheduled to take place." })
+                        @Html.LookupFor(m => m.VictimSensitiveInterviewsById[interviewKey].SiteLocationId, "<Pick One>", true, new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "SiteLocationId" })
+                        @Html.ValidationMessageFor(m => m.VictimSensitiveInterviewsById[interviewKey].SiteLocationId, "", new { @class = "help-block" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.VictimSensitiveInterviewsById[interviewKey].InterviewerID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the person or person indicated as the primary interviewer. If the interviewer is not listed, the drop-down menu can be edited at Logged In User > Manage Lookup Lists > Contacts. You must have permissions to access this function." })
+                        @Html.DropDownListFor(model => model.VictimSensitiveInterviewsById[interviewKey].InterviewerID, new SelectList(ViewBag.ContactLookup, "ID", "Name", Model.VictimSensitiveInterviewsById[interviewKey].InterviewerID), "<Pick One>", new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "InterviewerID" })
+                        @Html.ValidationMessageFor(m => m.VictimSensitiveInterviewsById[interviewKey].InterviewerID, "", new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.VictimSensitiveInterviewsById[interviewKey].RecordTypeID, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate how the session was recorded. If not recorded, please select Not Recorded." })
+                        @Html.LookupFor(m => m.VictimSensitiveInterviewsById[interviewKey].RecordTypeID, "<Pick One>", true, new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "RecordTypeID" })
+                        @Html.ValidationMessageFor(m => m.VictimSensitiveInterviewsById[interviewKey].RecordTypeID, "", new { @class = "help-block" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.VictimSensitiveInterviewsById[interviewKey].IsCourtesyInterview, new { @class = "control-label", data_toggle = "tooltip", title = "Check if this interview was a courtesy interview." })
+                        &nbsp;
+                        @Html.CheckBoxFor(m => m.VictimSensitiveInterviewsById[interviewKey].IsCourtesyInterview, new { data_icjia_broadcast = "#" + idPrefix + "IsCourtesyInterview" })
+                        @Html.ValidationMessageFor(m => m.VictimSensitiveInterviewsById[interviewKey].IsCourtesyInterview, "", new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default" style="margin: 20px 0 10px">
+                <table class="table table-condensed table-borderless mb-0">
+                    <caption class="text-center text-uppercase">Observers</caption>
+                    <colgroup>
+                        <col />
+                        <col style="width: 32%" />
+                        <col style="width: 38%" />
+                        <col style="width: 40px" />
+                    </colgroup>
+                    <thead>
+                        @{
+                            var SAMPLE_OBSERVER = new VSIObserver();
+                        }
+                        <tr class="icjia-panel-subheader">
+                            <th scope="col" class="pr-0 icjia-required" style="padding-left: 10px" data-toggle="tooltip" title="Select interview observer's position. If their position is not listed, select Other.">@Html.DisplayNameFor(m => SAMPLE_OBSERVER.ObserverID)</th>
+                            <th scope="col" class="pr-0" data-toggle="tooltip" title="Select the observer’s name or identifier. If the observer is not listed, the drop-down menu can be edited at Logged in user > Manage Lookup Lists > Contacts. You must have permissions to access this function.">@Html.DisplayNameFor(m => SAMPLE_OBSERVER.ContactID)</th>
+                            <th scope="col" class="pr-0" data-toggle="tooltip" title="Select the agency this observer works for if listed. If the agency is not listed, the drop-down menu can be edited at Logged in User > Manage Lookup Lists > Agencies. You must have permissions to access this function.">@Html.DisplayNameFor(m => SAMPLE_OBSERVER.AgencyID)</th>
+                            <th scope="col"><span class="sr-only">Action</span></th>
+                        </tr>
+                        <tr aria-hidden="true">
+                            @* for spacing only *@
+                            <th colspan="4" class="pb-0"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var observers = Model.VictimSensitiveInterviewsById[interviewKey].VSIObserversById;
+                        }
+                        @foreach (var each in observers.KeysFor(observers.Values.IncludingRestorable.OrderBy(c => c.ID, true).ThenBy(c => observers.KeyFor(c).Occurrence)))
+                        {
+                            bool isNew = each.Components[0] == null;
+                            string prefix = observers.ContainsKey(each) ? (isNew ? "+" : "=") : (isNew ? "~" : "-");
+                            @Html.Partial("_VictimSensitiveInterviews_Interview_Observer", Model, ViewData.CopyWith(new { observerKey = each, observerKeyPrefix = prefix }))
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" class="text-right">
+                                <button type="button" class="btn btn-xs btn-primary btn-icon" aria-label="Add New Observer" data-icjia-role="interview.observer.add" data-icjia-mustache-next='{ "key": @Model.VictimSensitiveInterviewsById[interviewKey].VSIObserversById.NextOccurrenceFor(null) }'>
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                    @using (var mustache = Html.BeginMustache(interviewKey.IsTemplate ? "--q-!protect outer-p--script" : "script", "--qq-", "-pp--"))
+                                    {
+                                        @Html.Partial("_VictimSensitiveInterviews_Interview_Observer", Model, ViewData.CopyWith(new { observerKey = Key.Template(null, mustache.Tag("key")), observerKeyPrefix = "+" }))
+                                    }
+                                </button>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="icjia-well-footer text-right">
+                <button type="button" class="btn btn-danger" aria-label="Delete This Interview" data-icjia-role="interview.delete"><span class="glyphicon glyphicon-trash"></span></button>
+            </div>
+            <input id="@Html.IdFor(m => m.VictimSensitiveInterviewsById[interviewKey].VSIObserversById)" aria-hidden="true" hidden="hidden" data-icjia-broadcast="#@(idPrefix)Observers" value="@Model.VictimSensitiveInterviewsById[interviewKey].VSIObserversById.Count" />
+        </div>
+	</td>
+</tr>

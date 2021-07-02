@@ -1,0 +1,169 @@
+@model AggregateInformationViewModel
+@using Infonet.Web.ViewModels.Clients
+@using PagedList.Mvc;
+
+@{
+	ViewBag.Title = "Aggregate Client Information";
+}
+
+@using (Html.BeginForm("Search_Edit", "AggregateInformation", FormMethod.Post, new { @class = "main", id = "addForm", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+	@Html.AntiForgeryToken()
+	<div class="row" style="margin-left: 0; margin-right: 0;">
+		<div class="col-xs-12" style="padding-right: 0; padding-left: 0; padding-bottom: 0;">
+			<div class="panel panel-primary" style="margin: 0; margin-top:5px; min-width:940px">
+				<div class="panel-heading">
+					<div class="row">
+						<div class="col-sm-8">
+							<h3 class="panel-title">Add Aggregate Client Information</h3>
+						</div>
+					</div>
+				</div>
+				<div class="panel-body newAggregates">
+					<input id="recordCount" type="hidden" value="@Model.displayForPaging.Count" aria-hidden="true" />
+					<input id="addCount" type="hidden" value="0" aria-hidden="true" />
+					<table id="newAggregates" class="table table-responsive icjia-table-borderless" style="margin-bottom: 0;">
+						<thead>
+							<tr>
+								<th scope="col" width="160px" style="border:none; min-width:160px;">
+									<span class="icjia-required" data-toggle="tooltip" title="Enter the date for this aggregate record. Typically, this is the last day of the month or quarter to represent summary information for the indicated month/quarter.">Date</span>
+								</th>
+								<th scope="col" style="min-width:260px;">
+									<span class="icjia-required" data-toggle="tooltip" title="Select the type of aggregate client information being reported.">Type of Information</span>
+								</th>
+								<th scope="col" width="120px" style="min-width:120px;">
+									<span class="icjia-required" data-toggle="tooltip" title="Enter the number of adults receiving services who disclosed the type of condition for the selected category to staff during the reporting month/quarter.">No. of Adults</span>
+								</th>
+								<th scope="col" width="120px" style="min-width:120px;">
+									<span class="icjia-required" data-toggle="tooltip" title="Enter the number of children receiving services who disclosed (or their parent disclosed) the type of condition for the selected category to staff during the reporting month/quarter.">No. of Children</span>
+								</th>
+								<th width="56px"></th>
+							</tr>
+						</thead>
+						<tbody>
+							@Html.Partial("_NewAggregateInformationPartial", new AggregateInformationViewModel())
+						</tbody>
+					</table>
+					<button type="button" class="btn btn-default btn-outline addAggregateClient"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;New Aggregate Client Information</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br />
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="pull-right">
+				@Html.Snippets().SaveButton(new { id = "saveButton", data_icjia_role = "preventDuplicateRequest", accesskey = "s" })
+				@Html.Snippets().UndoLink(Url.Action(), new { accesskey = "u" })
+			</div>
+		</div>
+	</div>
+
+}
+
+<hr />
+@using (Html.BeginForm("Search_Edit", "AggregateInformation", FormMethod.Get, new { autocomplete = "off", id="main" })) {
+	<div class="row">
+		<div class="form-group col-md-6 ">
+			@Html.Partial("_DateRangeLabelTextboxes", Model, new ViewDataDictionary { { "rangeTitle", "Aggregate Client Information Date Range" }, { "rangeTooltipTitle", "" } })
+		</div>
+		<div class="form-group col-md-3">
+			@Html.Label("rangePeriodChosen", "Ranges", new { @class = "control-label" })
+			<select class="form-control col-md-3" name="Range" id="rangePeriodChosen" data-icjia-role="dateRanges" data-icjia-start="#Start" data-icjia-end="#End" data-icjia-default-range="@Model.Range">
+				@Html.Partial("_DateRangeOptions1-4_20_5-19")
+			</select>
+		</div>
+	</div>
+	<div class="row">
+		<div class="form-group col-md-3">
+			@Html.LabelFor(m => m.TypeID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the Type of Information in which you want to search, from the drop-down menu." })
+			@Html.LookupFor(m => m.TypeID, Lookups.HivMentalSubstance[Provider.DV], "<Pick One>", new { @class = "form-control rowData newAggregateRowData" })
+			@Html.ValidationMessageFor(m => m.TypeID, "", new { @class = "help-block" })
+		</div>
+	</div>
+	@Html.Partial("_SearchResetButtons")
+}
+
+@using (Html.BeginForm("Search_Edit_Post", "AggregateInformation", FormMethod.Post, new { @class = "main", id = "searchResults", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+	@Html.AntiForgeryToken()
+	<div class="row" style="margin-top: 20px">
+		<div class="col-xs-12">
+			<table id="searchResults" class="table table-bordered table-responsive">
+				<thead>
+					<tr>
+						<th scope="col" class="text-center" width="130px" style="min-width: 130px;">
+							Action
+						</th>
+						<th width="160px" style="min-width:160px" data-toggle="tooltip" title="Enter the date for this aggregate record. Typically, this is the last day of the month or quarter to represent summary information for the indicated month/quarter.">
+							Date
+						</th>
+						<th scope="col" style="min-width: 260px" data-toggle="tooltip" title="Select the type of aggregate client information being reported.">
+							Type of Information
+						</th>
+						<th scope="col" width="120px" style="min-width: 120px" data-toggle="tooltip" title="Enter the number of adults receiving services who disclosed the type of condition for the selected category to staff during the reporting month/quarter.">
+							No. of Adults
+						</th>
+						<th scope="col" width="120px" style="min-width: 120px" data-toggle="tooltip" title="Enter the number of children receiving services who disclosed (or their parent disclosed) the type of condition for the selected category to staff during the reporting month/quarter.">
+							No. of Children
+						</th>
+					</tr>
+				</thead>
+
+				@if (Model.AggregateList != null) {
+					for (int i = 0; i < Model.displayForPaging.Count; i++) {
+						<tr class="rowClass" style="vertical-align: middle; min-width:130px;" width="130px">
+							<td style="padding-top: 15px;" valign="middle">
+								<label>Edit&nbsp;<input type="checkbox" class="editRecord"></label>
+								<label>
+									Delete
+									@Html.CheckBoxFor(modelItem => Model.displayForPaging[i].shouldDelete, new { @class = "deleteRecord rowData" })
+								</label>
+								@Html.HiddenFor(m => m.displayForPaging[i].ID, new { @class = "rowData" })
+							</td>
+							<td width="160px" style="min-width:160px;">
+								<div class="input-group date" data-provide="datepicker" data-date-end-date=@DateTime.Today.ToShortDateString()>
+									@Html.TextBoxFor(m => m.displayForPaging[i].HMSDate, true, new { @class = "form-control rowData", disabled = "disabled" })
+									<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+								</div>
+								@Html.ValidationMessageFor(m => m.displayForPaging[i].HMSDate, "", new { @class = "help-block" })
+							</td>
+							<td style="min-width:260px;">
+								@Html.LookupFor(m => m.displayForPaging[i].TypeID, Provider.DV, "<Pick One>", true, new { @class = "form-control rowData newAggregateRowData", disabled = "disabled" })
+								@Html.ValidationMessageFor(m => m.displayForPaging[i].TypeID, "", new { @class = "help-block" })
+							</td>
+							<td width="120px" style="min-width:120px;">
+								@Html.TextBoxFor(m => m.displayForPaging[i].AdultsNo, new { @class = "form-control rowData", type = "number", disabled = "disabled" })
+								@Html.ValidationMessageFor(m => m.displayForPaging[i].AdultsNo, "", new { @class = "help-block" })
+							</td>
+							<td width="120px" style="min-width:120px;">
+								@Html.TextBoxFor(m => m.displayForPaging[i].ChildrenNo, new { @class = "form-control rowData", type = "number", disabled = "disabled" })
+								@Html.ValidationMessageFor(m => m.displayForPaging[i].ChildrenNo, "", new { @class = "help-block" })
+							</td>
+						</tr>
+					}
+				}
+			</table>
+		</div>
+	</div>
+
+	<div id="addFormPlaceholder" style="display:none"></div>
+
+	@Html.Partial("_PagedListHiddenFields")
+}
+
+<div class="row">
+	<div class="col-sm-12">
+		@Html.PagedListPager(Model.AggregateList, page => Url.Action(Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)), new {
+			page, Model.Range, StartDate = Model.StartDate == null ? " " : Model.StartDate.GetValueOrDefault().ToShortDateString(),
+			EndDate = Model.EndDate == null ? " " : Model.EndDate.GetValueOrDefault().ToShortDateString(),
+			TypeID = Model.TypeID == null ? " " : Model.TypeID.GetValueOrDefault().ToString(), Model.PageSize
+		}), Html.Snippets().PagedListRenderOptions())
+		@Html.Partial("_PagedListDropMenu", Model, new ViewDataDictionary { { "PagedListUrlAction", Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)) } })
+	</div>
+</div>
+
+@section scripts{
+	<script src="~/Scripts/ICJIA/date-ranges.js"></script>
+	<script src="~/Scripts/ICJIA/pagedlist.js"></script>
+	<script src="~/Scripts/Views/Shared/_SearchEdit.js"></script>
+	<script src="~/Scripts/Views/AggregateInfo/_AggregateInfo.js"></script>
+}

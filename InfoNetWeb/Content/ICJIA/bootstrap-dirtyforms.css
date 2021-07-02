@@ -1,0 +1,53 @@
+﻿/*
+	******************************* ICJIA DIRTY *******************************
+*/
+form .icjia-if-form-dirty {
+	display: none;
+}
+
+form.icjia-dirty .icjia-if-form-dirty {
+	display: unset;
+}
+
+/* hack for IE11 */
+form.icjia-dirty span.icjia-if-form-dirty {
+	display: inline;
+}
+
+form.icjia-dirty .icjia-if-form-not-dirty {
+	display: none;
+}
+
+.modal .icjia-if-modal-dirty {
+	display: none;
+}
+
+.modal.icjia-dirty .icjia-if-modal-dirty {
+	display: unset;
+}
+
+/* hack for IE11 */
+.modal.icjia-dirty span.icjia-if-modal-dirty {
+	display: inline;
+}
+
+.modal.icjia-dirty .icjia-if-modal-not-dirty {
+	display: none;
+}
+
+html .icjia-if-page-dirty {
+	display: none;
+}
+
+html.icjia-dirty .icjia-if-page-dirty {
+	display: unset;
+}
+
+/* hack for IE11 */
+html.icjia-dirty span.icjia-if-page-dirty {
+	display: inline;
+}
+
+html.icjia-dirty .icjia-if-page-not-dirty {
+	display: none;
+}

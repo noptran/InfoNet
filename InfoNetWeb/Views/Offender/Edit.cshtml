@@ -1,0 +1,95 @@
+﻿@model OffenderListing
+
+@{
+	ViewBag.Title = "Offender Summary";
+}
+
+@using (Html.BeginForm("Edit", "Offender", FormMethod.Post, new { id = "main", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+	@Html.AntiForgeryToken()
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h2 class="panel-title">Offender</h2> @* Should display (i.e. readonly) rest of current OffenderList data in this panel.  Then this panel could be called Demographics and page title would be more appropriate. *@
+				</div>
+				<div class="panel-body">
+					<div class="form-group">
+						@Html.LabelFor(model => model.OffenderCode, new { @class = "control-label", data_toggle = "tooltip", title = "" })
+						@Html.TextBoxFor(model => model.OffenderCode, new { @class = "form-control" })
+						@Html.ValidationMessageFor(model => model.OffenderCode, "", new { @class = "help-block" })
+					</div>
+					<div class="form-group text-right mb-0">
+						@Html.Snippets().SaveButton(new { id = "saveButton", type = "button", data_icjia_role = "preventDuplicateRequest", accesskey = "s" })
+						@Html.Snippets().UndoLink(Url.Action(), new { accesskey = "u" })
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h2 class="panel-title">Linked Cases</h2>
+				</div>
+				<div class="panel-body">
+					@if (Model.CasesTiedToThisOffender.Count != 0) {
+						<table id="grid-basic" class="table table-condensed table-hover table-striped">
+							<thead>
+								<tr>
+									<th scope="col" data-column-id="clientId" data-type="numeric">Client Id</th>
+									<th scope="col" data-column-id="caseId" data-type="numeric">Case #</th>
+									<th scope="col" data-column-id="firstContactDate" data-order="desc">First Contact</th>
+									<th scope="col"><span class="sr-only">Action</span></th>
+								</tr>
+							</thead>
+							<tbody>
+								@{foreach (var each in Model.CasesTiedToThisOffender) {
+									<tr>
+										<td>
+											@Html.DisplayFor(m => each.ClientCode)
+										</td>
+										<td>
+											@Html.DisplayFor(m => each.CaseId)
+										</td>
+										<td>
+											@Html.DisplayFor(m => each.FirstContactDate)
+										</td>
+										<td>
+											<div class="btn-group">
+												@Html.ActionLink("Edit", "Edit", "Case", new { clientId = each.ClientId, caseId = each.CaseId }, new { @class = "btn btn-xs btn-primary btn-outline" })
+												<button type="button" class="btn btn-xs btn-primary btn-outline dropdown-toggle" style="padding-left: 4px; padding-right: 4px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @*style="border:0px; transparent; padding-top: 0px; padding-bottom: 0px;"*@>
+													<span class="caret"></span>
+													<span class="sr-only">Toggle Dropdown</span>
+												</button>
+												<ul class="dropdown-menu">
+													<li><a href="@Url.Action("Edit", "Case", new { clientId = each.ClientId, caseId = each.CaseId })">Intake</a></li>
+													<li><a href="@Url.Action("Offenders", "Case", new { clientId = each.ClientId, caseId = each.CaseId })">Offenders</a></li>
+													<li><a href="@Url.Action("Investigation", "Case", new { clientId = each.ClientId, caseId = each.CaseId })">Investigation</a></li>
+													<li><a href="@Url.Action("Services", "Case", new { clientId = each.ClientId, caseId = each.CaseId })">Services</a></li>
+													<li><a href="@Url.Action("Closeout", "Case", new { clientId = each.ClientId, caseId = each.CaseId })">Case Closeout</a></li>
+												</ul>
+											</div>
+										</td>
+									</tr>
+								}
+							}
+							</tbody>
+						</table>
+					} else {
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="text-info" style="padding-bottom:25px">
+									NOTE: It looks like there are no cases tied to this offender.
+								</div>
+							</div>
+						</div>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+
+@section scripts{
+	<script src="~/Scripts/Views/Offender/OffenderSummary.js"></script>
+}

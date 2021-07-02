@@ -1,0 +1,90 @@
+﻿@model Infonet.Web.ViewModels.Services.OtherStaffActivityViewModel
+
+@{
+	ViewBag.Title = Model.OsaID == null ? "New Other Staff Activity" : "Edit Other Staff Activity";
+}
+
+<div id="GroupServices">
+	@using (Html.BeginForm("Form", "OtherStaffActivity", FormMethod.Post, new { id = "main", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+		@Html.AntiForgeryToken()
+		@Html.HiddenFor(m => m.OsaID)
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.LabelFor(m => m.OtherStaffActivityID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the staff activity from the drop-down menu. If you do not see the activity needed, this drop-down menu can be edited at Logged In User > Manage Lookup Lists > Other Staff Activities. You must have the proper permissions to access this function." })
+                    @Html.DropDownListFor(m => m.OtherStaffActivityID, new SelectList(ViewBag.StaffActivities, "CodeID", "Description", Model.OtherStaffActivityID), "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.OtherStaffActivityID, "", new { @class = "help-block" })
+				</div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.SVID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the name of the staff person/volunteer who engaged in this activity." })
+                    @Html.DropDownListFor(m => m.SVID, new SelectList(Data.Centers.GetStaffForCenterAndDateRetainCurrentSvid(Model.OsaDate, Session.Center().Id, Model.SVID), "SVID", "EmployeeName", Model.SVID), "<Pick One>", new { @class = "form-control staffData" })
+                    @Html.ValidationMessageFor(m => m.SVID, "", new { @class = "help-block" })
+                </div>
+				<div class="form-group">
+					@Html.LabelFor(m => m.OsaDate, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the date this activity was conducted." })
+					<div class="input-group date" data-provide="datepicker" data-date-end-date=@DateTime.Today.ToShortDateString()>
+						@Html.TextBoxFor(m => m.OsaDate, "{0:MM/dd/yyyy}", new { @class = "form-control" })
+						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+					</div>
+					@Html.ValidationMessageFor(m => m.OsaDate, "", new { @class = "help-block" })
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.LabelFor(m => m.ConductingHours, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the number of hours staff person spent conducting the activity." })
+					@Html.TextBoxFor(m => m.ConductingHours, new { @class = "form-control", type = "number", step = 0.25 })
+					@Html.ValidationMessageFor(m => m.ConductingHours, "", new { @class = "help-block" })
+				</div>
+				<div class="form-group">
+					@{
+						string travelHours = "";
+						if (Model.TravelHours != 0) {
+							travelHours = Model.TravelHours.ToString();
+						}
+					}
+					@Html.LabelFor(m => m.TravelHours, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the number of hours staff person spent traveling to conduct this activity." })
+					@Html.TextBoxFor(m => m.TravelHours, new { @class = "form-control", type = "number", step = 0.25, Value = travelHours })
+					@Html.ValidationMessageFor(m => m.TravelHours, "", new { @class = "help-block" })
+				</div>
+				<div class="form-group">
+					@{
+						string prepareHours = "";
+						if (Model.PrepareHours != 0){
+							prepareHours = Model.PrepareHours.ToString();
+						}
+					}
+					@Html.LabelFor(m => m.PrepareHours, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the number of hours staff person spent preparing for the activity." })
+					@Html.TextBoxFor(m => m.PrepareHours, new { @class = "form-control", type = "number", step = 0.25, Value = prepareHours})
+					@Html.ValidationMessageFor(m => m.PrepareHours, "", new { @class = "help-block" })
+				</div>
+			</div>
+		</div>
+		<input type="hidden" id="saveAddNew" name="saveAddNew" value="0" />
+		<input type="hidden" id="returnURL" value="@TempData.Peek("URL")" name="ReturnURL" />
+	}
+	<div class="form-group text-right" style="margin-top:20px">
+		<div class="btn-group">
+			@Html.Snippets().SaveButton(new { id = "saveButton", data_icjia_role = "preventDuplicateRequest", accesskey = "s" })
+			<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<span class="caret"></span>
+				<span class="sr-only">Toggle Dropdown</span>
+			</button>
+			<ul class="dropdown-menu icjia-btn-dropdown">
+                <li>@Html.Snippets().SaveAddButton(new { id = "saveAddButton", data_icjia_role = "preventDuplicateRequest", accesskey = "a" })</li>
+			</ul>
+		</div>
+		@Html.Snippets().UndoLink(Url.Action(), new { accesskey = "u" })
+		@if (Model.OsaID == 0 || Model.OsaID == null) {
+			<a href="@TempData.Peek("URL")" class="btn btn-danger">Cancel</a>
+		} else {
+		    @Html.Snippets().DeleteLink(Url.Action("Delete", "OtherStaffActivity", new { id = Model.OsaID }), new { accesskey = "d" })
+		}
+	</div>
+</div>
+<div class="form-group">
+	<a href="@TempData.Peek("URL")"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span><span class="glyphicon glyphicon-chevron-left" style="margin-left:-6px" aria-hidden="true"></span>Back to Other Staff Activity Search</a>
+</div>
+
+@section Scripts{	
+	<script src="~/Scripts/Views/Services/_OtherStaffActivity.js"></script>
+}

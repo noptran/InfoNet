@@ -1,0 +1,74 @@
+﻿@model Infonet.Web.ViewModels.Offender.OffenderSearchViewModel
+
+<div class="modal fade" id="searchOffenderModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Search Existing Offenders</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(m => m.OffenderCode, new { @class = "control-label", data_toggle = "tooltip", title = "" })
+                        @Html.TextBoxFor(m => m.OffenderCode, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.OffenderCode, "", new { @class = "help-block" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        @Html.Label("AgeFrom", "Age Range", new { @class = "control-label" })
+                        <div class="input-group">
+                            @Html.TextBoxFor(m => m.AgeFrom, new { @class = "form-control" })
+                            <span class="input-group-addon"><b>to</b></span>
+                            @Html.TextBoxFor(m => m.AgeTo, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(m => m.SexId, new { @class = "control-label", data_toggle = "tooltip", title = "" })
+                        @Html.LookupFor(m => m.SexId, Lookups.GenderIdentity[Provider.CAC].Exclude(8).Include(3), "<Pick One>", true, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(m => m.RaceId, new { @class = "control-label", data_toggle = "tooltip", title = "" })
+                        @Html.LookupFor(m => m.RaceId, Lookups.Race[Provider.CAC], "<Pick One>", true, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-xs-12">
+                        <button type="button" id="searchExistingOffenders" class="btn btn-primary icjia-has-spinner"> <span class="icjia-spinner"><img src="~/Content/Images/ajax-loader.gif" width="12" height="12"></span>Search <span class="glyphicon glyphicon-search"></span></button>
+                        <span id="icjia-results" class="icjia-results" style="font-size:14px;display:none"> (Displaying <span id="offenderResultCount">0</span>  of  <span id="offenderSearchTotal">0</span> results)</span>
+                    </div>
+                </div>
+                <div class="row" style="overflow:auto">
+                    <div class="col-xs-12">
+                        <div class="searchResults">
+                            <table class="offenders table table-responsive" style="display:none;">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Offender ID</th>
+                                        <th scope="col">Gender</th>
+                                        <th scope="col">Race/Ethnicity</th>
+                                        <th scope="col">Age</th>
+                                        <th scope="col" width="60px"><span class="sr-only">Action</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="5">
+                                            <button type="button" class="btn btn-default btn-block hidden" id="loadMore">Load More &raquo;</button>
+                                            <div class="well text-center noResultsAlert" role="alert" style="display:none; color:#767676; font-weight: bold">
+                                                No Results
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

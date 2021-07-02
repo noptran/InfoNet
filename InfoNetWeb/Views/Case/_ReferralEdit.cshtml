@@ -1,0 +1,110 @@
+﻿@using PagedList.Mvc;
+@using PagedList;
+@model IPagedList<ReferralEdit>
+
+
+<div class="row">
+	<div class="col-sm-12">
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered table-list" id="referralTableEdit" data-assigned-id="@Model">
+				<thead>
+					<tr>
+						<th scope="col" class="col-md-2">Action</th>
+						<th scope="col" class="col-md-3"><span class="icjia-required" data-toggle="tooltip" title="Select the type of referral provided to the client.">Referral Type</span></th>
+						<th scope="col" class="col-md-3"><span class="icjia-required" data-toggle="tooltip" title="Enter the date this referral was provided.">Referral Date</span></th>
+						<th scope="col" class="col-md-2"><span class="icjia-required" data-toggle="tooltip" title="Select the agency this client was referred to. If the specific agency is not listed, drop-down menu can be edited by selecting the logged in user > Manage Lookup Lists > Agencies. You must have permission to access this function.">Agency</span></th>
+						<th scope="col" class="col-md-2"><span class="icjia-required" data-toggle="tooltip" title="Select the referral agency’s response to the client’s request for services.">Response</span></th>
+					</tr>
+				</thead>
+				<tbody>
+					@{
+						if (Model != null) {
+							var referralTypeFullList = "ReferralsEditType";
+							var referralResponseFullList = "ReferralsEditResponse";
+							var referralAgencyFullList = "ReferralsEditAgency";
+
+							for (int i = 0; i < Model.Count; i++) {
+								var setIndex = Model[i].Index != null ? Model[i].Index : i;
+								if (i == 0) {
+									@Html.LookupFor(model => model[i].ReferralTypeID, Lookups.ReferralType[Session.Center().Provider], "<Pick One>", false, new { @class = "form-control hidden", Id = referralTypeFullList, Name = referralTypeFullList })
+									@Html.LookupFor(model => model[i].ResponseID, Lookups.ReferralResponse[Session.Center().Provider], "<Pick One>", false, new { @class = "form-control hidden", Id = referralResponseFullList, Name = referralResponseFullList })
+									@Html.DropDownList("ReferralsEditAgency", new SelectList(ViewBag.AgencyLookup, "AgencyID", "AgencyName"), new { @class = "hidden" })
+								}
+								<tr data-icjia-role="clientsidepagination">
+									<td class="text-center">
+										<div class="form-group" style="margin:0; width:130px;">
+											@if (Model[i].LocationID == Session.Center().Id) {
+												<label>
+													@Html.CheckBox("ReferralEdit[" + setIndex + "].IsEdited", Model[i].IsEdited, new { Id = "ReferralEdit_" + setIndex + "__IsEdited", Onchange = "checkboxEnableRow(this); actionCheckboxUncheck(this)" })
+													Edit
+												</label>
+												<span style="padding-right:10px;"></span>
+												<label>
+													@Html.CheckBox("ReferralEdit[" + setIndex + "].IsDeleted", Model[i].IsDeleted, new { Id = "ReferralEdit_" + setIndex + "__IsDeleted", Onchange = "referralCheckboxDisableRow(this); actionCheckboxUncheck(this);", data_icjia_role = "referral.service.isdeleted" })
+													Delete
+												</label>
+											} else {
+												<h4><span class="label label-info" style="vertical-align:top;">Read Only</span></h4>
+											}
+											<input type="hidden" name="ReferralEdit[@(setIndex)].Index" value="@Model[i].Index" />
+											<input type="hidden" name="ReferralEdit[@(setIndex)].LocationID" value="@Model[i].LocationID" />
+											<input type="hidden" name="ReferralEdit[@(setIndex)].ReferralDetailID" value="@Model[i].ReferralDetailID" />
+										</div>
+									</td>
+									<td>
+										<div class="form-group" style="margin:0; min-width:145px;">
+											@Html.LookupFor(model => model[i].ReferralTypeID, Model[i].IsEdited ? Lookups.ReferralType[Session.Center().Provider] : (IEnumerable<LookupCode>)new[] { Lookups.ReferralType[Model[i].ReferralTypeID] },
+												"<Pick One>", true,
+												Html.Attributes(new { @class = "form-control", Name = "ReferralEdit[" + setIndex + "].ReferralTypeID", Id = "ReferralEdit_" + setIndex + "__ReferralTypeID", data_icjia_change_dropdown = referralTypeFullList })
+													.AndIf(!Model[i].IsEdited, new { Disabled = true }))
+											@Html.ValidationMessage("ReferralEdit[" + setIndex + "].ReferralTypeID", "", new { @class = "help-block" })
+										</div>
+									</td>
+									<td>
+										<div class="form-group" style="margin:0; min-width:75px;">
+											@Html.TextBoxFor(model => model[i].ReferralDate, "{0:MM/dd/yyyy}",
+							Html.Attributes(new { data_provide = "datepicker", data_date_end_date = DateTime.Today.ToShortDateString(), Class = "form-control date group1 inline-date", Name = "ReferralEdit[" + setIndex + "].ReferralDate", Id = "ReferralEdit_" + setIndex + "__ReferralDate" })
+								.AndIf(!Model[i].IsEdited, new { Disabled = true }))
+											@Html.ValidationMessage("ReferralEdit[" + setIndex + "].ReferralDate", "", new { @class = "help-block" })
+										</div>
+									</td>
+									<td>
+										<div class="form-group" style="margin:0; min-width:300px">
+											@Html.DropDownListFor(model => model[i].AgencyID,
+												new SelectList(Model[i].IsEdited ? ViewBag.AgencyLookup : ((IEnumerable<ListAgency>)ViewBag.AgencyLookup).Where(x => x.AgencyID == Model[i].AgencyID), "AgencyID", "AgencyName", Model[i].AgencyID),
+												"<Pick One>",
+												Html.Attributes(new { @class = "form-control group1", Name = "ReferralEdit[" + setIndex + "].AgencyID", Id = "ReferralEdit_" + setIndex + "__AgencyID", data_icjia_change_dropdown = referralAgencyFullList })
+													.AndIf(!Model[i].IsEdited, new { Disabled = true }))
+											@Html.ValidationMessage("ReferralEdit[" + setIndex + "].AgencyID", "", new { @class = "help-block" })
+										</div>
+
+									</td>
+									<td>
+										<div class="form-group" style="margin:0; min-width:115px;">
+											@Html.LookupFor(model => model[i].ResponseID, Model[i].IsEdited ? Lookups.ReferralResponse[Session.Center().Provider] : (IEnumerable<LookupCode>)new[] { Lookups.ReferralResponse[Model[i].ResponseID] },
+												"<Pick One>", true,
+												Html.Attributes(new { @class = "form-control group1", Name = "ReferralEdit[" + setIndex + "].ResponseID", Id = "ReferralEdit_" + setIndex + "__ResponseID", data_icjia_change_dropdown = referralResponseFullList })
+													.AndIf(!Model[i].IsEdited, new { Disabled = true }))
+											@Html.ValidationMessage("ReferralEdit[" + setIndex + "].ResponseID", "", new { @class = "help-block" })
+
+											<input type="hidden" name="ReferralEdit[@(setIndex)].ReferralTypeID" value="@Model[i].ReferralTypeID" />
+											<input type="hidden" name="ReferralEdit[@(setIndex)].AgencyID" value="@Model[i].AgencyID" />
+											<input type="hidden" name="ReferralEdit[@(setIndex)].ReferralDate" value='@(Model[i].ReferralDate.HasValue? Model[i].ReferralDate.Value.ToShortDateString() : "") ' />
+											<input type="hidden" name="ReferralEdit[@(setIndex)].ResponseID" value="@Model[i].ResponseID" />
+										</div>
+									</td>
+								</tr>
+							}
+						}
+					}
+				</tbody>
+			</table>
+			<div class="form-group" id="referralPagedList" data-pagination-link="@Url.Action("ReferralSearch")">
+				@Html.PagedListPager(Model, page => Url.Action("ReferralSearch", "Case", new {
+			   page, }), Html.Snippets().PagedListRenderOptions(new[] { "referralPagedList", "dirtyignore" }, new[] { "pagedListMultiples" }))
+				@Html.Partial("_PagedListFooter", Model, new ViewDataDictionary { { "isMultiples", true }, { "id", "ReferralSearchDates_[0]__PageSize" }, { "name", "ReferralSearchDates[0].PageSize" }, { "class", "" }, { "paginationFor", "referrals" } })
+				@Html.Hidden("ReferralSearchDates[0].Page", Model.PageNumber)
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,12 @@
+﻿<div class="row">
+	<div class="col-xs-8 col-md-10">
+		@Html.Partial("_SearchResetButtons")
+	</div>
+	<div class="col-xs-4 col-md-2">
+		<div class="form-group pull-right">
+			<a class="btn btn-primary" role="button" href="@ViewData["NewButtonUrl"]">
+				<span class="glyphicon glyphicon-plus-sign"></span> @Html.Raw(ViewData["NewButtonText"])
+			</a>
+		</div>
+	</div>
+</div>

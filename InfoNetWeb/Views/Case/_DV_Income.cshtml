@@ -1,0 +1,101 @@
+﻿@model ClientCase
+
+@{
+    decimal? primaryIncome = -1;
+    int primaryIncomeSource = -1;
+    decimal? totalIncome = 0;
+    string formattedAmount;
+}
+
+<div class="panel-body pb-0">
+    <p class="text-info">
+        Select client’s income source(s) and enter monthly amount (exact or approximate) for each source selected. If client has no income, check <b>No Financial Resources</b>. If income is unknown or client does not want to disclose this information, check <b>Unknown</b>. If an amount for a specific source is not known, enter <b>-1</b> as the monthly amount.
+    </p>
+	<hr style="margin-top: 10px; margin-bottom: 20px"/>
+	<div class="icjia-checkbox-group label-weight-normal">
+	    <div class="row">
+	        <div class="col-xs-6 text-right">
+				<div class="checkbox">
+					<label class="control-label">
+						@Html.CheckBoxFor(m => m.IsNoneIncomeSourceSelected)
+						@Lookups.IncomeSource2[-2].Description
+					</label>
+				</div>
+	        </div>
+	        <div class="col-xs-6">
+				<div class="checkbox" style="margin-bottom: 15px">
+		            <label class="control-label">
+						@Html.CheckBoxFor(m => m.IsUnknownIncomeSourceSelected)
+						@Lookups.IncomeSource2[-1].Description
+					</label>
+				</div>
+	        </div>
+	    </div>
+	    <div class="row">
+	        <div class="col-sm-6">
+				@{ int i = 0; }
+	            @for (; i <= Model.FinancialResources.Count / 2; i++) {
+	                if (primaryIncome < Model.FinancialResources[i].Amount) {
+	                    primaryIncome = Model.FinancialResources[i].Amount;
+	                    primaryIncomeSource = i;
+	                }
+	                <div class="form-group currentResource">
+	                    <div class="checkbox">
+	                        @Html.CheckBox("IncomeSource" + i, Model.FinancialResources[i].Amount >= -1, new { @class = "incomeSource" })
+	                        @Html.Label("IncomeSource" + i, Lookups.IncomeSource2[Model.FinancialResources[i].IncomeSource2ID].Description)
+	                    </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">$</span>
+                            @Html.EditorFor(m => m.FinancialResources[i].Amount, Model.FinancialResources[i].Amount == -1
+                                ? (object)new { htmlAttributes = new { @class = @"form-control financialResource", Value = "-1" } }
+                                : (object)new { htmlAttributes = new { @class = @"form-control financialResource" } })
+                            <span class="input-group-addon">Monthly</span>
+                        </div>
+	                    @Html.ValidationMessageFor(m => m.FinancialResources[i].Amount, "", new { @class = "help-block" })
+	                </div>
+	                @Html.HiddenFor(m => m.FinancialResources[i].IncomeSource2ID)
+	                @Html.HiddenFor(m => m.FinancialResources[i].ID)
+	                if (Model.FinancialResources[i].Amount != null && Model.FinancialResources[i].Amount > 0) {
+	                    totalIncome = totalIncome + Model.FinancialResources[i].Amount;
+	                }
+	            }
+	        </div>
+	        <div class="col-sm-6">
+	            @for (; i < Model.FinancialResources.Count; i++) {
+	                if (primaryIncome < Model.FinancialResources[i].Amount) {
+	                    primaryIncome = Model.FinancialResources[i].Amount;
+	                    primaryIncomeSource = i;
+	                }
+	                <div class="form-group currentResource">
+	                    <div class="checkbox">
+	                        @Html.CheckBox("IncomeSource" + i, Model.FinancialResources[i].Amount >= -1, new { @class = "incomeSource" })
+	                        @Html.Label("IncomeSource" + i, Lookups.IncomeSource2[Model.FinancialResources[i].IncomeSource2ID].Description)
+	                    </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">$</span>
+                            @Html.EditorFor(m => m.FinancialResources[i].Amount, Model.FinancialResources[i].Amount == -1
+                                ? (object)new { htmlAttributes = new { @class = @"form-control financialResource", Value = "-1" } }
+                                : (object)new { htmlAttributes = new { @class = @"form-control financialResource" } })
+                            <span class="input-group-addon">Monthly</span>
+                        </div>
+	                    @Html.ValidationMessageFor(m => m.FinancialResources[i].Amount, "", new { @class = "help-block" })
+	                </div>
+	                @Html.HiddenFor(m => m.FinancialResources[i].IncomeSource2ID)
+	                @Html.HiddenFor(m => m.FinancialResources[i].ID)
+	                if (Model.FinancialResources[i].Amount != null && Model.FinancialResources[i].Amount > 0) {
+	                    totalIncome = totalIncome + Model.FinancialResources[i].Amount;
+	                }
+	            }
+	        </div>
+			@if ((Model.IsNoneIncomeSourceSelected || Model.IsUnknownIncomeSourceSelected) == false && Model.ClientId != null && primaryIncome != -1) {
+				<div class="col-sm-12 col-md-12 col-lg-6">
+					<div aria-hidden="true" class="hidden-xs hidden-sm hidden-md" style="height: 15px"></div>
+					<p class="form-group text-info">
+						Primary Income Source: <b>@Lookups.IncomeSource2[Model.FinancialResources[primaryIncomeSource].IncomeSource2ID].Description</b><br />
+			            Total Monthly Income: <b>@($"{totalIncome:c}")</b>
+			        </p>
+				</div>
+		    }
+	    </div>
+	</div>
+</div>

@@ -1,0 +1,24 @@
+﻿@using Infonet.Reporting.Enumerations
+@model Infonet.Reporting.ViewModels.ManagementReportViewModel
+
+<div class="panel panel-primary icjia-error-group reportProperty @SubReportSelection.MngRptStaffServiceCancellation.GetShortName()" style="display:none">
+	<div class="panel-heading">
+		<h2 class="panel-title">
+			<span class="icjia-panel-title-text">Filters</span>
+		</h2>
+	</div>
+	<div class="panel-body">
+		<div class="form-group">
+			@Html.LabelFor(m => m.CancellationStaffSelections)
+			@Html.DropDownListFor(model => model.CancellationStaffSelections, new MultiSelectList(Model.StaffDefault, "SVID", "StaffName", Model.CancellationStaffSelections), new { @class = "form-control chosen staffSelection", multiple = "multiple" })
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(m => m.CancellationServiceSelections)
+			@Html.DropDownListFor(model => model.CancellationServiceSelections, new MultiSelectList(Model.ServiceNameDefault, "CodeId", "Description", Model.CancellationServiceSelections), new { @class = "form-control chosen", multiple = "multiple", data_icjia_ajax_url = "/Report/ServiceNames" })
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(m => m.CancellationReasonSelections)
+			@Html.DropDownListFor(model => model.CancellationReasonSelections, new MultiSelectList(Model.ServiceNameDefault, "CodeId", "Description", Model.CancellationReasonSelections), new { @class = "form-control chosen", multiple = "multiple", data_icjia_ajax_url = "/Report/CancellationReasons" })
+		</div>
+	</div>
+</div>

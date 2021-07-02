@@ -1,0 +1,238 @@
+﻿@model ClientCase
+
+@{
+	bool showReferredBy = true;
+	string url = HttpContext.Current.Request.Url.AbsoluteUri;
+
+	if (url.ToUpperInvariant().Contains("CLOSEOUT")) {
+		showReferredBy = false;
+	}
+}
+
+<div class="panel-body">
+	@if (showReferredBy) {
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<fieldset class="form-group">
+					<legend data-toggle="tooltip" title="Select the organization type(s) that referred the client for services.">Referred By</legend>
+				
+					<div class="icjia-checkbox-group">
+						<div class="row">
+							<div class="col-sm-4">
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.Police)
+									@Html.LabelFor(model => model.ClientReferralSource.Police)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.Hospital)
+									@Html.LabelFor(model => model.ClientReferralSource.Hospital)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.Medical)
+									@Html.LabelFor(model => model.ClientReferralSource.Medical)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.PublicHealth)
+									@Html.LabelFor(model => model.ClientReferralSource.PublicHealth)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.DCFS)
+									@Html.LabelFor(model => model.ClientReferralSource.DCFS)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.LegalSystem)
+									@Html.LabelFor(model => model.ClientReferralSource.LegalSystem)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.PrivateAttorney)
+									@Html.LabelFor(model => model.ClientReferralSource.PrivateAttorney)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.StateAttorney)
+									@Html.LabelFor(model => model.ClientReferralSource.StateAttorney)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.CircuitClerk)
+									@Html.LabelFor(model => model.ClientReferralSource.CircuitClerk)
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.Clergy)
+									@Html.LabelFor(model => model.ClientReferralSource.Clergy)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.SocialServiceProgram)
+									@Html.LabelFor(model => model.ClientReferralSource.SocialServiceProgram)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.HousingProgram)
+									@Html.LabelFor(model => model.ClientReferralSource.HousingProgram)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.SexualAssaultProgram)
+									@Html.LabelFor(model => model.ClientReferralSource.SexualAssaultProgram)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.OtherDVProgram)
+									@Html.LabelFor(model => model.ClientReferralSource.OtherDVProgram)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.EducationSystem)
+									@Html.LabelFor(model => model.ClientReferralSource.EducationSystem)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.StatewideHelpLine)
+									@Html.LabelFor(model => model.ClientReferralSource.StatewideHelpLine)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.NationalHotline)
+									@Html.LabelFor(model => model.ClientReferralSource.NationalHotline)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.OtherLocalHotline)
+									@Html.LabelFor(model => model.ClientReferralSource.OtherLocalHotline)
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.ChildAdvocacyCenter)
+									@Html.LabelFor(model => model.ClientReferralSource.ChildAdvocacyCenter)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.MedicalAdvocacyProgram)
+									@Html.LabelFor(model => model.ClientReferralSource.MedicalAdvocacyProgram)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.Relative)
+									@Html.LabelFor(model => model.ClientReferralSource.Relative)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.Self)
+									@Html.LabelFor(model => model.ClientReferralSource.Self)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.Friend)
+									@Html.LabelFor(model => model.ClientReferralSource.Friend)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.Media)
+									@Html.LabelFor(model => model.ClientReferralSource.Media)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.Other)
+									@Html.LabelFor(model => model.ClientReferralSource.Other, new { data_toggle = "tooltip", title = "Specify the type of organization that referred the client for services if none of the existing options apply." })
+								</div>
+								<div class="form-group">
+									@Html.TextBoxFor(model => model.ClientReferralSource.WhatOther, new { @class = "form-control"})
+									@Html.ValidationMessageFor(model => model.ClientReferralSource.WhatOther, "", new { @class = "help-block" })
+								</div>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group mb-0">
+							@Html.LabelFor(model => model.ClientReferralSource.AgencyID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the agency that referred the client for services.  If referring agency does not exist in the drop-down menu, go to Administration -> Lookup Lists -> Agencies to add an Agency or inform your supervisor." })							
+                            @Html.DropDownListFor(model => model.ClientReferralSource.AgencyID, new SelectList(Data.Centers.GetAgencyForCenterinCurrentAgencyId(Session.Center().ProviderId, Session.Center().Id, Model.ClientReferralSource == null ? 0: Model.ClientReferralSource.AgencyID), "AgencyID", "AgencyName"), "Select an Agency", new { @class = "form-control" })
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+
+	<div class="panel panel-default mb-0">
+		<div class="panel-body pb-0">
+
+			<fieldset class="form-group mb-0">
+				<legend data-toggle="tooltip">Referred To</legend>
+				<div class="icjia-checkbox-group">
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="form-group">
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.ToPolice)
+									@Html.LabelFor(model => model.ClientReferralSource.ToPolice)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.ToHospital)
+									@Html.LabelFor(model => model.ClientReferralSource.ToHospital)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.ToMedical)
+									@Html.LabelFor(model => model.ClientReferralSource.ToMedical)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.ToPublicHealth)
+									@Html.LabelFor(model => model.ClientReferralSource.ToPublicHealth)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.ToDCFS)
+									<label for="@Html.IdFor(model => model.ClientReferralSource.ToDCFS)" data-toggle="tooltip" title="DCFS referrals should NOT include mandatory reporting of abuse.">DCFS*</label>
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.ToLegalSystem)
+									@Html.LabelFor(model => model.ClientReferralSource.ToLegalSystem)
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.ToPrivateAttorney)
+									@Html.LabelFor(model => model.ClientReferralSource.ToPrivateAttorney)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.ToStateAttorney)
+									@Html.LabelFor(model => model.ClientReferralSource.ToStateAttorney)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.ToCircuitClerk)
+									@Html.LabelFor(model => model.ClientReferralSource.ToCircuitClerk)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.ToClergy)
+									@Html.LabelFor(model => model.ClientReferralSource.ToClergy)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.ToSocialServiceProgram)
+									@Html.LabelFor(model => model.ClientReferralSource.ToSocialServiceProgram)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.ToHousingProgram)
+									@Html.LabelFor(model => model.ClientReferralSource.ToHousingProgram)
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.ToSexualAssaultProgram)
+									@Html.LabelFor(model => model.ClientReferralSource.ToSexualAssaultProgram)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.ToOtherDVProgram)
+									@Html.LabelFor(model => model.ClientReferralSource.ToOtherDVProgram)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.ToEducationSystem)
+									@Html.LabelFor(model => model.ClientReferralSource.ToEducationSystem)
+								</div>
+								<div class="checkbox">
+									@Html.CheckBoxFor(model => model.ClientReferralSource.ToOther)
+									@Html.LabelFor(model => model.ClientReferralSource.ToOther, new { data_toggle = "tooltip", title = "Specify the type of organization the client was referred to if none of the existing options apply." })
+								</div>
+								<div class="form-group">						
+									@Html.TextBoxFor(model => model.ClientReferralSource.ToWhatOther, new { @class = "form-control" })
+									@Html.ValidationMessageFor(model => model.ClientReferralSource.ToWhatOther, "", new { @class = "help-block" })
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,184 @@
+﻿@model Infonet.Web.ViewModels.Admin.ContactLookupViewModel
+
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Manage Contact List";
+}
+
+@{int contactCount;}
+
+@if (Model.displayForPaging == null) {
+    contactCount = 0;
+} else {
+    contactCount = Model.displayForPaging.Count;
+}
+
+@using (Html.BeginForm("Index_Post", "ContactLookup", FormMethod.Post, new { @class = "main", id = "firstForm", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+    @Html.AntiForgeryToken()
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="panel panel-primary" style="margin: 0; margin-top:5px;">
+				<div class="panel-heading" data-toggle="collapse" data-target="#addContactCollapse">
+					<div class="row">
+						<div class="col-sm-8">
+							<h3 class="panel-title"><a data-toggle="collapse" href="#addContactCollapse">Add Contact</a></h3>
+						</div>
+					</div>
+				</div>
+				<div id="addContactCollapse" class="panel-collapse collapse in">
+					<div class="panel-body">
+						<table class="table table-responsive icjia-table-borderless" id="newContacts" style="margin-bottom: 0;">
+							<thead>
+								<tr>
+									<th scope="col" width="55%" style="border:none;"><span data-toggle="tooltip" title="Enter the contact name.">Contact Name</span></th>
+									<th scope="col" width="25%" style="border:none;"><span data-toggle="tooltip" title="Specify the desired sort order of this contact name. Leave blank if alphabetical sorting is desired.">Display Order</span></th>
+									<th scope="col" class="text-center" width="10%" style="border:none;"><span data-toggle="tooltip" title="Check this box to make this contact active. Uncheck box if this contact is no longer needed. Only active contacts will display in drop-down menus.">Is Active?</span></th>
+									<th scope="col" width="10%" style="border:none;"><span class="sr-only">Action</span></th>
+								</tr>
+							</thead>
+							<tbody></tbody>
+						</table>
+						<input type="hidden" class="addcontact" value="@contactCount" />
+						<button type="button" class="btn btn-default btn-outline addcontact" value="@contactCount"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;Add New Contact</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+    <br />
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="pull-right">
+                @Html.Snippets().SaveButton(new { id = "saveButton", data_icjia_role = "preventDuplicateRequest", accesskey = "s" })
+                @Html.Snippets().UndoLink(Url.Action(), new { accesskey = "u" })
+            </div>
+        </div>
+    </div>
+}
+<hr />
+
+@using (Html.BeginForm("Index", "ContactLookup", FormMethod.Get, new { id="main", autocomplete = "off" })) {
+	<div class="row">
+		<div class="col-sm-4 col-md-3">
+			<div class="form-group">
+				@Html.LabelFor(model => model.ContactName, new { @class = "control-label", data_toggle = "tooltip", title = "Enter a part of the contact name." })
+				@Html.EditorFor(model => model.ContactName, new { htmlAttributes = new { @class = @"form-control", type = "text", autocomplete = "off" } })
+				@Html.ValidationMessageFor(model => model.ContactName, "", new { @class = "help-block" })
+			</div>
+		</div>
+		<div class="col-sm-4 col-md-3">
+			<div class="form-group">
+				@Html.LabelFor(modelItem => modelItem.IsActive, new { @class = "control-label", data_toggle = "tooltip", title = "Is the contact name you are looking for active?" })
+				@Html.DropDownListFor(modelItem => modelItem.IsActive, new[] { new SelectListItem { Text = "", Value = "" }, new SelectListItem { Text = "Yes", Value = "true" }, new SelectListItem { Text = "No", Value = "false" } }, new { @class = "form-control" })
+			</div>
+		</div>
+		<div class="col-sm-4 col-md-3">
+			<div class="form-group">
+				@Html.LabelFor(model => model.DisplayOrder, new { @class = "control-label", data_toggle = "tooltip", title = "Pick your desired sort order." })
+				@Html.EditorFor(model => model.DisplayOrder, new { htmlAttributes = new { @class = @"form-control", type = "number", step = 1, autocomplete = "off" } })
+				@Html.ValidationMessageFor(model => model.DisplayOrder, "", new { @class = "help-block" })
+			</div>
+		</div>
+	</div>
+			<div class="row">
+				<div class="col-md-10">
+					<button type="submit" class="btn btn-primary" id="Search">
+						Filter <span class="glyphicon glyphicon-filter"></span>
+					</button>
+					<button type="submit" class="btn btn-warning" id="clearCriteria">
+						Clear filter criteria <span class="glyphicon glyphicon-erase"></span>
+					</button>
+				</div>
+			</div>
+			<input type="hidden" value="@contactCount" id="recordCount" />
+			<br />
+}
+
+@using (Html.BeginForm("Index_Post", "ContactLookup", FormMethod.Post, new { @class = "main", id = "secondForm", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+    @Html.AntiForgeryToken()
+	<table class="table table-hover table-bordered table-responsive" id="searchResults">
+		<tr>
+			<th scope="col" class="text-center" width="18%">
+				Action
+			</th>
+			<th scope="col" width="50%">
+				Contact Name
+			</th>
+			<th scope="col" width="22%">
+				Display Order
+			</th>
+			<th scope="col" class="text-center" width="10%">
+				Active?
+			</th>
+		</tr>
+		@if (Model.ContactList != null) {
+			for (int i = 0; i < Model.displayForPaging.Count; i++) {
+				<tr>
+					<td class="text-center">
+						@if (Model.displayForPaging[i].CenterID == Model.CenterID) {
+							<div>
+								<label>
+									Edit
+									@Html.CheckBoxFor(modelItem => Model.displayForPaging[i].shouldEdit, new { @class = "editRecord" })
+								</label>
+								<label>
+									Delete
+									@Html.CheckBoxFor(modelItem => Model.displayForPaging[i].shouldDelete, new { @class = "deleteRecord", data_hasreference = Model.displayForPaging[i].hasReference })
+								</label>
+							</div>
+						}
+					</td>
+					<td class="text-center">
+						<div class="form-group">
+							@Html.TextBoxFor(modelItem => Model.displayForPaging[i].ContactName, new { @class = "form-control rowData", disabled = "disabled" })
+							@Html.ValidationMessageFor(model => Model.displayForPaging[i].ContactName, "", new { @class = "help-block" })
+							@Html.HiddenFor(modelItem => Model.displayForPaging[i].ContactID)
+							@Html.HiddenFor(modelItem => Model.displayForPaging[i].ItemAssignmentID)
+							@Html.HiddenFor(modelItem => Model.displayForPaging[i].CenterID)
+							@Html.HiddenFor(modelItem => Model.displayForPaging[i].hasReference)
+						</div>
+					</td>
+					<td class="text-center">
+						<div class="form-group">
+							@Html.TextBoxFor(modelItem => Model.displayForPaging[i].DisplayOrder, new { type = "number", step = 1, @class = "form-control rowData", disabled = "disabled" })
+							@Html.ValidationMessageFor(model => Model.displayForPaging[i].DisplayOrder, "", new { @class = "help-block" })
+						</div>
+					</td>
+					<td class="text-center">
+						<div class="form-group" style="padding-top:6px;">
+							@Html.CheckBoxFor(modelItem => Model.displayForPaging[i].IsActive, new { @class = "rowData", disabled = "disabled" })
+							@Html.ValidationMessageFor(model => Model.displayForPaging[i].IsActive, "", new { @class = "help-block" })
+						</div>
+					</td>
+				</tr>
+			}
+		}
+	</table>
+    @Html.HiddenFor(model => model.CenterID)
+    <input type="hidden" id="pageNumber" name="PageNumber" value="@Model.PageNumber" />
+}
+
+<div class="row">
+	<div class="col-sm-12">
+		@Html.PagedListPager(Model.ContactList, page => Url.Action(Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)),
+		new {
+			page, Model.ContactName,
+			isActive = Model.IsActive,
+			displayOrder = Model.DisplayOrder, Model.PageSize
+		}), Html.Snippets().PagedListRenderOptions())
+		@Html.Partial("_PagedListDropMenu", Model, new ViewDataDictionary { { "PagedListUrlAction", Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)) } })
+	</div>
+</div>
+
+@section scripts{
+	<script src="~/Scripts/Views/Shared/_SearchEdit.js"></script>
+    <script src="~/Scripts/Views/Admin/ContactLookup.js"></script>
+	<script src="~/Scripts/ICJIA/pagedlist.js"></script>
+	<script src="~/Scripts/Views/Admin/RetainFilters.js"></script>;
+}
+
+
+
+
+
+

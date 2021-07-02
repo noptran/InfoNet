@@ -1,0 +1,81 @@
+﻿@using Infonet.Core
+@using PagedList.Mvc
+@model Infonet.Web.ViewModels.Admin.ExportStaffInfoViewModel
+
+@{
+	ViewBag.Title = "Export Staff";
+}
+
+@using (Html.BeginForm("Search", "ExportStaffInfo", FormMethod.Get, new { id = "main", autocomplete = "off" })) {
+	<div class="row">
+		<div class="col-sm-4 col-md-3">
+			<div class="form-group">
+				@Html.LabelFor(m => m.Status, new { @class = "control-label" })
+				@Html.EnumDropDownListFor(m => m.Status, "<Pick One>", new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.Status, "", new { @class = "help-block" })
+			</div>
+		</div>
+		<div class="col-sm-4 col-md-3">
+			<div class="form-group">
+				@Html.LabelFor(m => m.TypeOfStaff, new { @class = "control-label" })
+				@Html.EnumDropDownListFor(m => m.TypeOfStaff, "<Pick One>", new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.TypeOfStaff, "", new { @class = "help-block" })
+			</div>
+		</div>
+		<div class="col-sm-4 col-md-3">
+			<div class="form-group">
+				@Html.LabelFor(m => m.PersonnelTypeId, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the full or partial Client ID for a Client in the household if known." })
+				@Html.LookupFor(m => m.PersonnelTypeId, Session.Center().Provider, "<Pick One>", true, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.PersonnelTypeId, "", new { @class = "help-block" })
+			</div>
+		</div>
+	</div>
+
+	<div style="margin-bottom: 20px">
+		<button type="submit" class="btn btn-primary">
+			Search <span class="glyphicon glyphicon-search"></span>
+		</button>
+		<a href=@(Request.Url?.AbsolutePath) class="btn btn-warning">
+			Reset <span class="glyphicon glyphicon-refresh"></span>
+		</a>
+		<button type="submit" class="btn btn-success pull-right" name="download" value="true">
+			Download&nbsp;<span class="glyphicon glyphicon-download-alt"></span>
+		</button>
+	</div>
+}
+
+<table class="table table-hover table-responsive">
+	<tr>
+		<th scope="col">Staff ID</th>
+		<th scope="col">Last Name</th>
+		<th scope="col">First Name</th>
+		<th scope="col">Staff Type</th>
+		<th scope="col">Personnel Type</th>
+		<th scope="col">Start Date</th>
+		<th scope="col">Termination Date</th>
+	</tr>
+	@foreach (var each in Model.SearchResults) {
+		<tr>
+			<td>@each.SvId</td>
+			<td>@each.LastName</td>
+			<td>@each.FirstName</td>
+			<td>@each.TypeOfStaff</td>
+			<td>@(Lookups.PersonnelType[each.PersonnelTypeId]?.Description)</td>
+			<td>@Html.DisplayFor(m => each.StartDate)</td>
+			<td>@Html.DisplayFor(m => each.TerminationDate)</td>
+		</tr>
+	}
+</table>
+
+@Html.PagedListPager(Model.SearchResults, page => Url.Action((string)ViewContext.RouteData.Values["action"], new {
+	page,
+	Model.PageSize,
+	Status = ConvertNull.ToInt32(Model.Status),
+	TypeOfStaff = ConvertNull.ToInt32(Model.TypeOfStaff),
+	Model.PersonnelTypeId,
+}), Html.Snippets().PagedListRenderOptions())
+@Html.Partial("_PagedListFooter", Model.SearchResults)
+
+@section Scripts {
+	@Scripts.Render("~/Scripts/ICJIA/pagedlist.js")
+}

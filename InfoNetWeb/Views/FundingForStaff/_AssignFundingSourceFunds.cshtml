@@ -1,0 +1,67 @@
+﻿@model Infonet.Web.ViewModels.Admin.FundingForStaff
+
+@{
+	var isPercentError = false;
+	if (Model.FFSAFS.FundingSelectionList.Select(x => x.PercentFund ?? 0).Sum() != 100) {
+		isPercentError = true;
+	}
+}
+
+@{
+	if (Model != null && Model.FFSAFS != null && Model.FFSAFS.FundingSelectionList != null) {
+		<div class="well icjia-ffs-scrollable">
+			<table class="table" id="assignFundingFundsHeader">
+				<thead>
+					<tr>
+                        <th scope="col"><span class="sr-only">Funding</span></th>
+                        <th scope="col">Funds <button type="button" id="assignFundingFundsDeselectAll" style="margin:5px;" class="btn btn-default btn-xs dirtyignore" aria-label="Deselect All Funds">Deselect All</button></th> 
+                        <th scope="col">%</th>
+                    </tr>
+				</thead>
+			</table>
+
+			<div class="table-responsive pre-scrollable icjia-ffs-scrollable" id="divAssignFundingFunds">
+				<table class="table" id="assignFundingFunds">
+					<tbody>
+						@for (var i = 0; i < Model.FFSAFS.FundingSelectionList.Count(); i++) {
+							<tr class="@(isPercentError && Model.FFSAFS.FundingSelectionList[i].IsChecked ? "danger": "")">
+								<td>
+									@Html.HiddenFor(m => m.CurrentServiceProgramID)
+									@Html.HiddenFor(m => m.FFSAFS.FundingSelectionList[i].CodeID)
+									@Html.CheckBoxFor(m => m.FFSAFS.FundingSelectionList[i].IsChecked, new { @class = "assignFundingFundCheckbox" })
+								</td>
+								<td>
+									@Html.LabelFor(m => m.FFSAFS.FundingSelectionList[i].IsChecked, Model.FFSAFS.FundingSelectionList[i].Name)
+									@Html.HiddenFor(m => m.FFSAFS.FundingSelectionList[i].Name)
+								</td>
+								<td class="form-group">
+									@Html.TextBoxFor(m => m.FFSAFS.FundingSelectionList[i].PercentFund, new { @class = "form-control assignFundingFundPercent", @type = "number" })
+									@Html.ValidationMessageFor(m => m.FFSAFS.FundingSelectionList[i].PercentFund)
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+
+			<table class="table" id="assignFundingFundsFooter">
+				<tfoot>
+					<tr>
+                        <th scope="col"><span class="sr-only">Total</span></th>
+						<th scope="col">
+							<div style="float:left; width:75%;" id="assignFundingFundsTotalError">@Html.ValidationMessage("AFSPercentError", new {id="AFSPercentError"})</div>
+							<div style="float:right; width:25%;" class="text-right"><span id="assignFundingFundsTotal" data-toggle="tooltip" title="Total fund % must be 100% to save changes.">Total %:</span></div>
+						</th>
+						<th scope="col" style="width:82px;" id="assignFundingFundsTotalPercent"></th>
+					</tr>
+
+
+				</tfoot>
+			</table>
+		</div>
+	}
+}
+
+
+
+

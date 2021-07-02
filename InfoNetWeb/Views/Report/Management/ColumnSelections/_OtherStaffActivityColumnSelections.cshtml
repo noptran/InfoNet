@@ -1,0 +1,41 @@
+﻿@using Infonet.Reporting.Enumerations
+@model Infonet.Reporting.ViewModels.ManagementReportViewModel
+@{
+	string panelTitle = (string)ViewData["panelTitle"];
+}
+<div class="panel panel-primary icjia-error-group reportProperty @SubReportSelection.MngRptStaffServiceOtherStaffActivity.GetShortName()" style="display:none">
+	<div class="panel-heading">
+		<h2 class="panel-title">
+			<span class="icjia-panel-title-text">@panelTitle</span>
+		</h2>
+	</div>
+	<div class="panel-body">
+		<div class="row">
+			@foreach (var field in Model.OtherStaffActivityAvailableColumnSelections) {
+				string chkd = string.Empty;
+				string disabled = string.Empty;
+				if (Model.OtherStaffActivityColumnSelections != null && Model.OtherStaffActivityColumnSelections.Contains(field)) {
+					chkd = "checked='checked'";
+				}
+				if (field == ReportColumnSelectionsEnum.Staff || field == ReportColumnSelectionsEnum.Activity) {
+					chkd = "checked='checked'";
+					disabled = "disabled='disabled'";
+				}
+				<div class="col-xs-6 col-sm-4 col-md-3 columnSeletionOption">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="@Html.NameFor(model => model.OtherStaffActivityColumnSelections)" value="@((int)field)" data-icjia-name="@field.ToString()" @chkd @disabled /> @( field.GetDisplayName() )
+						</label>
+						@if (!string.IsNullOrEmpty(disabled)) {
+							<input type="checkbox" name="@Html.NameFor(model => model.OtherStaffActivityColumnSelections)"  value="@((int)field)" @chkd hidden />
+						}
+						<span class="columnOrderControl">
+							<a href="#" class="moveColumnSelectionLeft"><span class="glyphicon glyphicon-triangle-left"></span></a>
+							<a href="#" class="moveColumnSelectionRight"><span class="glyphicon glyphicon-triangle-right"></span></a>
+						</span>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+</div>

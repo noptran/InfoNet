@@ -1,0 +1,124 @@
+﻿@model Infonet.Web.ViewModels.Clients.HouseholdViewModel
+
+@{
+	ViewBag.Title = Model.ID == null ? "Add Household" : "Edit Household";
+	int clientCount = Model.Clients?.Count ?? 0;
+}
+
+<div id="Hotlines">
+	@using (Html.BeginForm("Form", "Households", FormMethod.Post, new { id = "main", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+		@Html.AntiForgeryToken()
+		@Html.HiddenFor(m => m.ID)
+		@Html.HiddenFor(m => m.CreationDate)
+		<h2>Household Details</h2>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.LabelFor(m => m.InvestigationID, new { @class = "control-label", data_toggle = "tooltip", title = "This is a unique identifier assigned to your client’s household to identify clients that are part of the same family or household, as well as to allow you to report the number of households that received services. This identifier must not contain any personal information about your client, e.g. birth dates, initials, etc." })
+					@Html.TextBoxFor(m => m.InvestigationID, new { @class = "form-control", maxlength="50" })
+					@Html.ValidationMessageFor(m => m.InvestigationID, "", new { @class = "help-block" })
+				</div>
+			</div>
+			<input type="hidden" id="saveAddNew" name="saveAddNew" value="0" />
+			<input type="hidden" id="returnURL" value="@TempData.Peek("HouseholdReturnUrl")" name="ReturnURL" />
+		</div>
+		<h2>Household Members</h2>
+		<div class="row">
+			<div class="col-md-6">
+				<table id="clients" class="table icjia-table-borderless">
+					<thead>
+						<tr>
+							<th scope="col" width="45%">Client ID</th>
+							@if (!Session.Center().IsSA) {
+								<th width="45%">Case ID</th>
+							}
+							<th scope="col"width="10%"><span class="sr-only">Action</span></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>@Html.ValidationMessage("NoClientsEntered")</tr>
+						@if (Model.Clients != null && Model.Clients.Count > 0) {
+							for (int i = 0; i < Model.Clients.Count; i++) {
+                        <tr class="clientRow">
+                            <td class="clientMainCells">
+                                <div class="form-group typeaheadGroup">
+                                    @Html.HiddenFor(m => m.Clients[i].ClientID, new { @class = "clientData" })
+                                    @Html.HiddenFor(m => m.Clients[i].ID, new { @class = "clientData" })
+                                    @Html.TextBoxFor(m => m.Clients[i].ClientCode, new { @class = "form-control clientData clientCode", autocomplete = "off" })
+                                    @Html.ValidationMessageFor(m => m.Clients[i].ClientCode, "", new { @class = "help-block" })
+                                    @if (Session.Center().IsSA)
+                                    {
+                                        @Html.HiddenFor(m => m.Clients[i].CaseID, new { @class = "clientData" })
+                                    }
+                                </div>
+                            </td>
+                            @if (!Session.Center().IsSA)
+                            {
+                                <td class="clientMainCells">
+                                    <div class="form-group">
+                                        @Html.DropDownListFor(m => m.Clients[i].CaseID, new SelectList(Model.Clients[i].Cases, "CaseId", "CaseId", Model.Clients[i].CaseID), new { @class = "form-control clientData caseList" })
+                                        @Html.ValidationMessageFor(m => m.Clients[i].CaseID, "", new { @class = "help-block" })
+                                    </div>
+                                </td>
+                            }
+                            <td class="deleteButton"><button class="btn btn-danger" type="button"><span class="glyphicon glyphicon-trash"></span></button></td>
+                            <td class="restoreClientRow hide" style="border:none; padding-top: 0px"><button type="button" class="btn btn-primary" aria-label="Restore Deleted Client" data-icjia-role="client.restore"><span class="glyphicon glyphicon-undo"></span></button></td>
+                        </tr>
+							}
+						} else {
+							@Html.Partial("_NewClientPartial")
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group text-nowrap">
+					<button id="clientAddNew" type="button" class="btn btn-default btn-outline"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;&nbsp;Add New Client</button>
+					<button id="clientAddSearch" type="button" class="btn btn-default btn-outline" data-toggle="modal" data-target="#searchModal"><span class="glyphicon glyphicon-search"></span>&nbsp;&nbsp;Add Clients by Search</button>
+					<input type="hidden" id="clientCount" value="@clientCount">
+		            <input type="hidden" id="originalClientCount" value="@clientCount">
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group text-right text-nowrap">
+					<div class="btn-group text-center">
+						@Html.Snippets().SaveButton(new { id = "saveButton", data_icjia_role = "preventDuplicateRequest", accesskey = "s" })
+						<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<span class="caret"></span>
+							<span class="sr-only">Toggle Dropdown</span>
+						</button>
+						<ul class="dropdown-menu icjia-btn-dropdown">
+			                <li>@Html.Snippets().SaveAddButton(new { id = "saveAddButton", data_icjia_role = "preventDuplicateRequest", accesskey = "a" })</li>
+						</ul>
+					</div>
+					@Html.Snippets().UndoLink(Url.Action(), new { accesskey = "u" })
+					@if (Model.ID == 0 || Model.ID == null) {
+						<a href="@TempData.Peek("HouseholdReturnUrl")" class="btn btn-danger">Cancel</a>
+					} else {
+					    @Html.Snippets().DeleteLink(Url.Action("Delete", "Households", new { id = Model.ID }), new { accesskey = "d" })
+					}
+				</div>
+			</div>
+		</div>
+	}
+	@Html.Partial("_ClientSearch", Model.ClientSearchViewModel)
+</div>
+<div class="form-group">
+	<a href="@TempData["HouseholdReturnUrl"]"><span class='glyphicon glyphicon-chevron-left' aria-hidden='true'></span><span class='glyphicon glyphicon-chevron-left' style='margin-left:-6px' aria-hidden='true'></span>Back to Household Search</a>
+</div>
+
+@section Styles{
+	<style>
+		.form-group.typeaheadGroup.has-error{
+			margin-top:-5px;
+		}
+	</style>
+}
+
+@section Scripts{
+	@Scripts.Render("~/bundles/typeahead")
+	<script src="~/Scripts/ICJIA/date-ranges.js"></script>
+	<script src="~/Scripts/Views/Client/Households.js"></script>
+}

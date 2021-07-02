@@ -1,0 +1,31 @@
+﻿@using Infonet.Reporting.Enumerations
+@model Infonet.Reporting.ViewModels.ManagementReportViewModel
+@{
+	string panelTitle = (string)ViewData["panelTitle"];
+}
+<div class="panel panel-primary icjia-error-group reportProperty @SubReportSelection.MngRptOtherOrderOfProtection.GetShortName()" style="display:none">
+	<div class="panel-heading">
+		<h2 class="panel-title">
+			<span class="icjia-panel-title-text">@panelTitle</span>
+		</h2>
+	</div>
+	<div class="panel-body">
+		<div class="row">
+			@foreach (var field in Enums.GetValues<OrderOfProtectionIssuedOrExpiredSelectionsEnum>()) {
+				string chkd = string.Empty;
+				string disabled = string.Empty;
+				if (Model.OrderOfProtectionDateSelection == field) {
+					chkd = "checked='checked'";
+				}
+				<div class="col-xs-6 col-sm-4 col-md-3">
+					<div class="checkbox">
+						<label>
+							<input type="radio" name="@Html.NameFor(model => model.OrderOfProtectionDateSelection)" value="@((int)field)" @chkd @disabled /> @( field.GetDisplayName() )
+						</label>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+</div>
+

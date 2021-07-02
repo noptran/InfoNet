@@ -1,0 +1,698 @@
+﻿@media (max-width: 767px){
+	.icjia-sm-not-responsive.table-responsive .btn-group .btn.btn-xs{
+		border-top-right-radius: 3px !important;
+		border-bottom-right-radius: 3px !important;
+	}
+
+	.icjia-sm-not-responsive.table-responsive .btn-group > .dropdown-toggle{
+		display:none;
+	}
+}
+
+@media (min-width: 768px){
+	.icjia-sm-not-responsive.table-responsive {
+		overflow-x:visible;
+		overflow-y:visible;
+	}
+}
+
+/*
+	************************* Accessible danger text on the Login screen *************************
+*/
+/* KMS DO this obviously doesn't belong here */
+.text-danger-login {
+	color: #c87472;
+}
+
+/*
+	************************* ICJIA Reports Center Selection panel **************************
+*/
+/* KMS DO this obviously doesn't belong here */
+.checkbox-inline-label {
+	margin-bottom: 0;
+	font-weight: normal;
+}
+
+.table-condensed-y > thead > tr > th,
+.table-condensed-y > tbody > tr > th,
+.table-condensed-y > tfoot > tr > th,
+.table-condensed-y > thead > tr > td,
+.table-condensed-y > tbody > tr > td,
+.table-condensed-y > tfoot > tr > td {
+	padding-bottom: 5px;
+	padding-top: 5px;
+}
+
+.table-condensed td.uncondensed, 
+.table-condensed-y td.uncondensed {
+	padding: 8px;
+}
+
+/*
+	************************* ICJIA BUTTON MODIFIERS **************************
+*/
+.btn-outline {
+	background-color: transparent;
+}
+
+.btn-white {
+	background-color: white;
+}
+
+.btn-icon {
+	background-color: transparent;
+	width: 24px; /* KMS DO this won't work with different button sizes */
+}
+
+.btn-icon,
+.btn-icon:hover,
+.btn-icon:focus,
+.btn-icon.focus,
+.btn-icon:active,
+.btn-icon.active,
+.btn-icon:active:hover,
+.btn-icon.active:hover,
+.btn-icon:active:focus,
+.btn-icon.active:focus,
+.btn-icon:active.focus,
+.btn-icon.active.focus {
+	border-color: transparent;
+}
+
+/*
+	******************************* BORDER COLORS ********************************
+*/
+.text-hot {
+    color: #d83200;
+}
+
+a.text-hot:hover,
+a.text-hot:focus {
+    color: #a52600;
+}
+
+/*
+	******************************* BORDER COLORS ********************************
+*/
+.border-default {
+    border-color: #777777;
+}
+
+.border-success {
+    border-color: #307a00;
+}
+
+.border-info {
+    border-color: #007295;
+}
+
+.border-warning {
+    border-color: #856939;
+}
+
+.border-hot {
+    border-color: #d83200;
+}
+
+.border-danger {
+    border-color: #a94442;
+}
+
+/*
+	**************************** CAROUSEL INDICATORS *****************************
+*/
+.carousel-indicators .indicator {
+    margin: 0;
+    height: 12px;
+    width: 12px;
+    opacity: .45;
+}
+
+.carousel-indicators .indicator.active {
+    opacity: 1;
+}
+
+.carousel-indicators .indicator.indicator-default {
+    border-color: #777777;
+    background-color: #777777;
+}
+
+.carousel-indicators .indicator.indicator-success {
+    border-color: #307a00;
+    background-color: #307a00;
+}
+
+.carousel-indicators .indicator.indicator-info {
+    border-color: #007295;
+    background-color: #007295;
+}
+
+.carousel-indicators .indicator.indicator-warning {
+    border-color: #856939;
+    background-color: #856939;
+}
+
+.carousel-indicators .indicator.indicator-hot {
+    border-color: #d83200;
+    background-color: #d83200;
+}
+
+.carousel-indicators .indicator.indicator-danger {
+    border-color: #a94442;
+    background-color: #a94442;
+}
+
+/*
+	**************************** BTN-LINK COLORS *****************************
+*/
+.btn-link-default {
+    color: #777777;
+}
+
+.btn-link-default:hover,
+.btn-link-default:focus {
+    color: #515151;
+}
+
+.btn-link-default[disabled]:hover,
+fieldset[disabled] .btn-link-default:hover,
+.btn-link-default[disabled]:focus,
+fieldset[disabled] .btn-link-default:focus {
+    color: #aaaaaa;
+}
+
+.btn-link-success {
+    color: #307a00;
+}
+
+.btn-link-success:hover,
+.btn-link-success:focus {
+    color: #122e00;
+}
+
+.btn-link-success[disabled]:hover,
+fieldset[disabled] .btn-link-success:hover,
+.btn-link-success[disabled]:focus,
+fieldset[disabled] .btn-link-success:focus {
+    color: #777777;
+}
+
+.btn-link-info {
+    color: #007295;
+}
+
+.btn-link-info:hover,
+.btn-link-info:focus {
+    color: #003749;
+}
+
+.btn-link-info[disabled]:hover,
+fieldset[disabled] .btn-link-info:hover,
+.btn-link-info[disabled]:focus,
+fieldset[disabled] .btn-link-info:focus {
+    color: #777777;
+}
+
+.btn-link-warning {
+    color: #856939;
+}
+
+.btn-link-warning:hover,
+.btn-link-warning:focus {
+    color: #4f3f22;
+}
+
+.btn-link-warning[disabled]:hover,
+fieldset[disabled] .btn-link-warning:hover,
+.btn-link-warning[disabled]:focus,
+fieldset[disabled] .btn-link-warning:focus {
+    color: #777777;
+}
+
+.btn-link-hot {
+    color: #d83200;
+}
+
+.btn-link-hot:hover,
+.btn-link-hot:focus {
+    color: #8c2000;
+}
+
+.btn-link-hot[disabled]:hover,
+fieldset[disabled] .btn-link-hot:hover,
+.btn-link-hot[disabled]:focus,
+fieldset[disabled] .btn-link-hot:focus {
+    color: #777777;
+}
+
+.btn-link-danger {
+    color: #a94442;
+}
+
+.btn-link-danger:hover,
+.btn-link-danger:focus {
+    color: #722e2d;
+}
+
+.btn-link-danger[disabled]:hover,
+fieldset[disabled] .btn-link-danger:hover,
+.btn-link-danger[disabled]:focus,
+fieldset[disabled] .btn-link-danger:focus {
+    color: #777777;
+}
+
+/*
+	************************** ICJIA Search/Edit Links/Buttons ***************************
+*/
+/* KMS DO this obviously doesn't belong here */
+.btn-search-edit {
+	padding-top: 0;
+	padding-bottom: 0;
+	padding-left: 4px;
+	padding-right: 4px;
+	border-radius: 2px;
+}
+
+.btn-search-edit-dropdown {
+	padding-top: 0;
+	padding-bottom: 0;
+	padding-left: 4px;
+	padding-right: 4px;
+	border-radius: 2px;
+}
+
+.btn-borderless {
+	border: 0;
+}
+
+
+/*
+	************************** ICJIA CHECKBOX GROUP ***************************
+	Intended to contain a series of .checkbox's.  .checkbox leaves excessive
+	margins above the first .checkbox and beneath the last one.
+	icjia-checkbox-group negates those margins.  Also, bootstrap carves out
+	some space above and to the right of checkbox inputs to give them some
+	breathing room, but bootstrap doesn't do anything for their left sides.
+	icjia-checkbox-group pads the .checkbox's to give them similar breathing
+	room on the left.
+*/
+.icjia-checkbox-group {
+	margin-top: -10px; /* negate bootstrap checkbox margin-top */
+	margin-bottom: -10px; /* negate bootstrap checkbox margin-bottom */
+	padding-left: 4px;
+}
+
+.icjia-checkbox-group .checkbox > input[type="checkbox"] {
+	margin-left: 0;
+}
+
+.icjia-checkbox-group + .help-block {
+	padding-top: 5px; /* compensate for above */
+}
+
+.icjia-checkbox-group.label-weight-normal label {
+	font-weight: normal;
+}
+
+
+/*
+	*********************** ICJIA FIELDSET FORM GROUP *************************
+	When fieldsets are used as form-group's, style the legend like a label and
+	compensate for last-child .help-block bottom margins.
+*/
+fieldset.form-group > legend {
+	/* undo bootstrap legend style... */
+	width: inherit;
+	padding: inherit;
+	font-size: inherit;
+	line-height: inherit;
+	color: inherit;
+	border: inherit;
+	/* then apply bootstrap label style... */
+	display: inline-block;
+	max-width: 100%;
+	margin-bottom: 5px;
+	font-weight: bold;
+}
+
+.has-error fieldset.form-group > legend {
+	color: #a94442; /* has-error color used for labels */
+}
+
+fieldset.form-group.has-error > legend {
+	color: #a94442; /* has-error color used for labels */
+}
+
+fieldset.form-group > .help-block:last-child {
+	margin-bottom: -5px; /* eliminate margin-bottom and negate margin-top */
+}
+
+
+/*
+	****************************** ICJIA MODAL ********************************
+*/
+.icjia-modal-danger > .modal-content > .modal-header {
+	color: #a94442; /* panel-danger color */
+	background-color: #f2dede; /* panel-danger background-color */
+}
+
+.icjia-modal-warning > .modal-content > .modal-header {
+	color: #856939;
+	background-color: #f9f0cd;
+}
+
+
+/*
+	**************************** ICJIA WELL FOOTER ****************************
+*/
+.icjia-well-footer {
+	padding: 10px 19px 14px;
+	margin: 0 -19px -19px -19px;
+	border-bottom-right-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
+
+
+/*
+	************************* ICJIA TABLE BORDERLESS2 *************************
+*/
+.table.table-borderless > thead > tr > th,
+.table.table-borderless > tbody > tr > th,
+.table.table-borderless > tfoot > tr > th,
+.table.table-borderless > thead > tr > td,
+.table.table-borderless > tbody > tr > td,
+.table.table-borderless > tfoot > tr > td {
+	border: none;
+}
+
+.table.table-borderless.table-borderless-stretch {
+	margin-left: -8px;
+	margin-right: -8px;
+}
+
+
+/*
+	****************************** ICJIA COLLAPSE *****************************
+*/
+.rotate-90-if-collapsed {
+	transform: rotate(0);
+	transition-property: transform;
+	transition-duration: 0.35s; /* bootstrap.css .collapsing transition-duration */
+	transition-timing-function: ease; /* bootstrap.css .collapsing transition-timing-function */
+}
+
+.collapsed .rotate-90-if-collapsed {
+	transform: rotate(90deg);
+	transition-property: transform;
+	transition-duration: 0.35s; /* bootstrap.css .collapsing transition-duration */
+	transition-timing-function: ease; /* bootstrap.css .collapsing transition-timing-function */
+}
+
+
+/*
+	***************************** CENTERING BLOCKS ****************************
+*/
+
+.center-y {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.center-xy {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-right: -50%;
+	transform: translate(-50%, -50%);
+}
+
+@media screen and (min-width: 768px) {
+	.center-xy-sm {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		margin-right: -50%;
+		transform: translate(-50%, -50%);
+	}
+}
+
+
+/*
+	************************** ICJIA STICKY FOOTER ****************************
+	A footer that sticks to the bottom of the window for pages with documents
+	shorter than the window (and remains at the bottom of the document for
+	longer pages).
+*/
+.icjia-sticky-footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 50px; /* icjia-page-footer height (including margins) */
+}
+
+.icjia-page-footer {
+	border-top: 1px solid #eee; /* page-header bottom-border */
+	padding-top: 14px; /* page-header padding-bottom */
+	margin-bottom: 15px; /* icjia-page-footer padding-top + border-top-width */
+}
+
+.icjia-page-side {
+	margin-top: 20px; /* page-header margin-top */
+	z-index: 1000;
+}
+
+
+/*
+	**************************** SCROLLING MARQUEE ****************************
+*/
+.marquee {
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.marquee .marquee-content {
+	display: inline-block;
+	padding-left: 100%;
+	animation: marquee 30s linear 3s infinite;
+}
+
+@keyframes marquee {
+	0%   { transform: translate(0, 0); }
+	100% { transform: translate(-100%, 0); }
+}
+
+
+/*
+	********************************** PULSE **********************************
+*/
+.pulse {
+	animation: pulse 1.5s steps(15, start) 3s infinite alternate;
+}
+
+@keyframes pulse { 80% { opacity: 1} 100% { opacity: 0.3; } }
+
+
+/*
+	********************************** BLINK **********************************
+*/
+.blink {
+	animation: blink 3s steps(15, start) 3s infinite;
+}
+
+@keyframes blink { to { visibility: hidden; } }
+
+
+/*
+	****************************** PIVOT TABLES *******************************
+*/
+
+.pivot {
+	margin: 1px; /* ensure borders are visible */
+	display: inline-block;
+}
+
+.pivot td,
+.pivot th {
+	padding: 5px;
+}
+
+.pivot > thead > tr > th,
+.pivot > thead > tr > td {
+	border-bottom-width: 1px;
+}
+
+.pivot .pivot-spacer {
+	border: none;
+}
+
+.pivot .pivot-row-dimension {
+	text-align: center;
+	font-style: italic;
+	font-weight: normal;
+	border: none;
+	color: #707070;
+}
+
+.pivot .pivot-column-dimension {
+	text-align: right;
+	vertical-align: middle;
+	font-style: italic;
+	font-weight: normal;
+	border: none;
+	color: #707070;
+}
+
+.pivot .pivot-row-header {
+	background-color: #f5f5f5;
+	border: 1px solid #dddddd;
+	text-align: center;
+}
+
+.pivot .pivot-column-header {
+	text-align: center;
+	vertical-align: middle;
+	background-color: #f5f5f5;
+	border: 1px solid #dddddd;
+}
+
+.pivot .pivot-cell {
+	text-align: right;
+	border: 1px solid #dddddd;
+}
+
+.pivot .pivot-row-total {
+	text-align: right;
+	font-weight: bold;
+	border: 1px solid #dddddd;
+	background-color: #f5f5f5;
+}
+
+.pivot .pivot-column-total {
+	text-align: right;
+	font-weight: bold;
+	border: 1px solid #dddddd;
+	background-color: #f5f5f5;
+}
+
+.pivot .pivot-total-row-header {
+	text-align: right;
+}
+
+.pivot .pivot-total-column-header {
+	text-align: center;
+	vertical-align: bottom;
+}
+
+.pivot caption {
+	caption-side: bottom;
+	text-align: center;
+	font-style: italic;
+	color: #707070;
+	padding-bottom: 0;
+}
+
+
+/*
+	******************************* DATA TABLES *******************************
+*/
+
+.data {
+	margin: 1px; /* ensure borders are visible */
+	display: inline-block;
+}
+
+.data td,
+.data th {
+	padding: 5px 10px;
+}
+
+.data th {
+	text-align: center;
+	vertical-align: middle;
+	background-color: #f5f5f5;
+	border: 1px solid #dddddd;
+}
+
+.data td {
+	text-align: left;
+	border: 1px solid #dddddd;
+}
+
+.data .data-summary {
+	font-weight: bold;
+	text-align: right;
+	background-color: #f5f5f5;
+}
+
+.data caption {
+	caption-side: bottom;
+	text-align: center;
+	font-style: italic;
+	color: #707070;
+	padding-bottom: 0;
+}
+
+
+/*
+	******************************* ACCESS KEYS *******************************
+*/
+.access-key {
+	text-decoration: underline;
+}
+
+
+/*
+	******************************* PAGE BREAKS *******************************
+*/
+.avoid-break {
+	break-inside: avoid-page;
+	page-break-inside: avoid;
+}
+.avoid-break-before {
+	break-before: avoid-page;
+	page-break-before: avoid;
+}
+.avoid-break-after {
+	break-after: avoid-page;
+	page-break-after: avoid;
+}
+
+
+/*
+	************************** BOOTSTRAP 4 UTILITIES **************************
+*/
+.mt-0 {
+	margin-top: 0 !important;
+}
+
+.mr-0 {
+	margin-right: 0 !important;
+}
+
+.mb-0 {
+	margin-bottom: 0 !important;
+}
+
+.ml-0 {
+	margin-left: 0 !important;
+}
+
+.pt-0 {
+    padding-top: 0 !important;
+}
+
+.pr-0 {
+	padding-right: 0 !important;
+}
+
+.pb-0 {
+	padding-bottom: 0 !important;
+}
+
+.pl-0 {
+	padding-left: 0 !important;
+}
+
+/*Fixes scrollbar dissappearing in IE11*/
+@-ms-viewport{width:auto!important}

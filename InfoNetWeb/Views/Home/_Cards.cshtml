@@ -1,0 +1,39 @@
+﻿@model IEnumerable<SystemMessage>
+
+<div>
+    @foreach (var each in Model) {
+        string priority = each.IsHot ? "hot" : (each.IsNew ? "info" : "primary");
+
+        <div data-icjia-role="cardWrapper">
+            @* ^^^ Protects Inner "card" div from being removed by Salvattore *@
+            <div class="card border-@priority">
+                <h2>
+                    <strong>@each.Title</strong>
+                </h2>
+                @if (each.PostedDate != null) {
+                    <p>
+                        <strong>POSTED |</strong>
+                        @($"{each.PostedDate:MMMM d, yyyy}")
+                        @if (each.IsNew) {
+                            <strong>| <span class="text-@priority">NEW</span></strong>
+                        }
+                    </p>
+                }
+                @if (!string.IsNullOrEmpty(each.Message)) {
+                    <p>@Html.Raw(each.Message)</p>
+                }
+                @if (!string.IsNullOrEmpty(each.LinkUrl)) {
+                    <p class="text-right">
+                        @if (each.IsDownload) {
+                            <a class="btn btn-default btn-white btn-borderless" href="@each.LinkUrl">@(each.LinkText ?? "Download") <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span></a>
+                        } else if (Url.IsLocalUrl(each.LinkUrl)) {
+	                        <a class="btn btn-link btn-link-@priority" href="@each.LinkUrl">@(each.LinkText ?? "Let's Do It!")</a>
+						} else {
+                            <a class="btn btn-link btn-link-@priority" href="@each.LinkUrl" target="_blank">@(each.LinkText ?? "Learn More") <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a>
+                        }
+                    </p>
+                }
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,893 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.2\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.2\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{68E9D3CD-BDB9-487E-B311-17997E7FCCD0}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Infonet.Web</RootNamespace>
+    <AssemblyName>InfonetWeb</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AuthorizedActionLink, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AuthorizedActionLink.2.2.0.0\lib\net40\AuthorizedActionLink.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EFHooks, Version=2.3.0.0, Culture=neutral, PublicKeyToken=1386ae34114c35cf, processorArchitecture=MSIL">
+      <HintPath>..\packages\Atreyu.EFHooks.2.3.1\lib\net45\EFHooks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.2\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Rotativa, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rotativa.1.7.3\lib\net461\Rotativa.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.2.5.0\lib\net46\Serilog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Serilog.Sinks.Async, Version=1.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.Sinks.Async.1.1.0\lib\net45\Serilog.Sinks.Async.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Serilog.Sinks.File, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.Sinks.File.3.2.0\lib\net45\Serilog.Sinks.File.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Serilog.Sinks.RollingFile, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.Sinks.RollingFile.3.3.0\lib\net45\Serilog.Sinks.RollingFile.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdHocController.cs" />
+    <Compile Include="Controllers\AgencyLookupController.cs" />
+    <Compile Include="Controllers\AggregateInformationController.cs" />
+    <Compile Include="Controllers\ContactLookupController.cs" />
+    <Compile Include="Controllers\CrisisInterventionController.cs" />
+    <Compile Include="Controllers\DirectorEmailController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\EventController.cs" />
+    <Compile Include="Controllers\ExportClientInfoController.cs" />
+    <Compile Include="Controllers\ExportStaffInfoController.cs" />
+    <Compile Include="Controllers\InfonetControllerBase.cs" />
+    <Compile Include="Controllers\CaseController.cs" />
+    <Compile Include="Controllers\FundingForStaffController.cs" />
+    <Compile Include="Controllers\CenterInformationController.cs" />
+    <Compile Include="Controllers\CommunityServicesController.cs" />
+    <Compile Include="Controllers\FundingSourceLookupController.cs" />
+    <Compile Include="Controllers\HotlineController.cs" />
+    <Compile Include="Controllers\OffenderController.cs" />
+    <Compile Include="Controllers\PreventDuplicateRequestAttribute.cs" />
+    <Compile Include="Controllers\RelationshipController.cs" />
+    <Compile Include="Controllers\OtherStaffActivityLookupController.cs" />
+    <Compile Include="Controllers\HouseholdsController.cs" />
+    <Compile Include="Controllers\OtherStaffActivityController.cs" />
+    <Compile Include="Controllers\PersonnelController.cs" />
+    <Compile Include="Controllers\PublicationController.cs" />
+    <Compile Include="Controllers\ReportAdminController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Controllers\RolesAdminController.cs" />
+    <Compile Include="Controllers\ServiceController.cs" />
+    <Compile Include="Controllers\ServiceFileUploadController.cs" />
+    <Compile Include="Controllers\ServiceOutcomeController.cs" />
+    <Compile Include="Controllers\MessageAdminController.cs" />
+    <Compile Include="Controllers\TurnAwayController.cs" />
+    <Compile Include="Controllers\UsersAdminController.cs" />
+    <Compile Include="Controllers\USPSController.cs" />
+    <Compile Include="Models\Reporting\ReportFilterListGenerator.cs" />
+    <Compile Include="Mvc\Binding\BindHints.cs" />
+    <Compile Include="Mvc\Binding\StringTrimModelBindingRule.cs" />
+    <Compile Include="Mvc\Collections\JTokenExtensions.cs" />
+    <Compile Include="Mvc\Html\MvcHtmlStringExtensions.cs" />
+    <Compile Include="Mvc\RecentClient.cs" />
+    <Compile Include="Mvc\Validation\BetweenNineteenFiftyTodayAttributeAdapter.cs" />
+    <Compile Include="Mvc\Validation\BetweenNineteenThirtyTodayAttributeAdapter.cs" />
+    <Compile Include="Mvc\Validation\ResidenceMoveDateBeforeFirstContactAttributeAdapter.cs" />
+    <Compile Include="Mvc\Validation\CompareWithDateAttributeAdapter.cs" />
+    <Compile Include="Mvc\Validation\FileExtensionAttributeAdapter.cs" />
+    <Compile Include="Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Utilities\UsersActivity.cs" />
+    <Compile Include="ViewModels\Case\AllegationRespondent.cs" />
+    <Compile Include="ViewModels\Case\CancellationsEdit.cs" />
+    <Compile Include="ViewModels\Case\CancellationsAdd.cs" />
+    <Compile Include="ViewModels\Case\CancellationsSearchDates.cs" />
+    <Compile Include="ViewModels\Case\DepartureAdd.cs" />
+    <Compile Include="ViewModels\Case\DirectServiceAdd.cs" />
+    <Compile Include="ViewModels\Case\DirectServiceEdit.cs" />
+    <Compile Include="ViewModels\Case\DirectServicesSearchDates.cs" />
+    <Compile Include="ViewModels\Case\HousingServicesAdd.cs" />
+    <Compile Include="ViewModels\Case\HousingServicesModify.cs" />
+    <Compile Include="ViewModels\Case\HousingServicesSearchDates.cs" />
+    <Compile Include="ViewModels\Case\ListAgency.cs" />
+    <Compile Include="ViewModels\Case\OtherCase.cs" />
+    <Compile Include="ViewModels\Case\ReferralAdd.cs" />
+    <Compile Include="ViewModels\Case\ReferralEdit.cs" />
+    <Compile Include="ViewModels\Case\ReferralSearchDates.cs" />
+    <Compile Include="ViewModels\Case\StaffMember.cs" />
+    <Compile Include="Mvc\Html\HelpExtensions.cs" />
+    <Compile Include="Mvc\Collections\LookupSelectionExtensions.cs" />
+    <Compile Include="Mvc\Collections\ModelStateDictionaryExtensions.cs" />
+    <Compile Include="Mvc\SessionCenter.cs" />
+    <Compile Include="Mvc\Validation\NotGreaterThanTodayAttributeAdapter.cs" />
+    <Compile Include="Mvc\Validation\NotLessThanNineteenSeventyAttributeAdapter.cs" />
+    <Compile Include="Mvc\Validation\BetweenJulyTwoThousandEightTodayAttributeAdapter.cs" />
+    <Compile Include="Mvc\Validation\BetweenNineteenNinetyTodayAttributeAdapter.cs" />
+    <Compile Include="Mvc\Validation\QuarterIncrementAttributeAdapter.cs" />
+    <Compile Include="Mvc\Validation\BetweenNineteenSeventyTodayAttributeAdapter.cs" />
+    <Compile Include="Mvc\Validation\WholeNumberAttributeAdapter.cs" />
+    <Compile Include="Mvc\Collections\ViewDataDictionaryExtensions.cs" />
+    <Compile Include="ViewModels\Account\AdminViewModel.cs" />
+    <Compile Include="Mvc\Authorization\HasShelterAttribute.cs" />
+    <Compile Include="Mvc\Authorization\DenyCoalitionAttribute.cs" />
+    <Compile Include="Mvc\HttpSessionStateBaseExtensions.cs" />
+    <Compile Include="ViewModels\Case\CaseOutline.cs" />
+    <Compile Include="Controllers\GroupServiceController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Mvc\Html\AttributeSet.cs" />
+    <Compile Include="Mvc\Html\AttributeExtensions.cs" />
+    <Compile Include="Mvc\Html\InputExtensions.cs" />
+    <Compile Include="Mvc\Html\MustacheExtensions.cs" />
+    <Compile Include="Mvc\Html\MvcMustache.cs" />
+    <Compile Include="Mvc\Authorization\IdentityExtensions.cs" />
+    <Compile Include="Mvc\Html\SnippetExtensions.cs" />
+    <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ClientController.cs" />
+    <Compile Include="Mvc\Binding\DerivedDictionaryRule.cs" />
+    <Compile Include="Mvc\Binding\IModelBindingRule.cs" />
+    <Compile Include="Mvc\Binding\ModelBindingRuleSet.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\Account\AccountViewModels.cs" />
+    <Compile Include="Models\Identity\IdentityModels.cs" />
+    <Compile Include="ViewModels\Account\ManageViewModels.cs" />
+    <Compile Include="Mvc\Binding\Microsoft\TypeDescriptorHelper.cs" />
+    <Compile Include="Mvc\Binding\Microsoft\TypeHelpers.cs" />
+    <Compile Include="Mvc\Html\LookupExtensions.cs" />
+    <Compile Include="Mvc\Validation\FileExtensionAttribute.cs" />
+    <Compile Include="Mvc\WebViewPage.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\Admin\AgenciesLookupViewModel.cs" />
+    <Compile Include="ViewModels\Admin\ContactLookupViewModel.cs" />
+    <Compile Include="ViewModels\Admin\DirectorEmailViewModel.cs" />
+    <Compile Include="ViewModels\Admin\ExportClientInfoViewModel.cs" />
+    <Compile Include="ViewModels\Admin\ExportStaffInfoViewModel.cs" />
+    <Compile Include="ViewModels\Admin\FundingForStaff.cs" />
+    <Compile Include="ViewModels\Admin\CenterInfoViewModel.cs" />
+    <Compile Include="ViewModels\Admin\FundingSourceLookupViewModel.cs" />
+    <Compile Include="ViewModels\Admin\OtherStaffActivityLookUpViewModel.cs" />
+    <Compile Include="ViewModels\Admin\PersonnelSearchViewModel.cs" />
+    <Compile Include="ViewModels\Admin\PersonnelViewModel.cs" />
+    <Compile Include="ViewModels\Admin\ServiceFileUploadModel.cs" />
+    <Compile Include="ViewModels\CaseSearchViewModel.cs" />
+    <Compile Include="ViewModels\Clients\AggregateInformationViewModel.cs" />
+    <Compile Include="ViewModels\Clients\HouseholdSearchViewModel.cs" />
+    <Compile Include="ViewModels\Clients\HouseholdViewModel.cs" />
+    <Compile Include="ViewModels\Clients\RelationshipSearchViewModel.cs" />
+    <Compile Include="ViewModels\Clients\RelationshipViewModel.cs" />
+    <Compile Include="ViewModels\CommInstSearchViewModel.cs" />
+    <Compile Include="ViewModels\CommunityInstitutionalServicesViewModel.cs" />
+    <Compile Include="ViewModels\Offender\OffenderSearchViewModel.cs" />
+    <Compile Include="ViewModels\Reporting\CompletedScheduledReportViewModel.cs" />
+    <Compile Include="ViewModels\Services\GroupServiceViewModel.cs" />
+    <Compile Include="ViewModels\Services\CrisisSearchViewModel.cs" />
+    <Compile Include="ViewModels\Services\CrisisViewModel.cs" />
+    <Compile Include="ViewModels\Services\EventSearchViewModel.cs" />
+    <Compile Include="ViewModels\Services\HotlineSearchViewModel.cs" />
+    <Compile Include="ViewModels\Services\EventViewModel.cs" />
+    <Compile Include="ViewModels\Services\HotlineViewModel.cs" />
+    <Compile Include="ViewModels\Services\OtherStaffActivitySearchViewModel.cs" />
+    <Compile Include="ViewModels\Services\OtherStaffActivityViewModel.cs" />
+    <Compile Include="ViewModels\Services\PublicationViewModel.cs" />
+    <Compile Include="ViewModels\Services\PublicationSearchViewModel.cs" />
+    <Compile Include="ViewModels\Services\TurnAwayViewModel.cs" />
+    <Compile Include="ViewModels\Services\ServiceOutcomeViewModel.cs" />
+    <Compile Include="ViewModels\Shared\ClientSearchViewModel.cs" />
+    <Compile Include="ViewModels\Shared\IDateRange.cs" />
+    <Compile Include="ViewModels\Shared\Marquee.cs" />
+    <Compile Include="ViewModels\Shared\PagedListPaginationViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="apple-touch-icon.png" />
+    <Content Include="Content\bootstrap-chosen.css" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\ICJIA\bootstrap-buttons.css" />
+    <Content Include="Content\chosen-sprite%402x.png" />
+    <Content Include="Content\chosen-sprite.png" />
+    <Content Include="Content\ICJIA\bootstrap-chosen-addons.css" />
+    <Content Include="Content\ICJIA\bootstrap-container-widths.css" />
+    <Content Include="Content\ICJIA\bootstrap-dirtyforms.css" />
+    <Content Include="Content\ICJIA\bootstrap-panel-overlays.css" />
+    <Content Include="Content\ICJIA\ADMIN\bootstrap-addons-admin.css" />
+    <Content Include="Content\ICJIA\ADMIN\bootstrap-btn-primary-admin.css" />
+    <Content Include="Content\ICJIA\ADMIN\bootstrap-admin.css" />
+    <Content Include="Content\ICJIA\ADMIN\icjia-logo-admin.css" />
+    <Content Include="Content\ICJIA\ADMIN\icjia-misc-admin.css" />
+    <Content Include="Content\ICJIA\ADMIN\icjia-panel-header-btn-admin.css" />
+    <Content Include="Content\ICJIA\ADMIN\icjia-stacked-nav-admin.css" />
+    <Content Include="Content\ICJIA\CAC\bootstrap-addons-cac.css" />
+    <Content Include="Content\ICJIA\CAC\bootstrap-btn-primary-cac.css" />
+    <Content Include="Content\ICJIA\CAC\bootstrap-cac.css" />
+    <Content Include="Content\ICJIA\CAC\icjia-logo-cac.css" />
+    <Content Include="Content\ICJIA\CAC\icjia-misc-cac.css" />
+    <Content Include="Content\ICJIA\CAC\icjia-panel-header-btn-cac.css" />
+    <Content Include="Content\ICJIA\CAC\icjia-stacked-nav-cac.css" />
+    <Content Include="Content\ICJIA\checkbox.css" />
+    <Content Include="Content\ICJIA\DV\bootstrap-btn-primary-dv.css" />
+    <Content Include="Content\ICJIA\DV\bootstrap-dv.css" />
+    <Content Include="Content\ICJIA\DV\icjia-logo-dv.css" />
+    <Content Include="Content\ICJIA\DV\icjia-misc-dv.css" />
+    <Content Include="Content\ICJIA\DV\icjia-panel-header-btn-dv.css" />
+    <Content Include="Content\ICJIA\full-screen-spinner.css" />
+    <Content Include="Content\ICJIA\DV\icjia-stacked-nav-dv.css" />
+    <Content Include="Content\ICJIA\multiselect.css" />
+    <Content Include="Content\ICJIA\pagination.css" />
+    <Content Include="Content\ICJIA\DV\bootstrap-addons-dv.css" />
+    <Content Include="Content\ICJIA\SA\bootstrap-addons-sa.css" />
+    <Content Include="Content\ICJIA\SA\bootstrap-btn-primary-sa.css" />
+    <Content Include="Content\ICJIA\SA\bootstrap-sa.css" />
+    <Content Include="Content\ICJIA\SA\icjia-logo-sa.css" />
+    <Content Include="Content\ICJIA\SA\icjia-misc-sa.css" />
+    <Content Include="Content\ICJIA\SA\icjia-panel-header-btn-sa.css" />
+    <Content Include="Content\ICJIA\SA\icjia-stacked-nav-sa.css" />
+    <Content Include="Content\ICJIA\session-tracker.css" />
+    <Content Include="Content\Images\ajax-loader.gif" />
+    <Content Include="Content\bootstrap-datepicker3.css" />
+    <Content Include="Content\bootstrap-datepicker3.min.css" />
+    <Content Include="Content\Images\IllinoisSeal.svg" />
+    <Content Include="Content\Images\logo-cdfss-ffffff.png" />
+    <Content Include="Content\Images\logo-caci-ffffff.png" />
+    <Content Include="Content\Images\logo-icadv-ffffff.png" />
+    <Content Include="Content\Images\logo-icasa-ffffff.png" />
+    <Content Include="Content\Images\logo-icjia-cbece7.png" />
+    <Content Include="Content\Images\logo-icjia-dbe9f6.png" />
+    <Content Include="Content\Images\logo-icjia-e8d6ff.png" />
+    <Content Include="Content\Images\logo-idhs-ffffff.png" />
+    <Content Include="Content\Views\Case\Edit.css" />
+    <Content Include="Content\Images\logo-icjia-ffffff.png" />
+    <Content Include="Content\PagedList.css" />
+    <Content Include="Content\Typeahead.css" />
+    <Content Include="Content\Views\Home\Index.css" />
+    <Content Include="Content\Views\FundingForStaff\main.css" />
+    <Content Include="Content\Views\FundingForStaff\reports.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Rotativa\help-wkhtmltoimage.txt" />
+    <Content Include="Rotativa\help-wkhtmltopdf.txt" />
+    <Content Include="Rotativa\wkhtmltoimage.exe" />
+    <Content Include="Rotativa\wkhtmltopdf.exe" />
+    <Content Include="Scripts\chosen.jquery.js" />
+    <Content Include="Scripts\chosen.jquery.min.js" />
+    <Content Include="Scripts\chosen.order.jquery.js" />
+    <Content Include="Scripts\chosen.order.jquery.min.js" />
+    <Content Include="Scripts\ICJIA\bootstrap.datepicker.addons.js" />
+    <Content Include="Scripts\ICJIA\bootstrap.datepicker.js" />
+    <Content Include="Scripts\ICJIA\bootstrap.addons.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Content\bootstrap-notify.css" />
+    <Content Include="Content\ICJIA\bootstrap-addons.css" />
+    <Content Include="Content\FFS_Guidebook_3-18-15.pdf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="App_Browsers\qt.browser" />
+    <None Include="Properties\PublishProfiles\Hebe1.Infonet.icjia.org.pubxml" />
+    <None Include="Properties\PublishProfiles\Hebesvr Production.pubxml" />
+    <None Include="Properties\PublishProfiles\Hebesvr Test-Infonet.pubxml" />
+    <None Include="Properties\PublishProfiles\Infonet_Dev6.pubxml" />
+    <None Include="Properties\PublishProfiles\Infonet_Iris-BatchSvr.pubxml" />
+    <None Include="Properties\PublishProfiles\msfw2008_icjia.pubxml" />
+    <None Include="Properties\PublishProfiles\Spac3Srv-Infonet.pubxml" />
+    <None Include="Properties\PublishProfiles\Spac3Srv-InfonetTest.pubxml" />
+    <None Include="Properties\PublishProfiles\TestDeployPackage.pubxml" />
+    <None Include="Scripts\jquery-3.1.0.intellisense.js" />
+    <Content Include="Scripts\ICJIA\broadcast.js" />
+    <Content Include="Scripts\caps-lock.js" />
+    <Content Include="Scripts\ICJIA\date-ranges.js" />
+    <Content Include="Scripts\ICJIA\debounce.js" />
+    <Content Include="Scripts\ICJIA\icjia-loading.js" />
+    <Content Include="Scripts\ICJIA\jquery.ajax.setup.js" />
+    <Content Include="Scripts\ICJIA\pagedlist.js" />
+    <Content Include="Scripts\ICJIA\jquery.fadeslide.js" />
+    <Content Include="Scripts\ICJIA\session-tracker.js" />
+    <Content Include="Scripts\ICJIA\state-county.js" />
+    <Content Include="Scripts\ICJIA\get-url-parameter.js" />
+    <Content Include="Scripts\ICJIA\system-growl.js" />
+    <Content Include="Scripts\ICJIA\errors-clear-format.js" />
+    <Content Include="Scripts\ICJIA\usps-typeahead.js" />
+    <Content Include="Scripts\jquery.bootstrap-growl.js" />
+    <Content Include="Scripts\jquery.bootstrap-growl.min.js" />
+    <Content Include="Scripts\ICJIA\jquery.multiselect.js" />
+    <Content Include="Scripts\jquery-3.1.0.js" />
+    <Content Include="Scripts\jquery-3.1.0.min.js" />
+    <Content Include="Scripts\jquery-3.1.0.min.map" />
+    <Content Include="Scripts\ICJIA\jquery.confirm.addons.js" />
+    <Content Include="Scripts\jquery.confirm.js" />
+    <Content Include="Scripts\jquery.confirm.min.js" />
+    <Content Include="Scripts\jquery.dirtyforms.dialogs.bootstrap.min.js" />
+    <Content Include="Scripts\ICJIA\jquery.dirtyforms.addons.js" />
+    <Content Include="Scripts\jquery.dirtyforms.js" />
+    <Content Include="Scripts\jquery.dirtyforms.min.js" />
+    <Content Include="Scripts\jquery.dirtyforms.min.js.map" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\ICJIA\jquery.regex.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\ICJIA\locales\bootstrap.datepicker.en-AU.min.js" />
+    <Content Include="Scripts\ICJIA\locales\bootstrap.datepicker.en-GB.min.js" />
+    <Content Include="Scripts\ICJIA\locales\bootstrap.datepicker.es.min.js" />
+    <Content Include="Scripts\mustache.js" />
+    <Content Include="Scripts\mustache.min.js" />
+    <Content Include="Scripts\Mvc\Validation\between-nineteenfifty-today.js" />
+    <Content Include="Scripts\Mvc\Validation\between-nineteenthirty-today.js" />
+    <Content Include="Scripts\Mvc\Validation\compare-with-date.js" />
+    <Content Include="Scripts\Mvc\Validation\between-nineteenninety-today.js" />
+    <Content Include="Scripts\Mvc\Validation\not-earlier-than-first-contact-date.js" />
+    <Content Include="Scripts\Mvc\Validation\not-greater-than-first-contact-date.js" />
+    <Content Include="Scripts\Mvc\Validation\sentence-before-charge.js" />
+    <Content Include="Scripts\Mvc\Validation\number-of-children.js" />
+    <Content Include="Scripts\Mvc\Validation\service-group-required.js" />
+    <Content Include="Scripts\Mvc\Validation\service-outcome-client-service-group.js" />
+    <Content Include="Scripts\Mvc\Validation\not-earlier-than-one-year-prior-first-contact-date.js" />
+    <Content Include="Scripts\Mvc\Validation\file-extension.js" />
+    <Content Include="Scripts\Mvc\Validation\whole-number.js" />
+    <Content Include="Scripts\pagination.js" />
+    <Content Include="Scripts\salvattore-1.0.8-balanced-columns.js" />
+    <Content Include="Scripts\salvattore-1.0.8-balanced-columns.min.js" />
+    <Content Include="Scripts\typeahead.jquery.js" />
+    <Content Include="Scripts\Mvc\Validation\between-july-twothousandeight-today.js" />
+    <Content Include="Scripts\Mvc\Validation\between-nineteenseventy-today.js" />
+    <Content Include="Scripts\Mvc\Validation\not-greater-than-today.js" />
+    <Content Include="Scripts\Mvc\Validation\not-less-than-nineteenseventy.js" />
+    <Content Include="Scripts\Mvc\Validation\quarter-increment.js" />
+    <Content Include="Scripts\Views\Account\Login.js" />
+    <Content Include="Scripts\Views\AdHoc\Index.js" />
+    <Content Include="Scripts\Views\Admin\ContactLookup.js" />
+    <Content Include="Scripts\Views\Admin\RetainFilters.js" />
+    <Content Include="Scripts\Views\Admin\DirectorEmail.js" />
+    <Content Include="Scripts\Views\Admin\FundingSourceLookup.js" />
+    <Content Include="Scripts\Views\Admin\ServiceFileUpload.js" />
+    <Content Include="Scripts\Views\Admin\AgencyLookup.js" />
+    <Content Include="Scripts\Views\Admin\Personnel.js" />
+    <Content Include="Scripts\Views\AggregateInfo\_AggregateInfo.js" />
+    <Content Include="Scripts\Views\Case\Edit.js" />
+    <Content Include="Scripts\Views\Case\Investigation.js" />
+    <Content Include="Scripts\Views\Case\_Demographics.js" />
+    <Content Include="Scripts\Views\Case\_FirstContactAge.js" />
+    <Content Include="Scripts\Views\Case\_Races.js" />
+    <Content Include="Scripts\Views\Case\_Referral.js" />
+    <Content Include="Scripts\Views\Case\_Team.js" />
+    <Content Include="Scripts\Views\Case\_Petitions.js" />
+    <Content Include="Scripts\Views\Case\_MedicalVisits.js" />
+    <Content Include="Scripts\Views\Case\_DcfsAllegations.js" />
+    <Content Include="Scripts\Views\Case\_OrdersOfProtection.js" />
+    <Content Include="Scripts\Views\Case\_PresentingIssues.js" />
+    <Content Include="Scripts\Views\Case\_Services.js" />
+    <Content Include="Scripts\Views\Admin\_OtherStaffActivityLookup.js" />
+    <Content Include="Scripts\Views\Case\_Behaviors.js" />
+    <Content Include="Scripts\Views\Case\_Departures.js" />
+    <Content Include="Scripts\Views\Case\_DirectServices.js" />
+    <Content Include="Scripts\Views\Case\_Cancellations.js" />
+    <Content Include="Scripts\Views\Case\_HousingServices.js" />
+    <Content Include="Scripts\Views\Case\_Offenders.js" />
+    <Content Include="Scripts\Views\Case\_PoliceProsecution.js" />
+    <Content Include="Scripts\Views\Case\_Residence.js" />
+    <Content Include="Scripts\Views\Case\_Medical.js" />
+    <Content Include="Scripts\Views\Case\_PreviousServiceUse.js" />
+    <Content Include="Scripts\Views\Case\_SpecialNeeds.js" />
+    <Content Include="Scripts\Views\Case\_Income.js" />
+    <Content Include="Scripts\Views\Case\_ReferredBy.js" />
+    <Content Include="Scripts\Views\Case\_Benefits.js" />
+    <Content Include="Scripts\Views\Admin\_CenterInformation.js" />
+    <Content Include="Scripts\Views\Case\_VictimSensitiveInterviews.js" />
+    <Content Include="Scripts\Views\Client\ClientSummary.js" />
+    <Content Include="Scripts\Views\Client\_Relationships.js" />
+    <Content Include="Scripts\Views\Client\Households.js" />
+    <Content Include="Scripts\Views\FundingForStaff\_Index.js" />
+    <Content Include="Scripts\Views\Offender\OffenderSummary.js" />
+    <Content Include="Scripts\Views\Reports\ReportOutput.js" />
+    <Content Include="Scripts\Views\Reports\Scheduled.js" />
+    <Content Include="Scripts\Views\Reports\ExceptionReport.js" />
+    <Content Include="Scripts\Views\Reports\ManagementReport.js" />
+    <Content Include="Scripts\Views\Reports\ReportFilter.js" />
+    <Content Include="Scripts\Views\Reports\StandardReport.js" />
+    <Content Include="Scripts\Views\Reports\Completed.js" />
+    <Content Include="Scripts\Views\Reports\SubmitReport.js" />
+    <Content Include="Scripts\Views\Services\CrisisIntervention.js" />
+    <Content Include="Scripts\Views\Services\Event.js" />
+    <Content Include="Scripts\Views\Services\ServicesSearchUpdateStaffList.js" />
+    <Content Include="Scripts\Views\Services\_Hotline.js" />
+    <Content Include="Scripts\Views\Services\_Outcome.js" />
+    <Content Include="Scripts\Views\Services\_OtherStaffActivity.js" />
+    <Content Include="Scripts\Views\Services\_Publication.js" />
+    <Content Include="Scripts\ICJIA\jquery.mustache.js" />
+    <Content Include="Scripts\Views\Services\_CommunityService.js" />
+    <Content Include="Scripts\Views\Services\_GroupServices.js" />
+    <Content Include="Scripts\Views\Services\_TurnAway.js" />
+    <Content Include="Scripts\Views\Shared\_ClientSearch.js" />
+    <Content Include="Scripts\Views\Shared\_SearchEdit.js" />
+    <Content Include="Scripts\Views\Home\SystemMessages.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Views\AdHoc\Report.cshtml" />
+    <Content Include="Views\AdHoc\_OutputModal.cshtml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Account\ConfirmEmail.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\Manage\ChangePassword.cshtml" />
+    <Content Include="Views\Manage\Index.cshtml" />
+    <Content Include="Views\Shared\Lockout.cshtml" />
+    <Content Include="Views\Client\Edit.cshtml" />
+    <Content Include="Views\Client\Index.cshtml" />
+    <Content Include="Views\Case\Edit.cshtml" />
+    <Content Include="Views\Client\Search.cshtml" />
+    <Content Include="Scripts\ICJIA\jquery.validate.unobtrusive.addons.js" />
+    <Content Include="Views\Case\_Demographics.cshtml" />
+    <Content Include="Views\Case\_PresentingIssues.cshtml" />
+    <Content Include="Views\Case\_Benefits.cshtml" />
+    <Content Include="Views\Case\_SpecialNeeds.cshtml" />
+    <Content Include="Views\Case\_Income.cshtml" />
+    <Content Include="Views\Case\_ReferredBy.cshtml" />
+    <Content Include="Views\Case\_Behaviors.cshtml" />
+    <Content Include="Views\Case\_PreviousServiceUse.cshtml" />
+    <Content Include="Views\Case\_Residence.cshtml" />
+    <Content Include="Views\Case\_ServicesNeeded.cshtml" />
+    <Content Include="Views\Case\_CaseStatus.cshtml" />
+    <Content Include="Views\Case\_Offender.cshtml" />
+    <Content Include="Views\GroupService\Form.cshtml" />
+    <Content Include="Views\GroupService\Search.cshtml" />
+    <Content Include="Views\Case\_ServicesReceived.cshtml" />
+    <Content Include="Views\Case\_Medical.cshtml" />
+    <Content Include="Views\Case\_PoliceProsecution.cshtml" />
+    <Content Include="Views\Case\_Offender_TrialCharge.cshtml" />
+    <Content Include="Views\CommunityServices\Form.cshtml" />
+    <Content Include="Views\CommunityServices\Search.cshtml" />
+    <Content Include="Views\Publication\Search.cshtml" />
+    <Content Include="Views\Publication\Form.cshtml" />
+    <Content Include="Views\Case\_DirectServices.cshtml" />
+    <Content Include="Views\Case\_DirectServicesAdd.cshtml" />
+    <Content Include="Views\Case\_DirectServicesEdit.cshtml" />
+    <Content Include="Views\Case\_DirectServicesSearch.cshtml" />
+    <Content Include="Views\Case\_Departures.cshtml" />
+    <Content Include="Views\Case\_DeparturesAdd.cshtml" />
+    <Content Include="Views\Case\_DeparturesEdit.cshtml" />
+    <Content Include="Views\GroupService\_NewAttendeePartial.cshtml" />
+    <Content Include="Views\Hotline\Search.cshtml" />
+    <Content Include="Views\Hotline\Form.cshtml" />
+    <Content Include="Views\TurnAway\Search_Edit.cshtml" />
+    <Content Include="Views\TurnAway\_NewTurnAwayPartial.cshtml" />
+    <Content Include="Views\CenterInformation\Index.cshtml" />
+    <Content Include="Views\Case\_HousingServices.cshtml" />
+    <Content Include="Views\Case\_HousingServicesAdd.cshtml" />
+    <Content Include="Views\Case\_HousingServicesEdit.cshtml" />
+    <Content Include="Views\Case\_HousingServicesSearch.cshtml" />
+    <Content Include="Views\ServiceOutcome\Search_Edit.cshtml" />
+    <Content Include="Views\ServiceOutcome\_NewOutcomePartial.cshtml" />
+    <Content Include="Views\ServiceOutcome\_NewQuestionPartial.cshtml" />
+    <Content Include="Views\OtherStaffActivity\Search.cshtml" />
+    <Content Include="Views\OtherStaffActivity\Form.cshtml" />
+    <Content Include="Views\Case\_Offender_PoliceCharge.cshtml" />
+    <Content Include="Views\Case\_Cancellations.cshtml" />
+    <Content Include="Views\Case\_CancellationsAdd.cshtml" />
+    <Content Include="Views\Case\_CancellationsEdit.cshtml" />
+    <Content Include="Views\Case\_CancellationsSearch.cshtml" />
+    <Content Include="Views\AggregateInformation\Search_Edit.cshtml" />
+    <Content Include="Views\AggregateInformation\_NewAggregateInformationPartial.cshtml" />
+    <Content Include="Views\Case\_OffendersFooter.cshtml" />
+    <Content Include="Views\Case\_EditPanel.cshtml" />
+    <Content Include="Views\FundingForStaff\Index.cshtml" />
+    <Content Include="Views\Households\Search.cshtml" />
+    <Content Include="Views\Households\Form.cshtml" />
+    <Content Include="Views\Shared\_ClientSearch.cshtml" />
+    <Content Include="Views\AgencyLookup\Index.cshtml" />
+    <Content Include="Views\AgencyLookup\_AgencyLookupPartial.cshtml" />
+    <Content Include="Views\Households\_NewClientPartial.cshtml" />
+    <Content Include="Views\OtherStaffActivityLookup\Index.cshtml" />
+    <Content Include="Views\OtherStaffActivityLookup\_OSALookupPartial.cshtml" />
+    <Content Include="Views\Personnel\Form.cshtml" />
+    <Content Include="Views\Personnel\Search.cshtml" />
+    <Content Include="Views\Case\_ResidencePartial.cshtml" />
+    <Content Include="Views\FundingSourceLookup\Index.cshtml" />
+    <Content Include="Views\FundingSourceLookup\_FundingSourceLookupPartial.cshtml" />
+    <Content Include="Views\FundingForStaff\_AddFundingIssueDate.cshtml" />
+    <Content Include="Views\FundingForStaff\_EditStaffList.cshtml" />
+    <Content Include="Views\Case\_OrdersOfProtection.cshtml" />
+    <Content Include="Views\Case\_OrdersOfProtection_Order.cshtml" />
+    <Content Include="Views\Case\_OrdersOfProtection_Order_Activity.cshtml" />
+    <Content Include="Views\FundingForStaff\_AssignServices.cshtml" />
+    <Content Include="Views\FundingForStaff\_Services.cshtml" />
+    <Content Include="Views\Account\_AnonymousLayout.cshtml" />
+    <Content Include="Views\RolesAdmin\Create.cshtml" />
+    <Content Include="Views\RolesAdmin\Edit.cshtml" />
+    <Content Include="Views\RolesAdmin\Index.cshtml" />
+    <Content Include="Views\UsersAdmin\Create.cshtml" />
+    <Content Include="Views\UsersAdmin\Edit.cshtml" />
+    <Content Include="Views\UsersAdmin\Index.cshtml" />
+    <Content Include="Views\Shared\_Navigation.cshtml" />
+    <Content Include="Views\DirectorEmail\Index.cshtml" />
+    <Content Include="Views\FundingForStaff\_MultiFundFundingSelection.cshtml" />
+    <Content Include="Views\FundingForStaff\_MultiFundServicesSelection.cshtml" />
+    <Content Include="Views\FundingForStaff\_MultiFundAssignment.cshtml" />
+    <Content Include="Views\FundingForStaff\_AssignFundingSource.cshtml" />
+    <Content Include="Views\FundingForStaff\_AssignFundingSourceFunds.cshtml" />
+    <Content Include="Views\FundingForStaff\_MultiFundAssignmentFundsServices.cshtml" />
+    <Content Include="Views\FundingForStaff\_Modal.cshtml" />
+    <Content Include="Views\ServiceFileUpload\Index.cshtml" />
+    <Content Include="Views\Case\_ReferredBySA.cshtml" />
+    <Content Include="Views\Case\_ReferredByDV.cshtml" />
+    <Content Include="Views\Case\_ReferredByCAC.cshtml" />
+    <Content Include="Views\Case\_SpecialNeedsDV.cshtml" />
+    <Content Include="Views\Case\_SpecialNeedsSA.cshtml" />
+    <Content Include="Views\Case\_SpecialNeedsCAC.cshtml" />
+    <Content Include="Views\Case\_SA_Medical.cshtml" />
+    <Content Include="Views\Case\_DV_Medical.cshtml" />
+    <Content Include="Views\Case\_SA_PoliceProsecution.cshtml" />
+    <Content Include="Views\Case\_DV_PoliceProsecution.cshtml" />
+    <Content Include="Views\Case\_DV_Income.cshtml" />
+    <Content Include="Views\Case\_SA_Income.cshtml" />
+    <Content Include="Views\CrisisIntervention\Search.cshtml" />
+    <Content Include="Views\CrisisIntervention\Form.cshtml" />
+    <Content Include="Views\Event\Search.cshtml" />
+    <Content Include="Views\Event\Form.cshtml" />
+    <Content Include="Views\ExportStaffInfo\Search.cshtml" />
+    <Content Include="Views\Case\_Offender_TrialCharge_Sentence.cshtml" />
+    <Content Include="Views\Shared\PageNotFound.cshtml" />
+    <Content Include="Views\CommunityServices\_Staff.cshtml" />
+    <Content Include="Views\Publication\_Staff.cshtml" />
+    <Content Include="Views\GroupService\_NewStaffPartial.cshtml" />
+    <Content Include="Views\ExportClientInfo\Search.cshtml" />
+    <Content Include="Views\FundingForStaff\_ReportFundingHistorySelection.cshtml" />
+    <Content Include="Views\FundingForStaff\_ReportStaffHeader.cshtml" />
+    <Content Include="Views\FundingForStaff\_ReportStaffDetails.cshtml" />
+    <Content Include="Views\FundingForStaff\_ReportStaffHeaderAll.cshtml" />
+    <Content Include="Views\FundingForStaff\_ReportStaffDetailsAll.cshtml" />
+    <Content Include="Views\FundingForStaff\_ReportPDFLayout.cshtml" />
+    <Content Include="Views\FundingForStaff\_ReportGetStaffAll.cshtml" />
+    <Content Include="Views\FundingForStaff\_ReportGetStaffSelected.cshtml" />
+    <Content Include="Views\Relationship\Search.cshtml" />
+    <Content Include="Views\Relationship\Form.cshtml" />
+    <Content Include="Views\Relationship\_NewClientPartial.cshtml" />
+    <Content Include="Views\Shared\Reports\_CenterSelection.cshtml" />
+    <Content Include="Views\Case\_Relationships.cshtml" />
+    <Content Include="Views\Event\_Staff.cshtml" />
+    <Content Include="Views\Case\_DcfsAllegations.cshtml" />
+    <Content Include="Views\Case\_DcfsAllegations_Form.cshtml" />
+    <Content Include="Views\Case\_MedicalVisits.cshtml" />
+    <Content Include="Views\Case\_MedicalVisits_Visit.cshtml" />
+    <Content Include="Views\Case\_Petitions.cshtml" />
+    <Content Include="Views\Case\_Petitions_Form.cshtml" />
+    <Content Include="Views\Case\_Team.cshtml" />
+    <Content Include="Views\Case\_Team_Form.cshtml" />
+    <Content Include="Views\Offender\Edit.cshtml" />
+    <Content Include="Views\Case\_OffenderSearch.cshtml" />
+    <Content Include="Views\Case\_VictimSensitiveInterviews.cshtml" />
+    <Content Include="Views\Case\_VictimSensitiveInterviews_Interview.cshtml" />
+    <Content Include="Views\Case\_VictimSensitiveInterviews_Interview_Observer.cshtml" />
+    <Content Include="Views\Shared\_PagedListDropMenu.cshtml" />
+    <Content Include="Views\Shared\_PagedListHiddenFields.cshtml" />
+    <Content Include="Views\Shared\_SearchResetNewButtons.cshtml" />
+    <Content Include="Views\Shared\_DateRangeSelect.cshtml" />
+    <Content Include="Views\ContactLookup\Index.cshtml" />
+    <Content Include="Views\ContactLookup\_ContactLookupPartial.cshtml" />
+    <Content Include="Views\Shared\_SearchResetButtons.cshtml" />
+    <Content Include="Views\Shared\_DateRangeLabelTextboxes.cshtml" />
+    <Content Include="Views\Shared\_DateRangeOptions1-8.cshtml" />
+    <Content Include="Views\Shared\_DateRangeOptions1-8_13-15.cshtml" />
+    <Content Include="Views\Shared\_DateRangeOptions1-4_20_5-19.cshtml" />
+    <Content Include="Views\Case\_Referral.cshtml" />
+    <Content Include="Views\Case\_ReferralAdd.cshtml" />
+    <Content Include="Views\Case\_ReferralEdit.cshtml" />
+    <Content Include="Views\Case\_ReferralSearch.cshtml" />
+    <Content Include="Views\Report\_ReportStyles.cshtml" />
+    <Content Include="Views\Report\ReportContainer.cshtml" />
+    <Content Include="Views\Report\StandardReport.cshtml" />
+    <Content Include="Views\Report\ManagementReport.cshtml" />
+    <Content Include="Views\Shared\Reports\_ReportPDFLayout.cshtml" />
+    <Content Include="Views\Report\ExceptionReport.cshtml" />
+    <Content Include="Views\Shared\Reports\_ReportDateRangeAndOutput.cshtml" />
+    <Content Include="Views\Report\Management\ColumnSelections\_ClientDetailColumnSelections.cshtml" />
+    <Content Include="Views\Report\Management\ColumnSelections\_IncomeSourceRangeSelections.cshtml" />
+    <Content Include="Views\Report\Management\ColumnSelections\_StaffClientServicesColumnSelections.cshtml" />
+    <Content Include="Views\Report\Management\ColumnSelections\_StaffHotlineColumnSelections.cshtml" />
+    <Content Include="Views\Report\Management\ColumnSelections\_StaffReportAgeSetSelection.cshtml" />
+    <Content Include="Views\Report\Management\ColumnSelections\_OtherStaffActivityColumnSelections.cshtml" />
+    <Content Include="Views\Report\Management\ColumnSelections\_CancellationColumnSelections.cshtml" />
+    <Content Include="Views\Report\Management\OrderSelections\_ClientDetailOrderSelections.cshtml" />
+    <Content Include="Views\Report\Management\OrderSelections\_StaffClientServicesOrderSelections.cshtml" />
+    <Content Include="Views\Report\Management\OrderSelections\_StaffHotlineOrderSelections.cshtml" />
+    <Content Include="Views\Report\Management\OrderSelections\_OtherStaffActivityOrderSelections.cshtml" />
+    <Content Include="Views\Report\Management\OrderSelections\_OrderOfProtectionOrderSelections.cshtml" />
+    <Content Include="Views\Report\Management\FilterSelections\_ClientDetailFilters.cshtml" />
+    <Content Include="Views\Report\Management\FilterSelections\_IncomeSourceFilters.cshtml" />
+    <Content Include="Views\Report\Management\FilterSelections\_StaffClientServiceFilters.cshtml" />
+    <Content Include="Views\Report\Management\FilterSelections\_StaffCommInstGroupFilters.cshtml" />
+    <Content Include="Views\Report\Management\FilterSelections\_StaffMediaPublicationFilters.cshtml" />
+    <Content Include="Views\Report\Management\FilterSelections\_StaffHotlineFilters.cshtml" />
+    <Content Include="Views\Report\Management\FilterSelections\_StaffReportFilters.cshtml" />
+    <Content Include="Views\Report\Management\FilterSelections\_OtherStaffActivityFilters.cshtml" />
+    <Content Include="Views\Report\Management\FilterSelections\_TurnAwayFilters.cshtml" />
+    <Content Include="Views\Report\Management\FilterSelections\_CancellationFilters.cshtml" />
+    <Content Include="Views\Report\Management\FilterSelections\_StaffEventMediaPublicationFilters.cshtml" />
+    <Content Include="Views\Report\Management\ColumnSelections\_NewIncomeRangePartial.cshtml" />
+    <Content Include="Views\Report\ScheduledReport.cshtml" />
+    <Content Include="Views\Report\SubmitReport.cshtml" />
+    <Content Include="Views\Shared\Reports\_ReportHTMLLayout.cshtml" />
+    <Content Include="Views\Report\ReportError.cshtml" />
+    <Content Include="Views\Report\ReportFile.cshtml" />
+    <Content Include="Views\Shared\_SessionTracker.cshtml" />
+    <Content Include="Views\Report\_ScheduledReportTable.cshtml" />
+    <Content Include="Views\Report\_CompletedReportModal.cshtml" />
+    <Content Include="Views\Shared\_PagedListFooter.cshtml" />
+    <Content Include="Views\Shared\_Marquee.cshtml" />
+    <Content Include="Views\MessageAdmin\Edit.cshtml" />
+    <Content Include="Views\MessageAdmin\Index.cshtml" />
+    <Content Include="Views\ReportAdmin\CenterActivity.cshtml" />
+    <Content Include="Views\AdHoc\Index.cshtml" />
+    <Content Include="Views\AdHoc\_Predicate.cshtml" />
+    <Content Include="Views\AdHoc\_Predicate_Condition_Input.cshtml" />
+    <Content Include="Views\AdHoc\_Predicate_Condition.cshtml" />
+    <Content Include="Views\AdHoc\_Conjunction.cshtml" />
+    <Content Include="Views\Account\SessionDebug.cshtml" />
+    <Content Include="Views\AdHoc\_SaveAsModal.cshtml" />
+    <Content Include="Views\AdHoc\_OpenModal.cshtml" />
+    <Content Include="Views\Report\Management\FilterSelections\_StaffNonClientCrisisFilters.cshtml" />
+    <Content Include="Views\UsersAdmin\_ResetPassword.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Case\_PoliceProsecution_CourtAppearance.cshtml" />
+    <Content Include="Views\Home\_Cards.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InfonetCore\InfonetCore.csproj">
+      <Project>{46c182b8-8645-4754-8be6-30d68c7f5a91}</Project>
+      <Name>InfonetCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InfonetData\InfonetData.csproj">
+      <Project>{7550a24e-08ab-428a-bf9e-e8985e376df2}</Project>
+      <Name>InfonetData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InfonetReporting\InfonetReporting.csproj">
+      <Project>{c815bfb2-02fc-4292-ad0d-5244867519a7}</Project>
+      <Name>InfonetReporting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InfonetUspsData\InfonetUspsData.csproj">
+      <Project>{301f3673-c549-4aec-b64c-e2ce9fac42c6}</Project>
+      <Name>InfonetUspsData</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Scripts\Mvc\Validation\between-nineteenfifty-today.js</ApplicationManifest>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>59774</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:59774/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup>
+    <PreBuildEvent>powershell -ExecutionPolicy ByPass -File  $(SolutionDir.TrimEnd('\'))\scripts\InjectGitVersion.ps1 $(ProjectDir)</PreBuildEvent>
+  </PropertyGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.2\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.2\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

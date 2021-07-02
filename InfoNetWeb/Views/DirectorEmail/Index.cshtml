@@ -1,0 +1,92 @@
+﻿@model IList<Infonet.Web.ViewModels.Admin.DirectorEmailViewModel>
+@{
+    ViewBag.Title = "Director Email Editor";
+}
+
+@using (Html.BeginForm("Index", "DirectorEmail", FormMethod.Post, new { id = "main", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+    @Html.AntiForgeryToken()
+
+	<div class="table-responsive">
+		<table class="table" id="results">
+			<thead>
+				<tr>
+					<th scope="col">Center Name</th>
+					<th scope="col">Director Email Address</th>
+					<th scope="col">Edit</th>
+				</tr>
+			</thead>
+
+			@if (Model != null) {
+				for (int i = 0; i < Model.Count; i++) {
+					<tr data-icjia-role="clientsidepagination">
+						@Html.HiddenFor(modelItem => modelItem[i].CenterId)
+						<td style="vertical-align: middle">
+							<div class="form-group mb-0" style="min-width:350px">
+								@Html.DisplayFor(modelItem => modelItem[i].CenterName)
+								@Html.HiddenFor(modelItem => modelItem[i].CenterName)
+							</div>
+						</td>
+						<td>
+							<div class="form-group mb-0" style="min-width:350px">
+								@Html.TextBoxFor(modelItem => modelItem[i].DirectorEmail, Model[i].ShouldEdit
+									? (object)new { @class = "form-control" }
+									: new { @class = "form-control", Disabled = true })
+							</div>
+							<div class="form-group mb-0 hidden" style="min-width:350px">
+								@Html.TextBoxFor(modelItem => modelItem[i].DirectorEmail, new { @class = "form-control" })
+								@Html.ValidationMessageFor(modelItem => modelItem[i].DirectorEmail, "", new { @class = "help-block mb-0" })
+							</div>
+						</td>
+						<td class="text-center" style="vertical-align: middle">
+							<div class="form-group mb-0" style="min-width:35px">
+								@Html.CheckBoxFor(modelItem => modelItem[i].ShouldEdit, new { @class = "editRecord" })
+							</div>
+						</td>
+					</tr>
+				}
+			}
+		</table>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="paging-container" id="tablePagingResults"> </div>
+		</div>
+	</div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="pull-right">
+                @Html.Snippets().SaveButton(new { id = "saveMain", data_icjia_role = "preventDuplicateRequest", accesskey = "s" })
+                @Html.Snippets().UndoLink(Url.Action(), new { accesskey = "u" })
+            </div>
+        </div>
+    </div>
+}
+
+@section Styles {
+	<link rel="stylesheet" href="~/Content/ICJIA/pagination.css" type="text/css">
+}
+
+@section scripts{
+	<script src="~/Scripts/Views/Admin/DirectorEmail.js"></script>
+	@Scripts.Render("~/bundles/pagination")
+
+	<script>
+		new Pagination('#tablePagingResults', {
+			itemsCount: $("table#results > tbody > tr").length,
+			onPageSizeChange: function (ps) {
+				//console.log('changed to ' + ps);
+			},
+			onPageChange: function (paging) {
+				var start = paging.pageSize * (paging.currentPage - 1),
+					end = start + paging.pageSize,
+					$rows = $('#results').find('[data-icjia-role="clientsidepagination"]');
+				$rows.hide();
+				for (var i = start; i < end; i++) {
+					$rows.eq(i).show();
+				}
+			}
+		});
+	</script>
+}

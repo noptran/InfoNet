@@ -1,0 +1,30 @@
+﻿@model ClientCase
+
+<div class="panel-body">
+    <div class="row">
+		@Html.Hidden("FirstContactDate", Model.FirstContactDate.Value.ToString("MM/dd/yyyy"))
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.IsClosed, new { @class = "control-label", data_toggle = "tooltip", title = "Check only if your client’s case is closed. Uncheck to re-open the case at any time." })
+                &nbsp;
+                @Html.CheckBoxFor(model => model.IsClosed)
+                @Html.ValidationMessageFor(model => model.IsClosed, "", new { @class = "help-block" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.ClosedDate, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the date your client’s case was closed." })
+                <div class="input-group date" data-provide="datepicker">
+                    @Html.TextBoxFor(model => model.ClosedDate, true, new { @class = "form-control", data_val_firstcontactdate = "Closed Date must not be before First Contact Date." })
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+                @Html.ValidationMessageFor(model => model.ClosedDate, "", new { @class = "help-block" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.ClosedReasonId, new { @class = "control-label", data_toggle = "tooltip", title = "Please select the option that most closely aligns with why the case was closed." })
+                @Html.LookupFor(model => model.ClosedReasonId, "<Pick One>", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ClosedReasonId, "", new { @class = "help-block" })
+            </div>
+        </div>
+        <div class="col-sm-6">
+        </div>
+    </div>
+</div>

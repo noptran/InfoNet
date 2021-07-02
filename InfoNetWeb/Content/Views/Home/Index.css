@@ -1,0 +1,87 @@
+﻿/*
+	Salvattore CSS for System Messages
+*/
+@media screen and (min-width: 1px) and (max-width: 767px) {
+    .icjia-columns[data-columns]::before {
+        content: '1 .col-xs-12';
+        display: none;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 991px) {
+    .icjia-columns[data-columns]::before {
+        content: '2 .col-sm-6 balanced';
+        display: none;
+    }
+}
+
+@media screen and (min-width: 992px) and (max-width: 1199px) {
+    .icjia-columns[data-columns]::before {
+        content: '3 .col-md-4 balanced';
+        display: none;
+    }
+}
+
+@media screen and (min-width: 1200px) and (max-width: 9999px) {
+    .icjia-columns[data-columns]::before {
+        content: '3 .col-lg-4 balanced';
+        display: none;
+    }
+}
+
+
+/*
+	System Messages CSS
+*/
+.jumbo-card {
+    border-top-style: solid;
+    border-top-width: 6px;
+	background-color: #eeeeee;
+	height: 388px;
+    position: relative;
+}
+
+.jumbo-card h1, .jumbo-card p {
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+.state-seal-icjia-card {
+    border-top-style: solid;
+    border-top-width: 6px;
+	background-color: #eeeeee;
+	height: 388px;
+    position: relative;
+}
+
+.state-seal-icjia-card img {
+	height: 148px
+}
+
+.state-seal-icjia-card p {
+	color: #484848;
+	line-height: 20pt;
+	font-weight: bold;
+	font-size: 19pt;
+	text-align: left;
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+.state-seal-icjia-card p span {
+	color: #6C6C6C;
+	font-size: 17pt;
+}
+
+.card {
+    border-top-style: solid;
+    border-top-width: 6px;
+    padding: 1px 15px 5px;
+	background-color: #eeeeee;
+	margin-bottom: 30px;
+}
+
+.card p, .card h2 {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}

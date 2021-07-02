@@ -1,0 +1,60 @@
+@using PagedList; 
+@model ClientCase
+
+@{
+	int providerId = (Int16)Model.Provider;
+	string firstContactDate = Model.FirstContactDate.Value.ToString("MM/dd/yyyy");
+}
+
+<div class="panel-body">
+
+	<div class="row">
+		<div class="col-sm-12">
+			<h4>Add Service Detail</h4>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="table-responsive">
+				<table class="table table-bordered table-striped table-hover" id="serviceDetailTableAdd">
+					<thead>
+						<tr>
+							<th scope="col" class="col-md-4"><span class="icjia-required" data-toggle="tooltip" title="Select the service client received from the drop-down menu.">Service</span></th>
+							<th scope="col" class="col-md-4"><span class="icjia-required" data-toggle="tooltip" title="Select the Staff member who provided this service from the drop-down menu.">Staff/Volunteer</span></th>
+							<th scope="col" class="col-md-2"><span class="icjia-required" data-toggle="tooltip" title="Enter the Date this service was provided.">Date</span></th>
+							<th scope="col" class="col-md-1"><span class="icjia-required" data-toggle="tooltip" title="Enter the number of hours the service lasted.  Estimate to the nearest quarter hour.">Hours</span></th>
+							<th scope="col" class="col-md-1"></th>
+						</tr>
+					</thead>
+					<tbody>
+						@{
+							for (int i = 0; i < ViewBag.DirectServicesAdd.Count; i++) {
+								@Html.Partial("_DirectServicesAdd", (DirectServiceAdd)ViewBag.DirectServicesAdd[i], new ViewDataDictionary(ViewData) { TemplateInfo = new TemplateInfo { HtmlFieldPrefix = string.Format("DirectServicesAdd[{0}]", i) } })
+							}
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	@if (Model.ServiceDetailsOfClient.Any(x => x.ServiceID != 65 && x.ServiceID != 66 && x.ServiceID != 118)) {
+		@Html.Action("DirectServicesSearchDates", "Case", new { directServiceSearchDates = ViewBag.DirectServiceSearchDates })
+	}
+
+	@Html.Hidden("providerId", providerId)
+	@Html.Hidden("FirstContactDate", firstContactDate)
+	<div class="row">
+		<div class="col-sm-12">
+			<h4>Service Detail List</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12" id="searchResult">
+			@if (Model.ServiceDetailsOfClient.Any(x => x.ServiceID != 65 && x.ServiceID != 66 && x.ServiceID != 118)) {
+				@Html.Partial("_DirectServicesEdit", (PagedList<DirectServiceEdit>)ViewBag.DirectServicesEdit)
+			}
+		</div>
+	</div>
+</div>

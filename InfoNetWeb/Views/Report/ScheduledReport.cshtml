@@ -1,0 +1,107 @@
+﻿@model Infonet.Web.ViewModels.Reporting.CompletedScheduledReportViewModel
+
+@{
+    string actionResult = "";
+    ViewBag.ContainerFluid = true;
+
+    if (Model.ReportTitle == "Completed") {
+        ViewBag.Title = "Completed Reports";
+        actionResult = "CompletedReport";
+    } else if (Model.ReportTitle == "Scheduled") {
+        ViewBag.Title = "Scheduled Reports";
+        actionResult = "ScheduledReport";
+    }
+
+    //var colorHold = "#ffffff"; //White
+    var colorReady = "#e0e0e0"; //Light Gray
+    //var colorFetching = "#c0c0c0"; //Silver
+    var colorRunning = "#afd9ee"; //Blue
+    var colorError = "#f7ecb5"; //Yellow
+    var colorFailed = "#e4b9b9"; //Red
+    //var colorDeleting = "#ffc966"; //Orange
+    //var colorDeletingFailed = "#e59400"; //OrangeRed
+}
+
+<div class="panel-body">
+	@using (Html.BeginForm(actionResult, "Report", FormMethod.Post, new { id = "main", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+		@Html.AntiForgeryToken()
+		<div class="row">
+			@Html.HiddenFor(m => m.ReportTitle)
+			<div class="panel panel-primary icjia-error-group" id="reportsDiv">
+				@Html.Partial("_ScheduledReportTable")
+			</div>
+		</div>
+
+		if (Model.ReportRecordsDisplayed != null && !((Model.ReportTitle == "Scheduled" || Model.ReportTitle == "Completed") && Model.ViewRole.ToUpper() != "FUNDER")) {
+			<div class="row">
+				<div class="col-xs-12" style="margin-bottom:20px">
+					@Html.Snippets().SaveButton(DirtyMode.Form, new { id = "Save", accesskey = "s" })
+					@Html.Snippets().UndoLink(Url.Action(actionResult, "Report", new { @class = "btn btn-block btn-warning", Id = "btnUndo", accesskey = "u" }))
+				</div>
+			</div>
+		}
+	}
+    <div class="icjia-loading" style="display:none;">Loading&#8230;</div>
+	@Html.Partial("_CompletedReportModal")
+</div>
+
+@section Styles{
+    <link rel="stylesheet" href="~/Content/ICJIA/full-screen-spinner.css" type="text/css">
+	<style>
+		.scrollableTbody {
+			display: block;
+			max-height: 150px;
+			overflow: auto;
+		}
+		@@media (min-width: 768px) {
+			.modal-xl {
+				width: 95% !important;
+				/*max-width:1600px;*/
+			}
+		}
+		textarea[name=approvalApproverComment] {
+			resize: none;
+		}
+		.overflow-hidden{
+			overflow:hidden !important;
+		}
+        .legend { 
+            list-style: none; 
+            margin-left: -35px; 
+			margin-top: 10px;
+        }
+        .legend li { 
+            float: left; 
+            margin-right: 10px; 
+        }
+        .legend span { 
+            border: 1px solid #ccc; 
+            float: left; 
+            width: 12px; 
+            height: 12px; 
+            margin: 2px; 
+        }
+		#paginationDiv * {
+			margin-top: 0px;
+			margin-bottom: 0px;
+		}
+		.icjia-pagedlist-page-of{
+			margin-top: 10px !important;
+		}
+		.pagination {
+			display:block;
+		}
+	</style>
+}
+
+@section Scripts {
+	@if (Model.ReportTitle == "Completed") {
+		@Scripts.Render("~/Scripts/Views/Reports/Completed.js")
+	} else if (Model.ReportTitle == "Scheduled") {
+		@Scripts.Render("~/Scripts/Views/Reports/Scheduled.js")
+	}
+
+	@Scripts.Render("~/Scripts/ICJIA/get-url-parameter.js")
+	@Scripts.Render("~/Scripts/ICJIA/system-growl.js")
+	@Scripts.Render("~/Scripts/ICJIA/icjia-loading.js")
+}

@@ -1,0 +1,50 @@
+﻿@model ClientCase
+
+@{
+	var appearanceKey = (Key)ViewData["appearanceKey"];
+	string appearanceKeyPrefix = (string)ViewData["appearanceKeyPrefix"];
+	bool isDeleted = "-~".Contains(appearanceKeyPrefix);
+	string idPrefix = ("courtAppearance_" + appearanceKey + "_").Replace(':', '_');
+}
+<tr class=@(isDeleted ? "hidden" : null)>
+    <td style="padding-left: 20px">
+        <div class="form-group mb-0">
+            <div class="input-group date" data-provide="datepicker">
+                @Html.TextBoxFor(m => m.ClientCourtAppearancesById[appearanceKey].CourtDate, "{0:MM/dd/yyyy}", new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "CourtDate" })
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+            </div>
+            @Html.ValidationMessageFor(m => m.ClientCourtAppearancesById[appearanceKey].CourtDate, "", new { @class = "help-block" })
+        </div>
+    </td>
+    <td class="pr-0">
+        <div class="form-group mb-0">
+            @Html.LookupFor(m => m.ClientCourtAppearancesById[appearanceKey].CourtContinuanceID, "<Pick One>", true, new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "CourtContinuanceID"})
+            @Html.ValidationMessageFor(m => m.ClientCourtAppearancesById[appearanceKey].CourtContinuanceID, "", new { @class = "help-block" })
+        </div>
+    </td>
+    <td class="uncondensed" style="padding-top: 10px">
+        <button type="button" class="btn btn-xs btn-danger btn-icon" aria-label="Delete This Court Appearance" data-icjia-role="courtAppearance.delete"><span class="glyphicon glyphicon-trash"></span></button>
+        @Html.Hidden(Html.NameFor(m => m.ClientCourtAppearancesById) + ".index", appearanceKeyPrefix + appearanceKey, new { data_icjia_role = "courtAppearance.index" })
+    </td>
+</tr>
+
+<tr class="deleted @(isDeleted ? null : "hidden")">
+    <td style="padding-left: 20px">
+        <div class="form-group mb-0">
+            <div class="input-group date" data-provide="datepicker">
+                @Html.TextBoxFor(m => m.ClientCourtAppearancesById[appearanceKey].CourtDate, "{0:MM/dd/yyyy}", new { id = idPrefix + "CourtDate", @class = "form-control", disabled = "disabled" })
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+            </div>
+            @Html.ValidationMessageFor(m => m.ClientCourtAppearancesById[appearanceKey].CourtDate, "", new { @class = "help-block" })
+        </div>
+    </td>
+    <td class="pr-0">
+        <div class="form-group mb-0">
+            @Html.LookupFor(m => m.ClientCourtAppearancesById[appearanceKey].CourtContinuanceID, "<Pick One>", true, new { id = idPrefix + "CourtContinuanceID",  @class = "form-control", disabled = "disabled" })
+            @Html.ValidationMessageFor(m => m.ClientCourtAppearancesById[appearanceKey].CourtContinuanceID, "", new { @class = "help-block" })
+        </div>
+    </td>
+    <td class="uncondensed" style="padding-top: 10px">
+        <button type="button" class="btn btn-xs btn-primary btn-icon" aria-label="Restore Deleted Court Appearance" data-icjia-role="courtAppearance.restore"><span class="glyphicon glyphicon-undo"></span></button>
+    </td>
+</tr>

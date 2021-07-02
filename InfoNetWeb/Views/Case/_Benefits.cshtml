@@ -1,0 +1,103 @@
+﻿@model ClientCase
+
+<div class="panel-body pb-0">
+	<div class="row">
+		<div class="col-sm-6">
+			<fieldset class="form-group">
+				<legend data-toggle="tooltip" title="If client receives no non-cash benefits, select 'No non-cash benefits'. If client does not want to disclose, select Unknown (check all that apply).">Please indicate client's non-cash benefits</legend>
+				<div class="icjia-checkbox-group" data-icjia-role="benefits">
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientNonCashBenefits.NoBenefit, new { data_icjia_role = "nobenefit" })
+						@Html.HiddenFor(m => m.ClientNonCashBenefits.NoBenefit)
+						@Html.LabelFor(m => m.ClientNonCashBenefits.NoBenefit)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientNonCashBenefits.FoodBenefit)
+						@Html.HiddenFor(m => m.ClientNonCashBenefits.FoodBenefit)
+						@Html.LabelFor(m => m.ClientNonCashBenefits.FoodBenefit)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientNonCashBenefits.SpecSuppNutr)
+						@Html.HiddenFor(m => m.ClientNonCashBenefits.SpecSuppNutr)
+						@Html.LabelFor(m => m.ClientNonCashBenefits.SpecSuppNutr)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientNonCashBenefits.TANFChildCare)
+						@Html.HiddenFor(m => m.ClientNonCashBenefits.TANFChildCare)
+						@Html.LabelFor(m => m.ClientNonCashBenefits.TANFChildCare)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientNonCashBenefits.TANFTrans)
+						@Html.HiddenFor(m => m.ClientNonCashBenefits.TANFTrans)
+						@Html.LabelFor(m => m.ClientNonCashBenefits.TANFTrans)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientNonCashBenefits.TANFOther)
+						@Html.HiddenFor(m => m.ClientNonCashBenefits.TANFOther)
+						@Html.LabelFor(m => m.ClientNonCashBenefits.TANFOther)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientNonCashBenefits.PublicHousing)
+						@Html.HiddenFor(m => m.ClientNonCashBenefits.PublicHousing)
+						@Html.LabelFor(m => m.ClientNonCashBenefits.PublicHousing)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientNonCashBenefits.OtherSource)
+						@Html.HiddenFor(m => m.ClientNonCashBenefits.OtherSource)
+						@Html.LabelFor(m => m.ClientNonCashBenefits.OtherSource)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientNonCashBenefits.UnknownBenefit, new { data_icjia_role = "unknownbenefit" })
+						@Html.HiddenFor(m => m.ClientNonCashBenefits.UnknownBenefit)
+						@Html.LabelFor(m => m.ClientNonCashBenefits.UnknownBenefit)
+					</div>
+				</div>
+			</fieldset>
+		</div>
+		<div class="col-sm-6">
+			<fieldset class="form-group">
+				<legend data-toggle="tooltip" title="Check all that apply.">Please indicate client's health insurance information</legend>
+				<div class="form-group text-info">
+					<strong>NOTE:</strong> Check ONLY those health insurance options applicable to this client, NOT any minor children in the client's care.
+				</div>
+				<div class="icjia-checkbox-group" data-icjia-role="healthinsurance">
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientNonCashBenefits.Medicaid)
+						@Html.HiddenFor(m => m.ClientNonCashBenefits.Medicaid)
+						@Html.LabelFor(m => m.ClientNonCashBenefits.Medicaid)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientNonCashBenefits.Medicare)
+						@Html.HiddenFor(m => m.ClientNonCashBenefits.Medicare)
+						@Html.LabelFor(m => m.ClientNonCashBenefits.Medicare)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientNonCashBenefits.StateChildHealth)
+						@Html.HiddenFor(m => m.ClientNonCashBenefits.StateChildHealth)
+						@Html.LabelFor(m => m.ClientNonCashBenefits.StateChildHealth)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientNonCashBenefits.VetAdminMed)
+						@Html.HiddenFor(m => m.ClientNonCashBenefits.VetAdminMed)
+						@Html.LabelFor(m => m.ClientNonCashBenefits.VetAdminMed)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientNonCashBenefits.PrivateIns)
+						@Html.HiddenFor(m => m.ClientNonCashBenefits.PrivateIns)
+						@Html.LabelFor(m => m.ClientNonCashBenefits.PrivateIns)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientNonCashBenefits.NoHealthIns, new { data_icjia_role = "nohealthinsurance" })
+						@Html.HiddenFor(m => m.ClientNonCashBenefits.NoHealthIns)
+						@Html.LabelFor(m => m.ClientNonCashBenefits.NoHealthIns)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientNonCashBenefits.UnknownHealthIns, new { data_icjia_role = "unknownhealthinsurance" })
+						@Html.HiddenFor(m => m.ClientNonCashBenefits.UnknownHealthIns)
+						@Html.LabelFor(m => m.ClientNonCashBenefits.UnknownHealthIns)
+					</div>
+				</div>
+			</fieldset>
+		</div>
+	</div>
+</div>

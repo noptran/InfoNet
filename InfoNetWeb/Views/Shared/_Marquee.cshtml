@@ -1,0 +1,42 @@
+﻿@using Infonet.Data
+@using Infonet.Web.ViewModels.Shared
+
+@{
+	string container = ViewBag.ContainerFluid == true ? "container-fluid" : "container";
+
+	var now = DateTime.Now;
+	var marquee = (Marquee)Session["_Marquee"];
+	if (marquee == null || marquee.RefreshedAt < now.AddMinutes(-1)) {
+		using (var db = new InfonetServerContext()) {
+			Session["_Marquee"] = marquee = new Marquee {
+				RefreshedAt = now,
+				Messages = SystemMessage.OrderForDisplay(SystemMessage.WhereAvailable(db.T_SystemMessages.Where(m => m.ModeId == (int)SystemMessage.Mode.Marquee), Session.Center().ProviderId, Session.Center().Top.Id, Session.Center().Id)).Select(m => new Marquee.Message { Title = m.Title, Text = m.Message, IsHot = m.IsHot }).ToArray()
+			};
+		}
+	}
+	double marqueeEstimatedWidth = marquee.Messages.Sum(m => m.Title.Length + (m.Text?.Length + 8 ?? 0)) - 8;
+}
+
+<div class="text-nowrap overflow-hidden affix icjia-navbar-marquee" style="height: 30px; width: 100%; top: 0; z-index: 1030; line-height: 30px">
+	<div class="marquee" style="position: relative; z-index: 1031">
+		@if (marqueeEstimatedWidth > 0) {
+			<div class="marquee-content" style="font-weight: bold; animation-duration: @(Math.Max(marqueeEstimatedWidth / 4.5, 30))s">
+				@foreach (var each in marquee.Messages) {
+					<span class="@(each.IsHot ? "pulse" : null)" style="margin-right: 30px; @(each.IsHot ? "color: white" : null)">
+						@each.Title
+						@if (each.Text != null) {
+							<span style="margin: 0 10px">–</span>@each.Text
+						}
+					</span>
+				}
+			</div>
+		}
+	</div>
+	<div style="position: absolute; top: 0; left: 0; width: 100%">
+		<div class="@container text-right" style="position: relative; padding: 0">
+			<div class="icjia-navbar-marquee-overlay" style="position: relative; display: inline-block; padding: 0 20px; border-radius: 4px 4px 0 0; z-index: 1032">
+				@Session.Center().Name<span style="margin: 0 15px">|</span>@User.Identity.Name
+			</div>
+		</div>
+	</div>
+</div>

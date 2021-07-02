@@ -1,0 +1,139 @@
+﻿@using System.Web.Mvc.Html
+@using PagedList.Mvc
+@model PagedList.IPagedList<SystemMessage>
+
+@{
+	ViewBag.Title = "Manage Messages";
+}
+
+@using(Html.BeginForm("Index", "MessageAdmin", FormMethod.Get, new { id = "main", autocomplete = "off" })) {
+	<div class="form-group">
+		<a class="btn btn-primary" role="button" href="@Url.Action("Edit")">
+			<span class="glyphicon glyphicon-plus-sign"></span> New Message
+		</a>
+	</div>
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th scope="col" class="text-center">Priority</th>
+				<th scope="col" class="text-center">Status</th>
+				<th scope="col" class="text-center">Display Mode</th>
+				<th scope="col">Title</th>
+				<th scope="col" class="text-center">Link</th>
+				<th scope="col">Providers</th>
+				<th scope="col">Posted</th>
+				<th scope="col">Expiration</th>
+                <th scope="col"><span class="sr-only">Action</span></th>
+			</tr>
+		</thead>
+		@foreach (var item in Model) {
+			<tr>
+				<td class="text-center">
+					@if (item.IsHot) {
+						<span class="label label-warning">Hot</span>
+					}
+				</td>
+				<td class="text-center">
+					@if (item.IsExpired) {
+						<span class="label label-primary">Expired</span>
+					} else if (item.IsNew && !item.IsCurrent) {
+						<span class="label label-default">Future</span>
+					} else if (item.IsNew) {
+						<span class="label label-info">New</span>
+					} else if (item.PostedDate == null) {
+						<span class="label label-success">Ageless</span>
+					} else {
+						<span class="label label-success">Previous</span>
+					}
+				</td>
+				<td class="text-center">
+					@(Lookups.SystemMessageMode[item.ModeId]?.Description)
+				</td>
+				<td style="font-style: italic" data-toggle="tooltip" title="@item.Message @item.Details">
+					@item.Title
+				</td>
+				<td class="text-center">
+					@if (!string.IsNullOrEmpty(item.LinkUrl)) {
+						if (item.IsDownload) {
+							<a class="btn btn-xs btn-link" href="@item.LinkUrl">@(item.LinkText ?? "Download") <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span></a>
+						} else if (Url.IsLocalUrl(item.LinkUrl)) {
+							<a class="btn btn-xs btn-link" href="@item.LinkUrl">@(item.LinkText ?? "Let's Do It!")</a>
+						} else {
+							<a class="btn btn-xs btn-link" href="@item.LinkUrl" target="_blank">@(item.LinkText ?? "Learn More") <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a>
+						}
+					}
+				</td>
+				<td class="text-nowrap">
+					@foreach (string each in (item.ProviderIds?.Cast<Provider>() ?? ProviderEnum.All).Select(p => p.ToString().ToLower())) {
+						<span class="label label-@each">@each</span>
+					}
+				</td>
+				<td>
+					@(item.PostedDate?.ToShortDateString())
+				</td>
+				<td>
+					@(item.ExpirationDate?.ToShortDateString())
+				</td>
+				<td class="text-right text-nowrap">
+					@Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-xs btn-primary btn-outline" })
+					<a href="javascript:void(0)" data-id="@item.Id" class="deleteMessage btn btn-xs btn-danger btn-outline icjia-has-spinner"><span class="icjia-spinner"><img src="~/Content/Images/ajax-loader.gif" width="12" height="12"></span>Delete</a>
+				</td>
+			</tr>
+		}
+	</table>
+
+	<div class="form-group">
+		@Html.PagedListPager(
+			Model,
+			page => Url.Action(Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)), new { page, Model.PageSize }),
+			Html.Snippets().PagedListRenderOptions())
+		@Html.Partial("_PagedListFooter", Model)
+	</div>
+}
+
+@section Styles {
+	<style>
+		.tooltip-inner {
+		    max-width: 500px !important;
+		}
+	</style>
+}
+
+@section Scripts {
+	@Scripts.Render("~/Scripts/ICJIA/pagedlist.js")
+
+	<script>
+		$(document).ready(function() {
+			$(".deleteMessage").on("click",
+				function() {
+					if (confirm("Are you sure you wish to delete this item?")) {
+						$(this).addClass('icjia-spinner-active');
+						var messageId = $(this).data("id");
+
+						$.ajax({
+							url: "@Url.Action("delete")",
+							type: 'POST',
+							data: {
+								id: messageId
+							},
+							success: function(data) {
+								if (data.Success) {
+									$("#main").find('input[name="__RequestVerificationToken"]').val(data.__RequestVerificationToken);
+									location.reload();
+								} else if (data.ErrorMessage.length > 0) {
+									systemGrowl('Oh Snap!', data.ErrorMessage, 'danger');
+								} else {
+									systemGrowl('Oh Snap!', 'An error prevented the message from being deleted.', 'danger');
+								}
+							},
+							error: function() {
+								systemGrowl('Oh Snap!', 'An error occurred while deleting the message.', 'danger');
+							}
+						}).always(function () {
+							elem.removeClass('icjia-spinner-active');
+						});
+					}
+				});
+		});
+	</script>
+}

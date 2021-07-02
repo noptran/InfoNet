@@ -1,0 +1,54 @@
+@using PagedList; 
+@model ClientCase
+@{
+	int providerId = (int)Model.Provider;
+}
+<div class="panel-body">
+	<div class="row">
+		<div class="col-sm-12">
+			<h4>Cancellation/No Show</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="table-responsive">
+				<table class="table table-bordered table-striped table-hover" id="cancellationsDetailTableAdd">
+					<thead>
+						<tr>
+							<th scope="col" class="col-md-3"><span class="icjia-required" data-toggle="tooltip" title="Select the service type from the drop-down menu that the client either canceled or did not show up for the appointment.">Service</span></th>
+							<th scope="col" class="col-md-2"><span class="icjia-required" data-toggle="tooltip" title="Select the reason the service was not provided (cancellation or no show).">Reason</span></th>
+							<th scope="col" class="col-md-3"><span class="icjia-required" data-toggle="tooltip" title="Select the staff member who was scheduled to provide the service from the drop-down menu.">Staff</span></th>
+							<th scope="col" class="col-md-3"><span class="icjia-required" data-toggle="tooltip" title="Enter the date this service was scheduled to occur.">Date</span></th>
+							<th scope="col" class="col-md-1"></th>
+						</tr>
+					</thead>
+					<tbody>
+						@{
+							for (int i = 0; i < ViewBag.CancellationsAdd.Count; i++) {
+								@Html.Partial("_CancellationsAdd", (CancellationsAdd)ViewBag.CancellationsAdd[i], new ViewDataDictionary(ViewData) { TemplateInfo = new TemplateInfo { HtmlFieldPrefix = string.Format("CancellationsAdd[{0}]", i) } })
+							}
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	@if (Model.Cancellations != null && Model.Cancellations.Any()) {
+		@Html.Action("CancellationsSearchDates", "Case", new { cancellationsSearchDates = ViewBag.CancellationsSearchDates })
+	}
+	@Html.Hidden("providerId", providerId)
+	<div class="row">
+		<div class="col-sm-12">
+			<h4>Cancellation/No Show List</h4>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-12" id="searchResult">
+			@{if (Model.Cancellations != null && Model.Cancellations.Any()) {
+				@Html.Partial("_CancellationsEdit", (PagedList<CancellationsEdit>)ViewBag.CancellationsEdit)
+					}
+				}
+		</div>
+	</div>
+</div>

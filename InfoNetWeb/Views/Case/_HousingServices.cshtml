@@ -1,0 +1,57 @@
+@using PagedList; 
+@model ClientCase
+@{
+	int providerId = (int)Model.Provider;
+}
+<div class="panel-body">
+
+@if (Session.Center().HasShelter) {
+	<div class="row">
+		<div class="col-sm-12">
+			<h4>Add Housing Service</h4>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="table-responsive">
+				<table class="table table-bordered table-striped table-hover" id="housingServiceDetailTableAdd">
+					<thead>
+						<tr>
+							<th scope="col" class="col-sm-5"><span class="icjia-required" data-toggle="tooltip" title="Select the Housing Service client received from the drop-down menu.">Service</span></th>
+							<th scope="col" class="col-sm-3"><span class="icjia-required" data-toggle="tooltip" title="Enter date the client first entered the Shelter/Trans. Housing Program.">Shelter/Tran. Housing Begin</span></th>
+							<th scope="col" class="col-sm-3"><span data-toggle="tooltip" title="Date the client left the Shelter/Trans. Housing Program.">Shelter/Tran. Housing End</span></th>
+							<th scope="col" class="col-sm-1"></th>
+						</tr>
+					</thead>
+					<tbody>
+						@{
+							for (int i = 0; i < ViewBag.HousingServicesAdd.Count; i++) {
+								@Html.Partial("_HousingServicesAdd", (HousingServicesAdd)ViewBag.HousingServicesAdd[i], new ViewDataDictionary(ViewData) { TemplateInfo = new TemplateInfo { HtmlFieldPrefix = $"HousingServicesAdd[{i}]" } })
+							}
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+}
+
+	@if (Model.ServiceDetailsOfClient.Any(x => x.ServiceID == 65 || x.ServiceID == 66 || x.ServiceID == 118)) {
+		@Html.Action("HousingServicesSearchDates", "Case", new { housingServiceSearchDates = ViewBag.HousingServiceSearchDates })
+	}
+	@Html.Hidden("providerId", providerId)
+	<div class="row">
+		<div class="col-sm-12">
+			<h4>Housing Service List</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12" id="searchResult">
+			@{if (Model.ServiceDetailsOfClient.Any(x => x.ServiceID == 65 || x.ServiceID == 66 || x.ServiceID == 118)) {
+					@Html.Partial("_HousingServicesEdit", (PagedList<HousingServicesModify>)ViewBag.HousingServicesEdit)
+				}
+			}
+		</div>
+	</div>
+</div>

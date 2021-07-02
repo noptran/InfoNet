@@ -1,0 +1,43 @@
+﻿@model ClientCase
+
+<div class="panel-body pb-0">
+	<div class="row">
+		<div class="col-md-6">
+			<fieldset class="form-group">
+				<legend data-toggle="tooltip" title="Select the organization type(s) that referred the client for services.">Referred From</legend>
+				<div class="icjia-checkbox-group">
+					<div class="checkbox">
+						@Html.CheckBoxFor(model => model.ClientReferralSource.DCFS)
+						@Html.LabelFor(model => model.ClientReferralSource.DCFS)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(model => model.ClientReferralSource.Police)
+						@Html.LabelFor(model => model.ClientReferralSource.Police)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(model => model.ClientReferralSource.Medical)
+						<label for="@Html.IdFor(model => model.ClientReferralSource.Medical)" style="padding-left: 20px;">Medical Provider</label>
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(model => model.ClientReferralSource.StateAttorney)
+						@Html.LabelFor(model => model.ClientReferralSource.StateAttorney)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(model => model.ClientReferralSource.Other)
+						@Html.LabelFor(model => model.ClientReferralSource.Other, new { data_toggle = "tooltip", title = "Specify the type of organization that referred the client for services if none of the existing options apply." })
+					</div>
+					<div class="form-group">
+						@Html.TextBoxFor(model => model.ClientReferralSource.WhatOther, new { @class = "form-control"})
+						@Html.ValidationMessageFor(model => model.ClientReferralSource.WhatOther, "", new { @class = "help-block" })
+					</div>
+				</div>
+			</fieldset>
+		</div>
+		<div class="col-md-6">
+			<div class="form-group">
+				@Html.LabelFor(model => model.ClientReferralSource.AgencyID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the agency that referred the client for services.  If referring agency does not exist in the drop-down menu, go to Administration -> Lookup Lists -> Agencies to add an Agency or inform your supervisor." })				
+                @Html.DropDownListFor(model => model.ClientReferralSource.AgencyID, new SelectList(Data.Centers.GetAgencyForCenterinCurrentAgencyId(Session.Center().ProviderId, Session.Center().Id, Model.ClientReferralSource == null ? 0 : Model.ClientReferralSource.AgencyID), "AgencyID", "AgencyName"), "Select an Agency", new { @class = "form-control" })
+			</div>
+		</div>
+	</div>
+</div>

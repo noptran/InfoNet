@@ -1,0 +1,32 @@
+﻿@model Infonet.Web.ViewModels.Admin.FundingForStaff
+
+<div class="row ffs-title">
+	<div class="col-md-6">
+		<span style="font-weight:bold;">Center: </span><span>@Session.Center().Name</span>
+	</div>
+	<div class="col-md-6">
+		<span style="font-weight:bold;">Staff Member: </span><span id="currentStaffMemberName"></span>
+	</div>
+</div>
+
+<div class="row" style="margin-top:10px;">
+	<div class="col-md-12">
+		<div class="form-group">
+			@Html.LabelFor(m => m.FFSAssignServices.SelectedEmployeeToDuplicateID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the staff member or volunteer to match services with for the selected staff member." })
+			@Html.DropDownListFor(m => m.FFSAssignServices.SelectedEmployeeToDuplicateID, Model.FFSAssignServices.EmployeeToDuplicateID, string.Empty, new { Class = "form-control selectedEmployeeToDuplicateID" })
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12"><span class="text-info">* indicates previously funded service.</span></div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="form-group" id="assignServicesMultiSelect">
+			@Html.LabelFor(m => m.FFSAssignServices.AvailableAndAssignedServiceIDs, new { @class = "control-label" })
+			@Html.ListBoxFor(m => m.FFSAssignServices.AvailableAndAssignedServiceIDs, Model.FFSAssignServices.AvailableAndAssignedServices, new { @class = "form-control" })
+		</div>
+	</div>
+</div>

@@ -1,0 +1,40 @@
+﻿@model Infonet.Web.ViewModels.Admin.FundingForStaff
+@{
+	if (Model.FFSReports.ReportDetails != null) {
+
+		var fundingDates = Model.FFSReports.ReportDetails.GroupBy(d => d.FundDateID).Select(grp => grp.FirstOrDefault().FundingDate).OrderBy(x => x.Value).ToList();
+
+
+		foreach (var fundingDate in fundingDates) {
+			<div class="row">
+				<div class="col-xs-12 ffs-report-fundingdate ffs-report-div">Funding Date: @fundingDate.Value.ToShortDateString()</div>
+			</div>
+
+			var staffMembers = Model.FFSReports.ReportDetails.Where(d=> d.FundingDate == fundingDate).GroupBy(d => d.SVID).Select(grp => grp.FirstOrDefault()).ToList();
+
+			foreach (var staffMember in staffMembers) {
+
+				<div class="row">
+					<div class="col-xs-11 col-xs-offset-1 ffs-report-staffmember ffs-report-div">@staffMember.LastName, @staffMember.FirstName</div>
+				</div>
+
+				var services = Model.FFSReports.ReportDetails.Where(d => d.SVID == staffMember.SVID && d.FundingDate == fundingDate).GroupBy(d => d.ProgramOrService).Select(grp => grp.FirstOrDefault()).ToList();
+
+				foreach (var service in services) {
+					<div class="row">
+						<div class="col-sm-8 col-xs-6 col-xs-offset-2 ffs-report-programservice ffs-report-div">@service.ProgramOrService</div>
+						<div class="col-sm-2 col-xs-4 ffs-report-div @(service.PercentFund == 100? "ffs-report-programservice-fundingpercent-100":"ffs-report-programservice-fundingpercent-not100")">@service.PercentFund%</div>
+					</div>
+					var funds = Model.FFSReports.ReportDetails.Where(x => x.ProgramOrService == @service.ProgramOrService && x.SVID == staffMember.SVID && x.FundingSource != null && x.FundingDate == fundingDate).ToList();
+					foreach (var fund in funds) {
+
+						<div class="row">
+							<div class="col-sm-7 col-xs-5 col-xs-offset-3 ffs-report-fund ffs-report-div">@fund.FundingSource</div>
+							<div class="col-sm-2 col-xs-4 ffs-report-fund-percent ffs-report-div">@fund.PercentFund%</div>
+						</div>
+					}
+				}
+			}
+		}
+	}
+}

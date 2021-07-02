@@ -1,0 +1,252 @@
+﻿@{ 
+	MvcHtmlString clientSearch = Html.AuthorizedActionLink("Search Cases", "Search", "Client");
+	MvcHtmlString[] clientMisc = {
+		Html.AuthorizedActionLink("Aggregate Information", "Search_Edit", "AggregateInformation"),
+		Html.AuthorizedActionLink("Households", "Search", "Households"),
+		Html.AuthorizedActionLink("Client Relationships", "Search", "Relationship")
+	};
+	MvcHtmlString[] servicesLinks = {
+		Html.AuthorizedActionLink("Group Services", "Search", "GroupService"),
+		Html.AuthorizedActionLink("Community and Institutional Services", "Search", "CommunityServices"),
+		Html.AuthorizedActionLink("Non-Client Crisis Intervention", "Search", "CrisisIntervention"),
+		Html.AuthorizedActionLink("Events", "Search", "Event"),
+		Html.AuthorizedActionLink("Media and Publications", "Search", "Publication"),
+		Html.AuthorizedActionLink("Hotline Calls", "Search", "Hotline"),
+		Html.AuthorizedActionLink("Turn Aways", "Search_Edit", "TurnAway"),
+		Html.AuthorizedActionLink("Service Outcomes", "Search_Edit", "ServiceOutcome"),
+		Html.AuthorizedActionLink("Other Staff Activities", "Search", "OtherStaffActivity")
+	};
+	MvcHtmlString[] reportsAdmin = {
+		Html.AuthorizedActionLink("Submit", "SubmitReport", "Report"),
+		Html.AuthorizedActionLink("Scheduled", "ScheduledReport", "Report"),
+		Html.AuthorizedActionLink("Completed", "CompletedReport", "Report")
+	};
+	MvcHtmlString[] reportsTypes = {
+		Html.AuthorizedActionLink("Standard", "StandardReport", "Report"),
+		Html.AuthorizedActionLink("Management", "ManagementReport", "Report"),
+		Html.AuthorizedActionLink("Exception", "ExceptionReport", "Report"),
+		Html.AuthorizedActionLink("Ad Hoc", "Index", "AdHoc")
+	};
+	MvcHtmlString[] userCenter = {
+		Html.AuthorizedActionLink("Center Information", "Index", "CenterInformation"),
+		Html.AuthorizedActionLink("Personnel Information", "Search", "Personnel"),
+		Html.AuthorizedActionLink("Funding for Staff", "Index", "FundingForStaff"),
+		Html.AuthorizedActionLink("Director Email Editor", "Index", "DirectorEmail")
+	};
+	MvcHtmlString[] userLookups = {
+		Html.AuthorizedActionLink("Agencies", "Index", "AgencyLookup"),
+		Html.AuthorizedActionLink("Contacts", "Index", "ContactLookup"),
+		Html.AuthorizedActionLink("Funding Sources", "Index", "FundingSourceLookup"),
+		Html.AuthorizedActionLink("Other Staff Activities", "Index", "OtherStaffActivityLookup"),
+	};
+	MvcHtmlString[] userData = {
+		Html.AuthorizedActionLink("Export Clients", "Search", "ExportClientInfo"),
+		Html.AuthorizedActionLink("Export Staff", "Search", "ExportStaffInfo"),
+		Html.AuthorizedActionLink("Import Services", "Index", "ServiceFileUpload")
+	};
+
+	MvcHtmlString[] securityAdmin =
+	{
+		Html.AuthorizedActionLink("Manage Users", "Index", "UsersAdmin"),
+		Html.AuthorizedActionLink("Manage Roles", "Index", "RolesAdmin"),
+	};
+
+	MvcHtmlString[] userInfo = {
+		Html.AuthorizedActionLink("User Information", "Index", "Manage"),
+		//Html.AuthorizedActionLink("Change Password", "ChangePassword", "Manage"),
+		Html.AuthorizedActionLink("Log Out", "LogOff", "Account")
+	};
+
+	MvcHtmlString[] miscellanyAdmin = {
+		Html.AuthorizedActionLink("Manage Messages", "Index", "MessageAdmin"),
+		Html.AuthorizedActionLink("Center Activity", "CenterActivity", "ReportAdmin")
+	};
+
+	bool showSeperator = false;
+}
+
+<nav class="navbar navbar-default navbar-fixed-top" style="top: 30px"> @* make room for 30px bar above navbar *@
+	<div class="@(ViewBag.ContainerFluid == true ? "container-fluid" : "container")">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a href="/" class="navbar-brand"><span class="sr-only">ICJIA</span></a>
+		</div>
+		<div id="navbar" class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+				@{
+					bool showClientCase = !clientSearch.IsNullOrEmpty();
+					bool showClientMisc = clientMisc.Any(a => !a.IsNullOrEmpty());
+					var recentClients = Session.RecentClients();
+				}
+				@if (showClientCase || showClientMisc) {
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Clients</a>
+						<ul class="dropdown-menu">
+							@if (showClientCase) {
+								showSeperator = true;
+								<li>@MvcHtmlString.Create(clientSearch.ToString())</li>
+								<li role="separator" class="divider hidden-xs"></li>
+								<li class="dropdown-header hidden-xs" aria-hidden="true">@Session.Center().Provider.GetDisplayName()</li>
+								foreach (var each in Lookups.ClientType[Session.Center().Provider]) {
+									<li><a href="~/Case/Edit?clientType=@each.CodeId">New @each.Description</a></li>
+								}
+							}
+							@if (showClientMisc) {
+								if (showSeperator) {
+									<li role="separator" class="divider hidden-xs"></li>
+								}
+								foreach (var link in clientMisc) {
+									<li>@link</li>
+								}
+							}
+							@if (recentClients.Count > 0) {
+								<li role="separator" class="divider hidden-xs"></li>
+								<li class="dropdown-header hidden-xs" aria-hidden="true">Recently Viewed</li>
+								foreach (var each in recentClients) {
+									<li><a href="~/Case/@(each.Action)/@(each.ClientId)c@(each.CaseId)">@each.ClientCode@(Session.Center().Provider == Provider.SA ? "" : $" - {each.CaseId}")</a></li>
+								}
+							}
+						</ul>
+					</li>
+				}
+				@if (servicesLinks.Any(a => !a.IsNullOrEmpty())) {
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Services</a>
+						<ul class="dropdown-menu">
+							@foreach(var link in servicesLinks) {
+								<li>@link</li>
+							}
+						</ul>
+					</li>
+				}
+				@{
+					bool showReportsAdmininstrative = reportsAdmin.Any(a => !a.IsNullOrEmpty());
+					bool showReportsTypes = reportsTypes.Any(a => !a.IsNullOrEmpty());
+
+					showSeperator = false;
+				}
+				@if (showReportsAdmininstrative || showReportsTypes) {
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reports</a>
+						<ul class="dropdown-menu">
+							@if (showReportsAdmininstrative) {
+								showSeperator = true;
+								<li class="dropdown-header hidden-xs" aria-hidden="true">Administrative</li>
+								foreach(var link in reportsAdmin) {
+									<li>@link</li>
+								}
+							}
+							@if (showReportsTypes) {
+								if (showSeperator) {
+									<li role="separator" class="divider hidden-xs"></li>
+								}
+								<li class="dropdown-header hidden-xs" aria-hidden="true">Report Types</li>
+								foreach (var link in reportsTypes) {
+									<li>@link</li>
+								}
+							}
+						</ul>
+					</li>
+				}	
+				
+				@if (userData.Any(a => !a.IsNullOrEmpty())) {
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span><span class="sr-only">Data Exchange</span></a>
+						<ul class="dropdown-menu">
+							<li class="dropdown-header hidden-xs" aria-hidden="true">Data Exchange</li>
+							@foreach (var link in userData) {
+								<li>@link</li>
+							}
+						</ul>
+					</li>
+				}
+				@{
+					bool showUserCenter = userCenter.Any(a => !a.IsNullOrEmpty());
+                    bool showSecurityAdmin = securityAdmin.Any(a => !a.IsNullOrEmpty());
+					bool showUserLookups = userLookups.Any(a => !a.IsNullOrEmpty());
+                    bool showMiscellanyAdmin = miscellanyAdmin.Any(a => !a.IsNullOrEmpty());
+
+					showSeperator = false;
+				}
+				@if (showUserCenter || showUserLookups || showSecurityAdmin || showMiscellanyAdmin) {
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><span class="sr-only">Settings</span></a>
+						<ul class="dropdown-menu">
+							@if (showUserCenter) {
+								showSeperator = true;
+								<li class="dropdown-header hidden-xs" aria-hidden="true">@Session.Center().Name</li>
+								foreach (var link in userCenter) {
+									<li>@link</li>
+								}
+							}
+                            @if (showSecurityAdmin)
+                            {
+                                if (showSeperator)
+                                {
+                                    <li role="separator" class="divider hidden-xs"></li>
+                                }
+                                <li class="dropdown-header hidden-xs" aria-hidden="true">Security</li>
+                                foreach (var link in securityAdmin)
+                                {
+                                    <li>@link</li>
+                                }
+                                showSeperator = true;
+                            }
+							@if(showUserLookups) {
+								if (showSeperator) {
+									<li role="separator" class="divider hidden-xs"></li>
+								}
+								<li class="dropdown-header hidden-xs" aria-hidden="true">Manage Lists</li>
+								foreach (var link in userLookups) {
+									<li>@link</li>
+								}
+                                showSeperator = true;
+							}
+                            @if (showMiscellanyAdmin) {
+                                if (showSeperator) {
+                                    <li role="separator" class="divider hidden-xs"></li>
+                                }
+                                <li class="dropdown-header hidden-xs" aria-hidden="true">Miscellany</li>
+                                foreach (var link in miscellanyAdmin) {
+                                    <li>@link</li>
+                                }
+                            }
+						</ul>
+					</li>
+				}
+			</ul>
+			<div class="navbar-right">
+				@if (showClientCase) {
+					<form method="get" action="/Client/QuickSearch" class="navbar-form navbar-left" autocomplete="off" role="search" novalidate="novalidate">
+						<div class="form-group">
+							<div class="input-group">
+								<input type="text" name="clientCode" size="12" class="form-control search-field" placeholder="Client ID" aria-label="Client ID">
+								<div class="input-group-btn">
+									<button type="submit" class="btn btn-primary" data-icjia-role="preventDuplicateRequest"><span class="sr-only">Search</span><span class="glyphicon glyphicon-search"></span></button>
+								</div>
+							</div>
+						</div>
+					</form>
+				}
+				@if (userInfo.Any(a => !a.IsNullOrEmpty())) {
+					<ul class="nav navbar-nav ">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user" aria-hidden="true"></span><span class="sr-only">User</span></a>
+							<ul class="dropdown-menu">
+								<li class="dropdown-header hidden-xs" aria-hidden="true">@User.Identity.Name</li>
+								@foreach (var link in userInfo) {
+									<li>@link</li>
+								}
+							</ul>
+						</li>
+					</ul>
+				}
+			</div>
+		</div>
+	</div>
+</nav>

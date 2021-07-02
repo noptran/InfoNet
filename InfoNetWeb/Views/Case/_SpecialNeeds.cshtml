@@ -1,0 +1,13 @@
+﻿@model ClientCase
+
+@switch (Session.Center().Provider) {
+	case Provider.DV:
+		@Html.Partial("_SpecialNeedsDV", Model)
+		break;
+	case Provider.SA:
+		@Html.Partial("_SpecialNeedsSA", Model)
+		break;
+	case Provider.CAC:
+		@Html.Partial("_SpecialNeedsCAC", Model)
+		break;
+}

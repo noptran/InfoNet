@@ -1,0 +1,67 @@
+﻿@model Infonet.Web.ViewModels.Account.ManageAccountViewModel
+@{
+    ViewBag.Title = "User Information";
+}
+
+@using(Html.BeginForm("Index", "Manage", FormMethod.Post, new { id = "main", data_icjia_role = "dirty.form", autocomplete = "off" })) {
+	@Html.AntiForgeryToken()
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="form-group">
+				@Html.LabelFor(model => model.Username, new { @class = "control-label" })
+				@Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
+				@Html.ValidationMessageFor(model => model.Username)
+				@*@Html.ActionLink("Change your password", "ChangePassword", "Manage", new { @class = "pull-right" })*@
+			</div>
+			<div class="form-group">
+
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(model => model.CenterName, new { @class = "control-label" })
+				@Html.TextBoxFor(m => m.CenterName, new { @class = "form-control", disabled = "disabled" })
+				@Html.AuthorizedActionLink("Edit Center Information", "Index", "CenterInformation", null, new { @class = "pull-right" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(model => model.Email, new { @class = "control-label" })
+				@Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+				@Html.ValidationMessageFor(model => model.Email)
+			</div>
+			<div class="form-group">
+				<table class="table table-condensed table-responsive">
+					<tr>
+						<th scope="col">Role</th>
+						<th scope="col">Description</th>
+					</tr>
+					@foreach(var role in Model.Roles) {
+						<tr>
+							<td>@role.Name</td>
+							<td>@role.Description</td>
+						</tr>
+					}
+				</table>
+			</div>
+		</div>
+	</div>
+	<br />
+	<br />
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="pull-left">
+				@Html.Snippets().SaveButton(new { id = "saveMain", data_icjia_role = "preventDuplicateRequest", accesskey = "s" })
+				@Html.Snippets().UndoLink(Url.Action(), new { accesskey = "u" })
+			</div>
+		</div>
+	</div>
+}
+
+@section Scripts{
+	<script>
+		$(document.body).on('click', '#saveMain', function () {
+			$("#main").submit();
+		});
+	</script>
+}
+
+
+
+

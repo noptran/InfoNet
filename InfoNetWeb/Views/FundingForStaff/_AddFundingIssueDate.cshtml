@@ -1,0 +1,28 @@
+﻿@model Infonet.Web.ViewModels.Admin.FundingForStaff
+
+<div class="row ffs-title">
+	<div class="col-md-12">
+		<span style="font-weight:bold;">Center: </span><span>@Session.Center().Name</span>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-12">
+		<div class="form-group">
+			@Html.LabelFor(m => m.FFSAdd.SelectedFundIssueDate, new { @class = "control-label" })
+			<div>
+				@Html.HiddenFor(m => m.FFSAdd.SelectedFundIssueDate)
+				@Html.TextBox("showFFSAdd_SelectedFundIssueDate", null, new { @class = "form-control", @disabled = "disabled" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(m => m.FFSAdd.NewFundIssueDate, new { @class = "control-label", data_toggle = "tooltip", title = "Enter new effective date for the funding statement." })
+			<div class="input-group date" data-provide="datepicker" data-date-end-date=@DateTime.Today.ToShortDateString()>
+				@Html.TextBoxFor(m => m.FFSAdd.NewFundIssueDate, true, new { @class = "form-control" })
+				<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+			</div>
+			@Html.ValidationMessageFor(m => m.FFSAdd.NewFundIssueDate, "", new { @class = "help-block" })
+		</div>
+	</div>
+</div>

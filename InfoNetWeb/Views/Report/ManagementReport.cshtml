@@ -1,0 +1,114 @@
+﻿@model Infonet.Reporting.ViewModels.ManagementReportViewModel
+
+@{
+	ViewBag.Title = "Management Reports";
+}
+
+@using (Html.BeginForm("ManagementReportRun", "Report", FormMethod.Post, new { id = "main", autocomplete = "off", target = "_blank" })) {
+	@Html.AntiForgeryToken()
+	@Html.Partial("Reports/_ReportDateRangeAndOutput", Model)
+	@Html.Partial("Reports/_CenterSelection", Model)
+	<div class="row">
+		<div class="col-sm-12 col-md-12 col-lg-12">
+			<div class="panel panel-primary icjia-error-group">
+				<div class="panel-heading">
+					<h2 class="panel-title">Report Selection</h2>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+                        <div class="col-xs-12 form-group">
+                            @Html.Hidden("ReportSelectionVal")
+                            @Html.ValidationMessageFor(model => model.ReportSelection, "", new { @class = "help-block" })
+                        </div>
+                    </div>
+                    <div class="row">
+						@foreach (var reportType in Model.AvailableSelections.Keys) {
+							<div class="col-md-4">
+								<fieldset>
+									<legend>
+										<div style="margin-bottom: 5px">@reportType.GetDisplayName()</div>
+									</legend>
+									@foreach (var sel in Model.AvailableSelections[reportType]) {
+										<div class="radio">
+											<label>
+												<input type="radio" class="reportSelectionRadio" id="selection@((int)sel)" name="@Html.NameFor(m => m.ReportSelection)" value="@((int)sel)" data-icjia-child-id=".@sel.GetShortName()" />
+												@sel.GetDisplayName()
+											</label>
+										</div>
+									}
+								</fieldset>
+							</div>
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			@Html.Partial("~/Views/Report/Management/ColumnSelections/_ClientDetailColumnSelections.cshtml", Model, new ViewDataDictionary { { "panelTitle", "Column Selection" } })
+			@Html.Partial("~/Views/Report/Management/ColumnSelections/_IncomeSourceRangeSelections.cshtml", Model, new ViewDataDictionary { { "panelTitle", "Annual Income Ranges" } })
+			@Html.Partial("~/Views/Report/Management/ColumnSelections/_StaffClientServicesColumnSelections.cshtml", Model, new ViewDataDictionary { { "panelTitle", "Column Selection" } })
+			@Html.Partial("~/Views/Report/Management/ColumnSelections/_StaffHotlineColumnSelections.cshtml", Model, new ViewDataDictionary { { "panelTitle", "Column Selection" } })
+			@Html.Partial("~/Views/Report/Management/ColumnSelections/_StaffReportAgeSetSelection.cshtml", Model, new ViewDataDictionary { { "panelTitle", "Age Set Selection" } })
+			@Html.Partial("~/Views/Report/Management/ColumnSelections/_OtherStaffActivityColumnSelections.cshtml", Model, new ViewDataDictionary { { "panelTitle", "Column Selection" } })
+			@Html.Partial("~/Views/Report/Management/ColumnSelections/_CancellationColumnSelections.cshtml", Model, new ViewDataDictionary { { "panelTitle", "Column Selection" } })
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			@Html.Partial("~/Views/Report/Management/OrderSelections/_ClientDetailOrderSelections.cshtml", Model, new ViewDataDictionary { { "panelTitle", "Order Selection" } })
+			@Html.Partial("~/Views/Report/Management/OrderSelections/_StaffClientServicesOrderSelections.cshtml", Model, new ViewDataDictionary { { "panelTitle", "Report Display" } })
+			@Html.Partial("~/Views/Report/Management/OrderSelections/_StaffHotlineOrderSelections.cshtml", Model, new ViewDataDictionary { { "panelTitle", "Order Selection" } })
+			@Html.Partial("~/Views/Report/Management/OrderSelections/_OtherStaffActivityOrderSelections.cshtml", Model, new ViewDataDictionary { { "panelTitle", "Report Format" } })
+			@Html.Partial("~/Views/Report/Management/OrderSelections/_OrderOfProtectionOrderSelections.cshtml", Model, new ViewDataDictionary { { "panelTitle", "Date Selection" } })
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12" style="margin-bottom:20px">
+			<button type="button" class="btn btn-primary center-block" id="Generate" name="Search">
+				Generate
+			</button>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			@Html.Partial("~/Views/Report/Management/FilterSelections/_ClientDetailFilters.cshtml", Model)
+			@Html.Partial("~/Views/Report/Management/FilterSelections/_IncomeSourceFilters.cshtml", Model)
+			@Html.Partial("~/Views/Report/Management/FilterSelections/_StaffClientServiceFilters.cshtml", Model)
+			@Html.Partial("~/Views/Report/Management/FilterSelections/_StaffCommInstGroupFilters.cshtml", Model)
+			@if (Session.Center().Provider == Provider.SA) {
+				@Html.Partial("~/Views/Report/Management/FilterSelections/_StaffEventMediaPublicationFilters.cshtml", Model)
+                @Html.Partial("~/Views/Report/Management/FilterSelections/_StaffNonClientCrisisFilters.cshtml", Model)
+			} else {
+				@Html.Partial("~/Views/Report/Management/FilterSelections/_StaffMediaPublicationFilters.cshtml", Model)
+			}
+			@Html.Partial("~/Views/Report/Management/FilterSelections/_StaffHotlineFilters.cshtml", Model)
+			@Html.Partial("~/Views/Report/Management/FilterSelections/_StaffReportFilters.cshtml", Model)
+			@Html.Partial("~/Views/Report/Management/FilterSelections/_OtherStaffActivityFilters.cshtml", Model)
+			@Html.Partial("~/Views/Report/Management/FilterSelections/_TurnAwayFilters.cshtml", Model)
+			@Html.Partial("~/Views/Report/Management/FilterSelections/_CancellationFilters.cshtml", Model)
+		</div>
+	</div>
+}
+
+@section Styles {
+	@Styles.Render("~/Content/ICJIA/checkbox.css", "~/Content/bootstrap-chosen.css", "~/Content/ICJIA/bootstrap-chosen-addons.css")
+	<style type="text/css">
+		.search-field {
+			border: none;
+		}
+		.reportStaff {
+			border-left: solid 8px
+		}
+	</style>
+}
+
+@section Scripts {
+	@Scripts.Render("~/Scripts/chosen.jquery.min.js")
+	@Scripts.Render("~/Scripts/ICJIA/date-ranges.js")
+	@Scripts.Render("~/Scripts/Views/Shared/_SearchEdit.js")
+	@Scripts.Render("~/Scripts/Views/Reports/ManagementReport.js")
+	@Scripts.Render("~/Scripts/Views/Reports/ReportOutput.js")
+	@Scripts.Render("~/Scripts/ICJIA/system-growl.js")
+}

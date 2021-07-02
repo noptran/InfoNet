@@ -1,0 +1,158 @@
+﻿@model Infonet.Web.ViewModels.CommunityServicesViewModel
+
+@{
+    ViewBag.Title = Model.ProgramID == 0 ? "New Community/Institutional Service" : "Edit Community/Institutional Service";
+}
+
+@{	
+	int staffindex = 0;
+	int staffCount = Model.ProgramDetailStaff?.Count ?? 0;
+}
+
+<div id="GroupServices">
+	@using (Html.BeginForm("Form", "CommunityServices", FormMethod.Post, new { id = "main", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+		@Html.AntiForgeryToken()
+		@Html.HiddenFor(m => m.ICS_ID)
+		<div class="row">
+			<div class="form-group col-md-6">
+				@Html.LabelFor(m => m.ProgramID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the community service that was provided from the drop-down menu." })
+				@Html.LookupFor(m => m.ProgramID, Session.Center().Provider, "<Pick One>", true, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.ProgramID, "", new { @class = "help-block" })
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<h2>Service Details</h2>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.LabelFor(m => m.PDate, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the date this presentation/contact occurred. If you are entering one record for presentations/contacts that occurred over multiple dates, e.g. weekly, monthly, enter the last date for the period this record represents." })
+					<div class="input-group date" data-provide="datepicker" data-date-end-date=@DateTime.Today.ToShortDateString()>
+						@Html.TextBoxFor(m => m.PDate, "{0:MM/dd/yyyy}", new { @class = "form-control" })
+						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+					</div>
+					@Html.ValidationMessageFor(m => m.PDate, "", new { @class = "help-block" })
+				</div>
+				<div class="form-group">
+					@Html.LabelFor(m => m.NumOfSession, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the number of presentations or contacts that occurred." })
+					@Html.TextBoxFor(m => m.NumOfSession, new { @class = "form-control", type="number", step="1" })
+					@Html.ValidationMessageFor(m => m.NumOfSession, "", new { @class = "help-block" })
+				</div>
+				<div class="form-group">
+					@Html.LabelFor(m => m.Hours, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the total number of presentation or contact hours. If more than one presentation/contact occurred, enter the sum total hours for all presentations/contacts." })
+					@Html.TextBoxFor(m => m.Hours, new { @class = "form-control", type="number", step=".25" })
+					@Html.ValidationMessageFor(m => m.Hours, "", new { @class = "help-block" })
+				</div>
+				<div class="form-group">
+					@Html.LabelFor(m => m.ParticipantsNum, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the total number of participants who received this service. If multiple presentations/contacts occurred, enter the sum total from all presentations/contacts. This number should exclude staff who provided the service." })
+					@Html.TextBoxFor(m => m.ParticipantsNum, new { @class = "form-control", type = "number", step = "1" })
+					@Html.ValidationMessageFor(m => m.ParticipantsNum, "", new { @class = "help-block" })
+				</div>
+
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.LabelFor(m => m.AgencyID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the agency to which the presentation/contact was made from the drop-down menu. To edit the options available in this drop-down menu, go to Manage Lists > Agencies." })					
+                    @Html.DropDownListFor(m => m.AgencyID, new SelectList(Data.Centers.GetAgencyForCenterinCurrentAgencyId(Session.Center().ProviderId, Session.Center().Id, Model.AgencyID), "AgencyID", "AgencyName"), "<Pick One>", new { @class = "form-control" })
+					@Html.ValidationMessageFor(m => m.AgencyID, "", new { @class = "help-block" })
+				</div>
+				<div class="form-group">
+					@Html.LabelFor(m => m.Location, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the location where this presentation/contact was made. You may enter a zip code, city or other geographic location. It is strongly recommended that the type of location entered here (zip code, city) is consistent for all records entered." })
+					@Html.TextBoxFor(m => m.Location, new { @class = "form-control" })
+					@Html.ValidationMessageFor(m => m.Location, "", new { @class = "help-block" })
+				</div>
+				<div class="form-group">
+					@Html.LabelFor(m => m.StateID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the state where the presentation/contact was made." })
+					@Html.DropDownListFor(m => m.StateID, new SelectList(Data.Usps.States, "ID", "StateAbbreviation", Model.StateID ?? Data.Usps.Illinois.ID), new { @class = "form-control", data_icjia_role="StateCounty", data_icjia_county="select[name$='CountyID']" })
+					@Html.ValidationMessageFor(m => m.StateID, "", new { @class = "help-block" })
+				</div>
+				<div class="form-group">
+					@Html.LabelFor(m => m.CountyID, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(m => m.CountyID, Session.Center().Provider) })
+					@Html.DropDownListFor(m => m.CountyID, new SelectList(Data.Usps.GetCountiesByState(Model.StateID ?? Data.Usps.Illinois.ID), "ID", "CountyName", Model.CountyID), "<Pick One>", new { @class = "form-control" })
+					@Html.ValidationMessageFor(m => m.CountyID, "", new { @class = "help-block" })
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group col-xs-12">
+				@Html.LabelFor(m => m.Comment_Act, new { @class = "control-label", data_toggle = "tooltip", title = "Enter any comments regarding this presentation/contact, e.g. title of presentation, meeting, or project; description of effort." })
+				@Html.TextAreaFor(m => m.Comment_Act, new { @class = "form-control", style = "resize: vertical;" })
+				<div id="charRemaining" class="text-info">&nbsp;<span id="charRemainingCount"></span> characters remaining</div>
+				@Html.ValidationMessageFor(m => m.Comment_Act, "", new { @class = "help-block" })
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<h2>Staff Information</h2>
+			</div>
+		</div>
+		<table id="staff" class="table table-responsive icjia-table-borderless">
+			<thead>
+                <tr>
+                    <th scope="col">@Html.LabelFor(m => m.ProgramDetailStaff[staffindex].SVID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the staff person(s)/volunteer(s) who provided the presentation/contact." })</th>
+                    <th scope="col">@Html.LabelFor(m => m.ProgramDetailStaff[staffindex].ConductHours, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the number of hours this staff person spent presenting or providing the service." })</th>
+                    <th scope="col">@Html.LabelFor(m => m.ProgramDetailStaff[staffindex].HoursPrep, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the number of hours this staff person spent preparing for the presentation/contact." })</th>
+                    <th scope="col">@Html.LabelFor(m => m.ProgramDetailStaff[staffindex].HoursTravel, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the number of hours this staff person spent traveling to and from the presentation/contact." })</th>
+                    <th scope="col"><span class="sr-only">Action</span></th>
+                </tr>
+			</thead>
+			<tbody>
+				@Html.Partial("_Staff", Model)
+			</tbody>
+			<tfoot style="border:0">
+				<tr>
+					<td colspan="5" style="border:0; padding-top: 0;">
+						<button type="button" class="btn btn-default btn-outline staff_AddNew"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;Add New Staff</button>
+						<input type="hidden" id="staffCount" value="@staffCount" />
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+		<input type="hidden" id="saveAddNew" value="0" name="saveAddNew" />
+		<input type="hidden" id="returnURL" value="@TempData.Peek("CommServReturnUrl")" name="ReturnURL" />
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="pull-right">
+					<div class="btn-group text-center">
+						@Html.Snippets().SaveButton(new { id = "saveButton", data_icjia_role = "preventDuplicateRequest", accesskey = "s" })
+						<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<span class="caret"></span>
+							<span class="sr-only">Toggle Dropdown</span>
+						</button>
+						<ul class="dropdown-menu icjia-btn-dropdown">
+                            <li>@Html.Snippets().SaveAddButton(new { id = "saveAddButton", data_icjia_role = "preventDuplicateRequest", accesskey = "a" })</li>
+						</ul>
+					</div>
+					@Html.Snippets().UndoLink(Url.Action(), new { accesskey = "u" })
+					@if (Model.ProgramID == 0) {
+						<a href="@TempData.Peek("CommServReturnUrl")" class="btn btn-danger">Cancel</a>
+					} else {
+					    @Html.Snippets().DeleteLink(Url.Action("Delete", "CommunityServices", new { id = Model.ICS_ID }), new { accesskey = "d" })
+					}
+				</div>
+			</div>
+		</div>
+	}
+</div>
+<div class="form-group">
+	<a href="@TempData.Peek("CommServReturnUrl")"><span class='glyphicon glyphicon-chevron-left' aria-hidden='true'></span><span class='glyphicon glyphicon-chevron-left' style='margin-left:-6px' aria-hidden='true'></span>Back to Community Services Search</a>
+</div>
+
+@section Styles{
+	<style>
+		.glyphicon-remove {
+			color: #333;
+		}
+	</style>
+}
+
+@section Scripts{
+	@Scripts.Render("~/Scripts/ICJIA/state-county.js")
+	@Scripts.Render("~/Scripts/Views/Services/_CommunityService.js")
+}
+
+
+
+

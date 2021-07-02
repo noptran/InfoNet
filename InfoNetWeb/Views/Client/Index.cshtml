@@ -1,0 +1,53 @@
+﻿@model PagedList.IPagedList<Client>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Clients";
+}
+
+<h2>Clients</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Edit")
+</p>
+
+@using (Html.BeginForm("Index", "Client", FormMethod.Get)) {
+    <p>
+        @Html.Label("SearchString", "Find by Client ID:", new { @class = "control-label col-md-2" })
+        @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @class = "form-control" })
+        <input type="submit" value="Search" class="btn btn-default" />
+    </p>
+}
+
+<table class="table">
+    <tr>
+        <th scope="col">
+            @Html.ActionLink("Client Code", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th scope="col">
+            @Html.ActionLink("Revision Stamp", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th scope="col"><span class="sr-only">Action</span></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ClientCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RevisionStamp)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ClientId })
+        </td>
+    </tr>
+}
+
+</table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

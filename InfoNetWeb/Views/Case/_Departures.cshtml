@@ -1,0 +1,37 @@
+@model ClientCase
+
+<div class="panel">
+	<div class="table-responsive">
+		<table class="table" id="departureModify">
+			@*<caption class="text-center text-uppercase">Destinations</caption>*@
+			<thead class="icjia-panel-subheader">
+                <tr>
+                    <th scope="col">Departure Date</th>
+                    <th scope="col">Destination</th>
+                    <th scope="col">Destination Tenure</th>
+                    <th scope="col">Destination Subsidy</th>
+                    <th scope="col">Reason For Leaving</th>
+                    <th scope="col"><span class="sr-only">Action</span></th>
+                </tr>
+			</thead>
+			<tbody>
+				@Html.Partial("_DeparturesEdit", Model)
+
+				@if (ViewBag.DeparturesAdd != null) {
+					for (int i = 0; i < ViewBag.DeparturesAdd.Count; i++) {
+					    @Html.Partial("_DeparturesAdd", (DepartureAdd)ViewBag.DeparturesAdd[i], new ViewDataDictionary(ViewData) { TemplateInfo = new TemplateInfo { HtmlFieldPrefix = string.Format("DepartureAdd[{0}]", i) } })
+					}
+				}
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="7" class="text-right">
+						<button type="button" class="btn btn-primary btn-xs btn-icon" data-icjia-role="departure.destination.add" aria-label="Add Destination">
+							<span class="glyphicon glyphicon-plus"></span>
+						</button>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+</div>

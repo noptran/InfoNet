@@ -1,0 +1,9 @@
+﻿@{
+	Layout = "~/Views/Shared/Reports/_ReportHTMLLayout.cshtml";
+	ViewBag.Title = "Report Failed";
+}
+
+<div class="alert alert-danger">
+	<strong>Oh Snap!</strong> One or more errors prevented the report from running.
+	@Html.ValidationSummary(false, "Please fix the following and try again:", new { style="margin-top: 15px" })	
+</div>

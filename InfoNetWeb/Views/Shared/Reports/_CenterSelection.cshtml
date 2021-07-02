@@ -1,0 +1,34 @@
+﻿@model Infonet.Reporting.ViewModels.IReportCenterSelectionBase
+@{
+    string[] backgroundColors = { "#f7ecb5", "#afd9ee", "#e4b9b9", "#ecfde5", "#e8d6ff", "#cbece7", "#e3e5ef", "#66d8fb", "#b8b2cc", "#b7d4d4", "#f6cbdb", "#a1b87e", "#f8df8b", "#e5abe5", "#cbfff8", "#afd9ee", "#e4b9b9", "#ecfde5", "#e8d6ff" };
+    string[] borderColors =     { "#ded39c", "#96c0d5", "#cba0a0", "#d3e4cc", "#cfbde6", "#b2d3ce", "#caccd6", "#4dbfe2", "#d4d1e0", "#d7e7e7", "#fbe7ee", "#dbe4ce", "#fdf7e2", "#f9eef9", "#d3efeb", "#96c0d5", "#cba0a0", "#d3e4cc", "#cfbde6" };
+    string[] textColors =       { "#5e531c", "#164055", "#4b2020", "#4b5c44", "#4f3d66", "#32534e", "#4a4c56", "#003F62", "#29321c", "#29321c", "#493c41", "#29321c", "#4a4229", "#5b445b", "#5b445b", "#164055", "#4b2020", "#4b5c44", "#4f3d66" };
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="panel panel-primary icjia-error-group">
+            <div class="panel-heading">
+                <h2 class="panel-title">Center Selection</h2>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                   <div class="col-sm-12 form-group mb-0">
+                        @Html.ValidationMessageFor(model => model.CenterIds, "", new { @class = "help-block" })
+						<span id="CenterIdsHelp" class="help-block hide">You must specify at least one center.</span>
+                        <div class="text-center">
+                            @{ int i = 0; }
+						    @foreach (var center in Session.Center().AllRelated) {
+							    <label class="btn btn-default btn-badgebox" style="margin: 4px; padding-top: 8px; background-color: @backgroundColors[i]; border: 1px solid @borderColors[i]; color: @textColors[i]">
+									@center.Name
+									<input type="checkbox" id="CenterSelection_@i" class="badgebox" checked="@(center.Id == Session.Center().Id)" name="CenterIds" value="@center.Id">
+									<span class="badge" style="margin-left: 8px; background-color:#ffffff;border:1px solid @borderColors[i];color: @textColors[i]">&nbsp;</span>
+								</label>
+							    i++;
+						    }
+					    </div>
+                    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

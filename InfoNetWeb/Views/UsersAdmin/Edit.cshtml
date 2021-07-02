@@ -1,0 +1,159 @@
+﻿@using Infonet.Web
+@using Microsoft.AspNet.Identity.Owin
+@model Infonet.Web.ViewModels.Account.EditUserViewModel
+@{
+	ViewBag.Title = "Edit User";
+	var applicationRoles = Context.GetOwinContext().Get<ApplicationRoleManager>().Roles.OrderBy(r => r.Name);
+}
+
+@using (Html.BeginForm("Edit", "UsersAdmin", FormMethod.Post, new { id = "main", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+	@Html.AntiForgeryToken()
+	<div class="row">
+		<div class="col-sm-6">
+			@Html.HiddenFor(m => m.Id)
+			<div class="form-group">
+				@Html.LabelFor(m => m.Username, new { @class = "control-label" })
+				@Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.Username)
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.CenterId, new { @class = "control-label" })
+				@Html.DropDownListFor(m => m.CenterId, new SelectList(Data.Centers.GetAllCenters(), "CenterId", "CenterName", Model.CenterId), "<Pick One>", new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.CenterId)
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.Email, new { @class = "control-label" })
+				@Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.Email)
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<fieldset class="form-group" aria-required="true">
+				<legend class="icjia-required">User Roles</legend>
+				<div class="icjia-checkbox-group">
+					@foreach (var each in new SelectList(applicationRoles, "Name", "Name")) {
+						<div class="checkbox">
+							<label class="control-label">
+								<input id="@("role" + each.Value)" type="checkbox" name="Roles" value="@each.Value" checked="@Model.Roles.Contains(each.Value)" data-val="true" data-val-mandatory="At least one User Role must be selected." />
+								@each.Value
+							</label>
+						</div>
+					}
+				</div>
+				@Html.ValidationMessage("Roles", new { @class = "help-block" })
+			</fieldset>
+		</div>
+	</div>
+	<div class="form-group">
+		@Html.Snippets().SaveButton(new { id="saveMain", data_icjia_role = "preventDuplicateRequest", accesskey = "s" })
+		@Html.Snippets().UndoLink(Url.Action(), new { @accesskey = "u" })
+		<button type="button" class="btn btn-warning btn-white" data-toggle="modal" data-target="#changePasswordModal">Reset Password</button>
+		<button type="button" class="btn btn-danger" data-icjia-role="delete">Delete</button>
+	</div>
+	<div id="changePasswordModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Reset Password</h4>
+				</div>
+				<div class="modal-body" id="resetPassword">
+					@Html.Partial("_ResetPassword", new Infonet.Web.ViewModels.Account.PasswordResetViewModel())
+				</div>
+				<div class="modal-footer">
+					<button type="button" id="savePassword" class="btn btn-success" data-icija-role="save-password">Save</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<a href="@Url.Action("Index")"><span class='glyphicon glyphicon-chevron-left' aria-hidden='true'></span><span class='glyphicon glyphicon-chevron-left' style='margin-left:-6px' aria-hidden='true'></span>Back to Manage Users</a>
+}
+
+@section Scripts {
+	<script>
+		$(document.body).on('click', '#savePassword', function () {
+			savePassword();
+		});
+
+		$(document).on('hidden.bs.modal', '#changePasswordModal', function () {
+			$('#NewPassword,#ConfirmPassword').val('');
+			$('#NewPassword').removeClass('input-validation-error');
+			$('#NewPassword').closest('.form-group').removeClass('has-error');
+			$('#ConfirmPassword').removeClass('input-validation-error');
+			$('#ConfirmPassword').closest('.form-group').removeClass('has-error');
+			$('span[data-valmsg-for="NewPassword"]').html("");
+			$('span[data-valmsg-for="ConfirmPassword"]').html("");
+			$('.validation-summary-errors').html("");
+		});
+
+		$(document).keypress(function (e) {
+			if (e.which == 13 && ($("#changePasswordModal").data('bs.modal') || {}).isShown) {
+				savePassword();
+				e.preventDefault();
+			}
+		});
+
+		$(document.body).on('click', '[data-icjia-role="delete"]', function () {
+			$.confirm({
+				title: "Are you sure you want to do that?",
+				text: "You've marked this record for deletion. <br /> If you continue, this record will be <strong>permanently deleted</strong>.",
+				confirmButtonClass: "btn-danger",
+				dialogClass: "modal-dialog icjia-modal-danger",
+				confirm: function () {
+					$.ajax({
+						url: '/UsersAdmin/DeleteUser',
+						type: "Post",
+						cache: "false",
+						data: $("#Id,[name='__RequestVerificationToken']").serialize(),
+						success: function (response) {
+							if (response.hasOwnProperty('Error')) {
+								systemGrowl('Oh Snap!', response['Error'], 'danger');
+							} else if (response.hasOwnProperty('Success')) {
+								systemGrowl('Hooray!', "User has successfully been deleted.", 'success', 5000);
+								window.location.href = response['Success'];
+							} else {
+								//KMS DO what to do here?
+							}
+						},
+						error: function () {
+							systemGrowl('Oh Snap!', "There was an unexpected error.", 'danger');
+						}
+					});
+				},
+				cancel: function () {
+					// nothing to do
+				}
+			});
+		});
+
+		function savePassword() {
+			if (($('#NewPassword,#ConfirmPassword').valid())) {
+				$.ajax({
+					url: '/UsersAdmin/PasswordReset',
+					type: "POST",
+					data: $("#Id,#ConfirmPassword,#NewPassword,[name='__RequestVerificationToken']").serialize(),
+					cache: false,
+					success: function (response) {
+						if (response.hasOwnProperty('Error')) {
+							systemGrowl("Password change was unsuccessful.");
+						} else if (response.hasOwnProperty('Success')) {
+							systemGrowl('Hooray!', "Password has been successfully changed.", 'success', 5000);
+							$('#changePasswordModal').modal('hide');
+						} else {
+							$("#resetPassword").html(response);
+						}
+					},
+					error: function () {
+						systemGrowl('Oh Snap!', "There was an unexpected error.", 'danger');
+					}
+				});
+			}
+		}
+
+		$(document.body).on('click', "#saveMain", function () {
+			$("#main").submit();
+		});
+	</script>
+}

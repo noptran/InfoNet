@@ -1,0 +1,61 @@
+﻿@model ClientCase
+
+<div class="panel-body pb-0">
+	<div class="form-group">
+		<div class="icjia-checkbox-group">
+			<div class="checkbox">
+				@Html.CheckBoxFor(m => m.ClientDisability.NoSpecialNeeds)
+				<label for="@Html.IdFor(m => m.ClientDisability.NoSpecialNeeds)">None Identified</label>
+			</div>
+		</div>
+	</div>
+	<hr style="margin-bottom: 10px" />
+	<fieldset class="form-group mb-0">
+		<legend>Client Language and/or Disability Needs (check as many as apply)</legend>
+		<div class="icjia-checkbox-group">
+			<div class="row" id="icjia-special-needs-body">
+				<div class="col-sm-6">
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientDisability.Deaf)
+						<label for="@Html.IdFor(m => m.ClientDisability.Deaf)" class="control-label">Hard of hearing/deaf</label>
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientDisability.VisualProblem)
+						<label for="@Html.IdFor(m => m.ClientDisability.VisualProblem)" class="control-label">Low vision/blind</label>
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientDisability.LimitedEnglish)
+						<label for="@Html.IdFor(m => m.ClientDisability.LimitedEnglish)" class="control-label">Requires Non-English language services</label>
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.ClientDisability.PrimaryLanguageID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the client’s primary language." })
+						@Html.LookupFor(m => m.ClientDisability.PrimaryLanguageID, "<Pick One>", new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.ClientDisability.PrimaryLanguageID, "", new { @class = "help-block" })
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientDisability.WheelChair)
+						@Html.LabelFor(m => m.ClientDisability.WheelChair)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientDisability.DevelopmentallyDisabled)
+						<label for="@Html.IdFor(m => m.ClientDisability.DevelopmentallyDisabled)" class="control-label">Developmental disability</label>
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientDisability.MentalDisability)
+						@Html.LabelFor(m => m.ClientDisability.MentalDisability)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientDisability.OtherDisability)
+						<label for="@Html.IdFor(m => m.ClientDisability.OtherDisability)" class="control-label" data-toggle="tooltip" title="Describe what other special needs your client has, without entering potentially identifying information.">Other Disability</label>
+					</div>
+					<div class="form-group">
+						@Html.TextBoxFor(m => m.ClientDisability.WhatOther, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.ClientDisability.WhatOther, "", new { @class = "help-block" })
+					</div>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+</div>

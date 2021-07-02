@@ -1,0 +1,266 @@
+﻿@model ClientCase
+@{
+	bool isNewClient = Model.Client.ClientId == null;
+}
+
+@Html.Hidden("ProviderID", Session.Center().ProviderId)
+@Html.Hidden("LastSavedClientCode", Model.Client.ClientCode)
+
+<div class="panel-body pb-0">
+    <div class="row">
+        <div class="col-sm-6">
+            @if (isNewClient) {
+                <div class="form-group">
+					@Html.LabelFor(model => model.Client.ClientCode,
+						Model.Client.IsVictim
+							? "Victim ID"
+							: Model.Client.IsSignificantOther ? "Significant Other ID" : null,
+						new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(model => model.Client.ClientCode) }
+					)
+					@Html.TextBoxFor(model => model.Client.ClientCode, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Client.ClientCode, "", new { @class = "help-block" })
+                </div>}
+            <div class="form-group">
+				@Html.LabelFor(model => model.FirstContactDate, Model.Provider == Provider.CAC ? "CAC Case Open Date" : null, new { @class = "control-label", data_toggle = "tooltip", title = "Date the client first contacted the center for services." })
+                <div class="input-group date" data-provide="datepicker">
+					@Html.TextBoxFor(model => model.FirstContactDate, true, Model.Provider == Provider.CAC
+					? new { @class = "form-control", data_val_betweennineteenninetytoday = "The field CAC Case Open Date must be between 1/1/1990 and today.", data_val_date = "The field CAC Case Open Date must be a date.", data_val_required = "The CAC Case Open Date field is required." }
+					: (object)new { @class = "form-control" })
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+                @Html.ValidationMessageFor(model => model.FirstContactDate, "", new { @class = "help-block" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Age, new { @class = "control-label", data_toggle = "tooltip", title = "Enter client's age (or approximate age) at First Contact Date. If this information is unknown, enter -1." })
+                @Html.TextBoxFor(model => model.Age, new { @class = "form-control first-contact-age" })
+                @Html.ValidationMessageFor(model => model.Age, "", new { @class = "help-block" })
+            </div>
+			<div class="form-group">
+				@Html.LabelFor(model => model.Client.GenderIdentityId, new { @class = "control-label", data_toggle = "tooltip", title = "Select the option your client most closely identifies with." })
+				@Html.LookupFor(model => model.Client.GenderIdentityId, "<Pick One>", new { @class = "form-control" })
+				@Html.ValidationMessageFor(model => model.Client.GenderIdentityId, "", new { @class = "help-block" })
+			</div>
+            @if (Model.Provider != Provider.CAC) {
+				<fieldset class="form-group" aria-required="true">
+					<legend class="icjia-required" data-toggle="tooltip" title="Select all options for which your client identifies. If they choose not to identify, select Unknown.">@Html.DisplayNameFor(model => model.Client.RaceHudIds)</legend>
+					<div class="icjia-checkbox-group">
+						@foreach (var race in Lookups.RaceHud[Model.Provider]) {
+							<div class="checkbox">
+								<label class="control-label">
+									<input class="race" id="@("race" + race.CodeId)" type="checkbox" name="Client.RaceHudIds" value="@race.CodeId" checked="@(Model.Client.RaceHudIds.Contains(race.CodeId) ? "checked" : null)" data-val="true" data-val-mandatory="At least one @Html.DisplayNameFor(model => model.Client.RaceHudIds) must be selected." />
+									@race.Description
+								</label>
+							</div>
+						}
+					</div>
+					@Html.ValidationMessageFor(model => model.Client.RaceHudIds, "", new { @class = "help-block" })
+				</fieldset>
+            } else {
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Client.RaceId, new { @class = "control-label", data_toggle = "tooltip", title = "Select the option your client identifies with. If they choose not to identify, select Unknown." })
+                    @Html.LookupFor(model => model.Client.RaceId, "<Pick One>", new { @class = "form-control", data_val_required = $"The {Html.DisplayNameFor(model => model.Client.RaceId)} field is required." })
+                    @Html.ValidationMessageFor(model => model.Client.RaceId, "", new { @class = "help-block" })
+                </div>
+            }
+        </div>
+        <div class="col-sm-6">
+            @if (Model.Client.IsAdult || Model.Client.IsNonOffendingCaretaker) {
+                if (Model.Client.IsAdult) {
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.SexualOrientationId, new { @class = "control-label", data_toggle = "tooltip", title = "Select the option your client most closely identifies with. If they choose not to identify, select Not Reported." })
+                        @Html.LookupFor(model => model.SexualOrientationId, "<Pick One>", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.SexualOrientationId, "", new { @class = "help-block" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.VetStatusId, new { @class = "control-label", data_toggle = "tooltip", title = "Select whether or not your client is a veteran. If they choose not to answer, select Not Reported." })
+                        @Html.LookupFor(model => model.VetStatusId, "<Pick One>", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.VetStatusId, "", new { @class = "help-block" })
+                    </div>
+                }
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EmploymentId, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(model => model.EmploymentId) })
+                    @Html.LookupFor(model => model.EmploymentId, "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.EmploymentId, "", new { @class = "help-block" })
+                </div>
+                if (Model.Client.IsAdult) {
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.EducationId, new { @class = "control-label", data_toggle = "tooltip", title = "Select the highest level of education your client has completed.  If they choose not to answer, please select Unknown." })
+                        @Html.LookupFor(model => model.EducationId, "<Pick One>", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.EducationId, "", new { @class = "help-block" })
+                    </div>
+                }
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MaritalStatusId, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(model => model.MaritalStatusId) })
+                    @Html.LookupFor(model => model.MaritalStatusId, "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.MaritalStatusId, "", new { @class = "help-block" })
+                </div>
+                if (Model.Client.IsAdult) {
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PregnantId, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(model => model.PregnantId) })
+                        @Html.LookupFor(model => model.PregnantId, "<Pick One>", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.PregnantId, "", new { @class = "help-block" })
+                    </div>
+                }
+                if (Model.Client.IsNonOffendingCaretaker) {
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.RelationSOtoClientId, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate the relationship of this client to the Victim. If they choose not to answer, select Unknown." })
+                        @Html.LookupFor(model => model.RelationSOtoClientId, Lookups.RelationshipToClient[Model.Provider].Exclude(29, 34, 35, 46, 47, 48, 52, 54, 55, 59, 61, 62, 66, 67), "<Pick One>", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.RelationSOtoClientId, "", new { @class = "help-block" })
+                    </div>
+                }
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NumberOfChildren, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(model => model.NumberOfChildren) })
+                    @Html.TextBoxFor(model => model.NumberOfChildren, new { @class = "form-control", data_val_numberofchildren = "Number of Children must be between " + (Session.Center().ProviderId == 6 ? "0 and 25." : "-1 and 20") })
+                    @Html.ValidationMessageFor(model => model.NumberOfChildren, "", new { @class = "help-block" })
+                </div>}
+            @if (Model.Client.IsChild) {
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CustodyId, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(model => model.CustodyId) })
+                    @Html.LookupFor(model => model.CustodyId, "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CustodyId, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.LivesWithId, new { @class = "control-label", data_toggle = "tooltip", title = "Select the option that most closely aligns with the client's living situation. If the client chooses not to answer, select Unknown." })
+                    @Html.LookupFor(model => model.LivesWithId, "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.LivesWithId, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.SchoolId, new { @class = "control-label", data_toggle = "tooltip", title = "Select the last completed or current school grade of the client. If client chooses not to answer, select Unknown." })
+                    @Html.LookupFor(model => model.SchoolId, "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.SchoolId, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IsDCFSOpen, new { @class = "control-label", data_toggle = "tooltip", title = "Check this box if there is an open DCFS Case associated with the client. If unknown, leave unchecked." })
+                    &nbsp;
+                    @Html.CheckBoxFor(model => model.IsDCFSOpen)
+                    @Html.ValidationMessageFor(model => model.IsDCFSOpen, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IsDCFSInvestigation, new { @class = "control-label", data_toggle = "tooltip", title = "Check this box if there is an active DCFS Investigation associated with the client. If unknown, leave unchecked." })
+                    &nbsp;
+                    @Html.CheckBoxFor(model => model.IsDCFSInvestigation)
+                    @Html.ValidationMessageFor(model => model.IsDCFSInvestigation, "", new { @class = "help-block" })
+                </div>}
+            @if (Model.Client.IsVictim || Model.Client.IsSignificantOther) {
+                <div class="form-group">
+                    @Html.LabelFor(model => model.SexualOrientationId, new { @class = "control-label", data_toggle = "tooltip", title = "Select the option your client most closely identifies with. If they choose not to identify, select Not Reported." })
+                    @Html.LookupFor(model => model.SexualOrientationId, "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.SexualOrientationId, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.HealthInsuranceId, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate the type of Insurance for your client. If they choose not to answer, select Not Reported." })
+                    @Html.LookupFor(model => model.HealthInsuranceId, "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.HealthInsuranceId, "", new { @class = "help-block" })
+                </div>
+
+                if (Model.Client.IsSignificantOther) {
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.RelationSOtoClientId, new { @class = "control-label", data_toggle = "tooltip", title = "Select the relationship the significant other shares with the victim." })
+                        @Html.LookupFor(model => model.RelationSOtoClientId, Lookups.RelationshipToClient[Model.Provider].Exclude(29, 46, 47, 52, 59, 64, 65, 70), "<Pick One>", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.RelationSOtoClientId, "", new { @class = "help-block" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.SignificantOtherOfId, new { @class = "control-label", data_toggle = "tooltip", title = "Select whether the client is a significant other of an Adult Victim or Child Victim." })
+                        @Html.LookupFor(model => model.SignificantOtherOfId, "<Pick One>", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.SignificantOtherOfId, "", new { @class = "help-block" })
+                    </div>
+                }
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EmploymentId, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(model => model.EmploymentId) })
+                    @Html.LookupFor(model => model.EmploymentId, "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.EmploymentId, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EducationId, new { @class = "control-label", data_toggle = "tooltip", title = "Select the highest level of education your client has completed. If they choose not to answer, please select Not Reported." })
+                    @Html.LookupFor(model => model.EducationId, "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.EducationId, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MaritalStatusId, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(model => model.MaritalStatusId) })
+                    @Html.LookupFor(model => model.MaritalStatusId, "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.MaritalStatusId, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PregnantId, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(model => model.PregnantId) })
+                    @Html.LookupFor(model => model.PregnantId, "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PregnantId, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IsStudent, new { @class = "control-label", data_toggle = "tooltip", title = "Mark the checkbox if the client is currently a college or university student." })
+                    &nbsp;
+                    @Html.CheckBoxFor(model => model.IsStudent)
+                    @Html.ValidationMessageFor(model => model.IsStudent, "", new { @class = "help-block" })
+                </div>
+            }
+
+            @if (Model.Client.IsChildVictim) {
+                <div class="form-group">
+                    @Html.LabelFor(model => model.HealthInsuranceId, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate the type of Insurance for your client. If they choose not to answer, select Not Reported." })
+                    @Html.LookupFor(model => model.HealthInsuranceId, "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.HealthInsuranceId, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PregnantId, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(model => model.PregnantId) })
+                    @Html.LookupFor(model => model.PregnantId, "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PregnantId, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CustodyId, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(model => model.CustodyId) })
+                    @Html.LookupFor(model => model.CustodyId, "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CustodyId, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DCFSHotlineDate, new { @class = "control-label", data_toggle = "tooltip", title = "Date DCFS Hotline was first contacted." })
+                    <div class="input-group date" data-provide="datepicker" data-date-end-date=@DateTime.Today.ToShortDateString()>
+                        @Html.TextBoxFor(model => model.DCFSHotlineDate, true, new { @class = "form-control" })
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.DCFSHotlineDate, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DCFSServiceDate, new { @class = "control-label", data_toggle = "tooltip", title = "Date of first service from DCFS." })
+                    <div class="input-group date" data-provide="datepicker" data-date-end-date=@DateTime.Today.ToShortDateString()>
+                        @Html.TextBoxFor(model => model.DCFSServiceDate, true, new { @class = "form-control" })
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.DCFSServiceDate, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PoliceReportDate, new { @class = "control-label", data_toggle = "tooltip", title = "Enter date of Police Report for the incident." })
+                    <div class="input-group date" data-provide="datepicker" data-date-end-date=@DateTime.Today.ToShortDateString()>
+                        @Html.TextBoxFor(model => model.PoliceReportDate, true, new { @class = "form-control" })
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.PoliceReportDate, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.InvestigationTypeId, new { @class = "control-label", data_toggle = "tooltip", title = "Select the type of organization that initiated the investigation." })
+                    @Html.LookupFor(model => model.InvestigationTypeId, "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.InvestigationTypeId, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IsInformationOnlyCase, new { @class = "control-label", data_toggle = "tooltip", title = "Select if this case is for information only." })
+                    &nbsp;
+                    @Html.CheckBoxFor(model => model.IsInformationOnlyCase)
+                    @Html.ValidationMessageFor(model => model.IsInformationOnlyCase, "", new { @class = "help-block" })
+                </div>
+            }
+
+            @if (Model.Client.IsChildNonVictim) {
+                <div class="form-group">
+                    @Html.LabelFor(model => model.RelationSOtoClientId, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate the relationship of this client to the Victim. If they choose not to answer, select Unknown." })
+                    @Html.LookupFor(model => model.RelationSOtoClientId, Lookups.RelationshipToClient[Model.Provider].Exclude(1, 2, 5, 6, 12, 13, 16, 17, 24, 25, 29, 34, 35, 38, 39, 40, 41, 44, 45, 46, 47, 48, 52, 54, 55, 59, 66, 67), "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.RelationSOtoClientId, "", new { @class = "help-block" })
+                </div>
+            }
+
+            @if (Model.Client.IsCACSignificantOther) {
+                <div class="form-group">
+                    @Html.LabelFor(model => model.RelationSOtoClientId, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate the relationship of this client to the Victim. If they choose not to answer, select Unknown." })
+                    @Html.LookupFor(model => model.RelationSOtoClientId, Lookups.RelationshipToClient[Model.Provider].Exclude(1, 2, 12, 13, 26, 27, 28, 29, 30, 31, 34, 35, 46, 47, 48, 52, 54, 55, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67), "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.RelationSOtoClientId, "", new { @class = "help-block" })
+                </div>
+            }
+        </div>
+    </div>
+</div>

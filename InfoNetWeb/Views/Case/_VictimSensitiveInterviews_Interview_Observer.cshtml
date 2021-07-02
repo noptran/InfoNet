@@ -1,0 +1,57 @@
+﻿@model ClientCase
+
+@{
+	var interviewKey = (Key)ViewData["interviewKey"];
+	var observerKey = (Key)ViewData["observerKey"];
+	string observerKeyPrefix = (string)ViewData["observerKeyPrefix"];
+	bool isDeleted = "-~".Contains(observerKeyPrefix);
+	string idPrefix = ("observer" + interviewKey + "_" + observerKey).Replace(':', '_');
+}
+
+<tr class=@(isDeleted ? "hide" : null)>
+    <td style="padding-left: 10px">
+        <div class="form-group mb-0">
+            @Html.LookupFor(m => m.VictimSensitiveInterviewsById[interviewKey].VSIObserversById[observerKey].ObserverID, "<Pick One>", true, new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "Deleted td:eq(0) :input:first" })
+            @Html.ValidationMessageFor(m => m.VictimSensitiveInterviewsById[interviewKey].VSIObserversById[observerKey].ObserverID, "", new { @class = "help-block" })
+        </div>
+    </td>
+    <td>
+        <div class="form-group mb-0">
+            @Html.DropDownListFor(m => m.VictimSensitiveInterviewsById[interviewKey].VSIObserversById[observerKey].ContactID, new SelectList(ViewBag.ContactLookup, "ID", "Name", Model.VictimSensitiveInterviewsById[interviewKey].VSIObserversById[observerKey].ContactID), "<Pick One>", new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "Deleted td:eq(1) :input:first" })
+            @Html.ValidationMessageFor(m => m.VictimSensitiveInterviewsById[interviewKey].VSIObserversById[observerKey].ContactID, "", new { @class = "help-block" })
+        </div>
+    </td>
+    <td>
+        <div class="form-group mb-0">
+            @Html.DropDownListFor(m => m.VictimSensitiveInterviewsById[interviewKey].VSIObserversById[observerKey].AgencyID, new SelectList(Data.Centers.GetAgencyForCenterinCurrentAgencyId(Session.Center().ProviderId, Session.Center().Id, Model.VictimSensitiveInterviewsById[interviewKey] == null ? 0 : Model.VictimSensitiveInterviewsById[interviewKey].VSIObserversById[observerKey].AgencyID), "AgencyID", "AgencyName", Model.VictimSensitiveInterviewsById[interviewKey].VSIObserversById[observerKey].AgencyID), "<Pick One>", new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "Deleted td:eq(2) :input:first" })
+            @Html.ValidationMessageFor(m => m.VictimSensitiveInterviewsById[interviewKey].VSIObserversById[observerKey].AgencyID, "", new { @class = "help-block" })
+        </div>
+    </td>
+    <td class="deleteObserverRow text-right pl-0" style="padding-top: 10px">
+        <button type="button" class="btn btn-xs btn-danger btn-icon" aria-label="Delete This Observer" data-icjia-role="interview.observer.delete"><span class="glyphicon glyphicon-trash"></span></button>
+        @Html.Hidden(Html.NameFor(m => m.VictimSensitiveInterviewsById[interviewKey].VSIObserversById) + ".index", observerKeyPrefix + observerKey, new { data_icjia_role = "interview.observer.index" })
+    </td>
+    <td class="text-right pl-0 restoreObserverRow hide" style="padding-top: 10px;"><button type="button" class="btn btn-icon btn-xs btn-primary" aria-label="Restore Deleted Observer" data-icjia-role="observer.restore"><span class="glyphicon glyphicon-undo"></span></button></td>
+</tr>
+
+@* Used when in Disabled/Deleted state *@
+<tr id="@(idPrefix)Deleted" class="deleted @(isDeleted ? null : "hide")">
+	<td style="padding-left: 10px">
+		<div class="form-group mb-0">
+			@Html.LookupFor(m => m.VictimSensitiveInterviewsById[interviewKey].VSIObserversById[observerKey].ObserverID, "<Pick One>", true, new { @class = "form-control", disabled = "disabled" })
+		</div>
+	</td>
+	<td>
+		<div class="form-group mb-0">
+			@Html.DropDownListFor(m => m.VictimSensitiveInterviewsById[interviewKey].VSIObserversById[observerKey].ContactID, new SelectList(ViewBag.ContactLookup, "ID", "Name", Model.VictimSensitiveInterviewsById[interviewKey].VSIObserversById[observerKey].ContactID), "<Pick One>", new { @class = "form-control", disabled = "disabled" })
+		</div>
+	</td>
+	<td>
+		<div class="form-group mb-0">
+			@Html.DropDownListFor(m => m.VictimSensitiveInterviewsById[interviewKey].VSIObserversById[observerKey].AgencyID, new SelectList(ViewBag.AgencyLookup, "AgencyID", "AgencyName", Model.VictimSensitiveInterviewsById[interviewKey].VSIObserversById[observerKey].AgencyID), "<Pick One>", new { @class = "form-control", disabled = "disabled" })
+		</div>
+	</td>
+	<td class="text-right pl-0" style="padding-top: 10px">
+		<button type="button" class="btn btn-xs btn-primary btn-icon" aria-label="Restore Deleted Observer" data-icjia-role="interview.observer.restore"><span class="glyphicon glyphicon-undo"></span></button>
+	</td>
+</tr>

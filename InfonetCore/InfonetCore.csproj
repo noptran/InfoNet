@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{46C182B8-8645-4754-8BE6-30D68C7F5A91}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Infonet.Core</RootNamespace>
+    <AssemblyName>InfonetCore</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EFHooks, Version=2.3.0.0, Culture=neutral, PublicKeyToken=1386ae34114c35cf, processorArchitecture=MSIL">
+      <HintPath>..\packages\Atreyu.EFHooks.2.3.1\lib\net45\EFHooks.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CamelCase.cs" />
+    <Compile Include="Collections\CollectionDecorator.cs" />
+    <Compile Include="Collections\Comparers.cs" />
+    <Compile Include="Collections\Enums.cs" />
+    <Compile Include="Collections\ExposableCollection.cs" />
+    <Compile Include="Collections\KeyedCollection.cs" />
+    <Compile Include="Collections\SublistExtensions.cs" />
+    <Compile Include="Collections\Lookahead.cs" />
+    <Compile Include="Collections\LookaheadEnumerator.cs" />
+    <Compile Include="Collections\DerivedDictionary.cs" />
+    <Compile Include="Collections\DictionaryExtensions.cs" />
+    <Compile Include="Collections\EnumeratorDecorator.cs" />
+    <Compile Include="Collections\EnumeratorWrapper.cs" />
+    <Compile Include="Collections\HashCode.cs" />
+    <Compile Include="Collections\EnumerableExtensions.cs" />
+    <Compile Include="Collections\IKeyAccess.cs" />
+    <Compile Include="Collections\Key.cs" />
+    <Compile Include="Collections\KeyProvider.cs" />
+    <Compile Include="Collections\ComparableExtensions.cs" />
+    <Compile Include="Collections\EmptyEnumerator.cs" />
+    <Compile Include="Collections\OrdinalEnum.cs" />
+    <Compile Include="Collections\OrdinalEnumMap.cs" />
+    <Compile Include="Collections\RestorableCollection.cs" />
+    <Compile Include="Collections\SetExtensions.cs" />
+    <Compile Include="Collections\ShadowCollection.cs" />
+    <Compile Include="Collections\Parameters.cs" />
+    <Compile Include="Data\DataRowExtensions.cs" />
+    <Compile Include="Data\DataTableExtensions.cs" />
+    <Compile Include="Data\DelimitedField.cs" />
+    <Compile Include="Data\SqlCommandExtensions.cs" />
+    <Compile Include="Data\SqlDataReaderExtensions.cs" />
+    <Compile Include="Data\SqlParameterCollectionExtensions.cs" />
+    <Compile Include="Entity\Binding\StringTrimAttribute.cs" />
+    <Compile Include="Entity\RemoveIfTrueAttribute.cs" />
+    <Compile Include="Entity\Validation\BetweenNineteenFiftyTodayAttribute.cs" />
+    <Compile Include="Entity\Validation\BetweenNineteenThirtyTodayAttribute.cs" />
+    <Compile Include="Entity\Validation\CompareWithDateAttribute.cs" />
+    <Compile Include="IO\CsvWriter.cs" />
+    <Compile Include="IO\StringBuilderExtensions.cs" />
+    <Compile Include="ConvertNull.cs" />
+    <Compile Include="Entity\Binding\BindHintAttribute.cs" />
+    <Compile Include="Entity\Binding\OnBindExceptionAttribute.cs" />
+    <Compile Include="Entity\DatabaseExtensions.cs" />
+    <Compile Include="Entity\DeleteIfNulledAttribute.cs" />
+    <Compile Include="Entity\INotifyContextSavedChanges.cs" />
+    <Compile Include="Entity\IRevisable.cs" />
+    <Compile Include="Entity\EnhancedDbContext.cs" />
+    <Compile Include="Entity\Validation\BetweenJulyTwoThousandEightTodayAttribute.cs" />
+    <Compile Include="Entity\Validation\BetweenNineteenNinetyTodayAttribute.cs" />
+    <Compile Include="Entity\Validation\BetweenNineteenSeventyTodayAttribute.cs" />
+    <Compile Include="Entity\Validation\CustomRangeAttribute.cs" />
+    <Compile Include="Entity\Validation\LogicalBooleanAttribute.cs" />
+    <Compile Include="Entity\Validation\NotGreaterThanTodayAttribute.cs" />
+    <Compile Include="Entity\Validation\NotLessThanNineteenSeventyAttribute.cs" />
+    <Compile Include="Entity\Validation\QuarterIncrementAttribute.cs" />
+    <Compile Include="Entity\Validation\WholeNumberAttribute.cs" />
+    <Compile Include="IO\BufferHelper.cs" />
+    <Compile Include="IO\TextReaderExtensions.cs" />
+    <Compile Include="IO\TextWriterExtensions.cs" />
+    <Compile Include="Logging\Log.cs" />
+    <Compile Include="NullExtensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reflection\AssemblyExtensions.cs" />
+    <Compile Include="Reflection\AttributeCollectionExtensions.cs" />
+    <Compile Include="Reflection\MemberInfoExtensions.cs" />
+    <Compile Include="Collections\EnumExtensions.cs" />
+    <Compile Include="Reflection\PropertyInfoExtensions.cs" />
+    <Compile Include="Security\PrincipalExtensions.cs" />
+    <Compile Include="Threading\ClosingFetchable.cs" />
+    <Compile Include="Threading\IFetchable.cs" />
+    <Compile Include="Threading\LazyHolder.cs" />
+    <Compile Include="Threading\LoggingFetchable.cs" />
+    <Compile Include="Threading\PollingFetchable.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>powershell -ExecutionPolicy ByPass -File  $(SolutionDir.TrimEnd('\'))\scripts\InjectGitVersion.ps1 $(ProjectDir)</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

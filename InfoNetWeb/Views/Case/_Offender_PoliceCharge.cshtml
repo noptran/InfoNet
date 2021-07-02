@@ -1,0 +1,85 @@
+﻿@model ClientCase
+
+@{
+    var offenderKey = (Key)ViewData["offenderKey"];
+    var chargeKey = (Key)ViewData["chargeKey"];
+    string chargeKeyPrefix = (string)ViewData["chargeKeyPrefix"];
+    bool isDeleted = "-~".Contains(chargeKeyPrefix);
+    string idPrefix = ("policeCharge" + offenderKey + "_" + chargeKey).Replace(':', '_');
+}
+
+<tr class=@(isDeleted ? "deleted" : null) data-toggle="collapse" data-target="#@(idPrefix)Collapse">
+    <td class="text-center">
+        <span id="@(idPrefix)ArrestMadeId"></span>
+    </td>
+    <td>
+        <span id="@(idPrefix)ArrestDate"></span>
+    </td>
+    <td>
+        <span id="@(idPrefix)StatuteId"></span>
+    </td>
+    <td>
+        <span id="@(idPrefix)ChargeTypeId"></span>
+    </td>
+    <td>
+        <span id="@(idPrefix)ChargeDate"></span>
+    </td>
+    <td>
+        <button type="button" class="btn btn-primary btn-xs btn-icon collapsed @(isDeleted ? "hide" : null)" aria-label="Toggle Charge Editing" aria-controls="#@(idPrefix)Collapse" aria-expanded="false" data-icjia-role="offender.policecharge.expand" data-toggle="collapse" data-target="#@(idPrefix)Collapse"><span class="glyphicon glyphicon-triangle-bottom rotate-90-if-collapsed"></span></button>
+        <button type="button" class="btn btn-primary btn-xs btn-icon @(isDeleted ? null : "hide")" aria-label="Restore Deleted Charge" data-icjia-role="offender.policecharge.restore"><span class="glyphicon glyphicon-undo"></span></button>
+        @Html.Hidden(Html.NameFor(m => m.OffendersById[offenderKey].PoliceChargesById) + ".index", chargeKeyPrefix + chargeKey, new { data_icjia_role = "offender.policecharge.index" })
+    </td>
+</tr>
+<tr>
+    <td colspan="6" style="border-top: none; padding: 0">
+        <div id="@(idPrefix)Collapse" class="collapse well" style="position: relative; margin: 0 39.3667px 19.68335px">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+						@Html.LabelFor(m => m.OffendersById[offenderKey].PoliceChargesById[chargeKey].ArrestMadeId, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(model => model.OffendersById[offenderKey].PoliceChargesById[chargeKey].ArrestMadeId) })
+                        @Html.LookupFor(m => m.OffendersById[offenderKey].PoliceChargesById[chargeKey].ArrestMadeId, "<Pick One>", true, new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "ArrestMadeId" })
+                        @Html.ValidationMessageFor(m => m.OffendersById[offenderKey].PoliceChargesById[chargeKey].ArrestMadeId, "", new { @class = "help-block" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.OffendersById[offenderKey].PoliceChargesById[chargeKey].ArrestDate, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the Date of Arrest.  Approximate date can be entered if known within one month." })
+                        <div class="input-group date" data-provide="datepicker">
+                            @Html.TextBoxFor(m => m.OffendersById[offenderKey].PoliceChargesById[chargeKey].ArrestDate, true, new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "ArrestDate" })
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                        @Html.ValidationMessageFor(m => m.OffendersById[offenderKey].PoliceChargesById[chargeKey].ArrestDate, "", new { @class = "help-block" })
+                    </div>
+                    <div class="form-group">
+						@Html.LabelFor(m => m.OffendersById[offenderKey].PoliceChargesById[chargeKey].StatuteId, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(model => model.OffendersById[offenderKey].PoliceChargesById[chargeKey].StatuteId) })
+                        @Html.LookupFor(m => m.OffendersById[offenderKey].PoliceChargesById[chargeKey].StatuteId, "<Pick One>", true, new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "StatuteId", data_icjia_role = "charge" })
+                        @Html.ValidationMessageFor(m => m.OffendersById[offenderKey].PoliceChargesById[chargeKey].StatuteId, "", new { @class = "help-block" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+					<div class="form-group">
+						@Html.LabelFor(m => m.OffendersById[offenderKey].PoliceChargesById[chargeKey].ChargeTypeId, Model.Provider == Provider.CAC ? "Class" : null, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(model => model.OffendersById[offenderKey].PoliceChargesById[chargeKey].ChargeTypeId) })
+						@Html.LookupFor(m => m.OffendersById[offenderKey].PoliceChargesById[chargeKey].ChargeTypeId, "<Pick One>", true, new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "ChargeTypeId" })
+						@Html.ValidationMessageFor(m => m.OffendersById[offenderKey].PoliceChargesById[chargeKey].ChargeTypeId, "", new { @class = "help-block" })
+					</div>
+                    @if (Model.Provider == Provider.CAC) {
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.OffendersById[offenderKey].PoliceChargesById[chargeKey].ChargeCounts, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the number of counts for the selected charge against the offender." })
+                            @Html.TextBoxFor(m => m.OffendersById[offenderKey].PoliceChargesById[chargeKey].ChargeCounts, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.OffendersById[offenderKey].PoliceChargesById[chargeKey].ChargeCounts, "", new { @class = "help-block" })
+                        </div>
+                    }
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.OffendersById[offenderKey].PoliceChargesById[chargeKey].ChargeDate, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the date of this police charge.  Often, this date is the same as the Arrest Date, but other times, a warrant for an offender's arrest charge was filed earlier than the offender's actual arrest date.  If this information is not known, leave blank." })
+                        <div class="input-group date" data-provide="datepicker">
+                            @Html.TextBoxFor(m => m.OffendersById[offenderKey].PoliceChargesById[chargeKey].ChargeDate, true, new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "ChargeDate" })
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                        @Html.ValidationMessageFor(m => m.OffendersById[offenderKey].PoliceChargesById[chargeKey].ChargeDate, "", new { @class = "help-block" })
+                    </div>
+                </div>
+            </div>
+            <div class="icjia-well-footer text-right">
+                <button type="button" class="btn btn-danger" aria-label="Delete This Charge" data-icjia-role="offender.policecharge.delete"><span class="glyphicon glyphicon-trash"></span></button>
+            </div>
+        </div>
+    </td>
+</tr>

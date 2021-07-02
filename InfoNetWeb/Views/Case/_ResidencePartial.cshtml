@@ -1,0 +1,125 @@
+﻿@model ClientCase
+
+@{
+	var residenceKey = (Key)ViewData["residenceKey"];
+	string residenceAction = (string)ViewData["residenceAction"];
+	string idPrefix = ("residence_" + residenceKey + "_").Replace(':', '_');
+	bool isDeleted = "-~".Contains(residenceAction);
+}
+
+<tr class=@(isDeleted ? "deleted" : null) data-toggle="collapse" data-target="#@(idPrefix)Collapse">
+	<td style="padding-left: 40px">
+		<span id="@(idPrefix)MoveDate"></span>
+	</td>
+	<td>
+		<span id="@(idPrefix)State"></span>
+	</td>
+	<td>
+		<span id="@(idPrefix)County"></span>
+	</td>
+	<td>
+		<span id="@(idPrefix)Zipcode"></span>
+	</td>
+	<td>
+		<span id="@(idPrefix)CityOrTown"></span>
+	</td>
+	<td>
+		<span id="@(idPrefix)Township"></span>
+	</td>
+	<td width="40px">
+		<button type="button" class="btn btn-primary btn-xs btn-icon collapsed @(isDeleted ? "hide" : null)" aria-label="Toggle Residence Editing" aria-controls="#@(idPrefix)Collapse" aria-expanded="false" data-icjia-role="residence.expand" data-toggle="collapse" data-target="#@(idPrefix)Collapse"><span class="glyphicon glyphicon-triangle-bottom rotate-90-if-collapsed"></span></button>
+		<button type="button" class="btn btn-primary btn-xs btn-icon @(isDeleted ? null : "hide")" aria-label="Restore Deleted Residence" data-icjia-role="residence.restore"><span class="glyphicon glyphicon-undo"></span></button>
+		@Html.Hidden(Html.NameFor(m => m.Client.TwnTshipCountyById) + ".index", residenceAction + residenceKey, new { data_icjia_role = "residence.index" })
+	</td>
+</tr>
+<tr class="dataRow">
+	<td colspan="7" style="border-top: none; padding: 0">
+		<div id="@(idPrefix)Collapse" class="collapse well residence" style="position: relative; margin: 0 39.3667px 19.68335px">
+			<div class="row">
+				<div class="col-sm-6">
+					@Html.HiddenFor(model => model.Client.TwnTshipCountyById[residenceKey].LocID)
+					@Html.HiddenFor(model => model.Client.TwnTshipCountyById[residenceKey].ClientID)
+					@Html.HiddenFor(model => model.Client.TwnTshipCountyById[residenceKey].CaseID)
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Client.TwnTshipCountyById[residenceKey].MoveDate, new { @class = "control-label", data_toggle = "tooltip", title = "Effective Date of residence should be the first date client lived at this location. This date should be no earlier than the client’s First Contact Date, and no later than today’s date." })
+                        <div class="input-group date" data-provide="datepicker" data-date-end-date=@DateTime.Today.ToShortDateString()>
+                            @Html.TextBoxFor(model => model.Client.TwnTshipCountyById[residenceKey].MoveDate, "{0:MM/dd/yyyy}", new { @class = "move-date form-control", data_icjia_broadcast = $"#{idPrefix}MoveDate" })
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Client.TwnTshipCountyById[residenceKey].MoveDate, "", new { @class = "help-block" })
+                        @Html.Hidden("Hidden_Client_TwnTshipCountyById_" + residenceKey + "__MoveDate", Model.Client.TwnTshipCountyById[residenceKey].MoveDate.ToString("MM/dd/yyyy"))
+                    </div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6 col-md-2">
+					<div class="form-group">
+						@Html.LabelFor(model => model.Client.TwnTshipCountyById[residenceKey].StateID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the client’s resident state. IL is the Default State." })
+						@Html.DropDownListFor(model => model.Client.TwnTshipCountyById[residenceKey].StateID, new SelectList(Data.Usps.States, "ID", "StateAbbreviation", Model.Client.TwnTshipCountyById[residenceKey].StateID != null ? Model.Client.TwnTshipCountyById[residenceKey].StateID : Data.Usps.Illinois.ID), new { @class = "form-control stateList", data_icjia_broadcast = $"#{idPrefix}State" })
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-4">
+					<div class="form-group">
+						@Html.LabelFor(model => model.Client.TwnTshipCountyById[residenceKey].CountyID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the client’s residential county. To view counties from other states, change the State field to the client’s resident state." })
+						@Html.DropDownListFor(model => model.Client.TwnTshipCountyById[residenceKey].CountyID, new SelectList(Data.Usps.GetCountiesByState(Model.Client.TwnTshipCountyById[residenceKey].StateID ?? Data.Usps.Illinois.ID), "ID", "CountyName", Model.Client.TwnTshipCountyById[residenceKey].CountyID), "<Pick One>", new { @class = "form-control", data_icjia_broadcast = $"#{idPrefix}County" })
+					</div>
+				</div>
+				<div class="col-sm-12 col-md-6">
+					<div class="form-group">
+						@Html.LabelFor(model => model.Client.TwnTshipCountyById[residenceKey].Zipcode, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the client’s residential Zip Code." })
+						@if (Session.Center().Provider == Provider.DV) {
+							<div class="input-group" style="width: 100%">
+								@Html.TextBoxFor(model => model.Client.TwnTshipCountyById[residenceKey].Zipcode, new { @class = "form-control", maxlength = "5", data_icjia_role = "residence.zipcode.typeahead", data_icjia_broadcast_zip = $"#{idPrefix}Zipcode" })
+								<span class="input-group-addon zipcodeCB"><input class="res_cb_unknown" type="checkbox" value="-1" data-icjia-broadcast-zip=@($"#{idPrefix}Zipcode")> Unknown</span>
+								<span class="input-group-addon zipcodeCB"><input class="res_cb_notreported" type="checkbox" value="-2" data-icjia-broadcast-zip=@($"#{idPrefix}Zipcode")> Not Reported</span>
+							</div>
+						} else {
+							@Html.TextBoxFor(model => model.Client.TwnTshipCountyById[residenceKey].Zipcode, new { @class = "form-control", maxlength = "5", data_icjia_role = "residence.zipcode.typeahead", data_icjia_broadcast_zip = $"#{idPrefix}Zipcode" })
+						}
+						@Html.ValidationMessageFor(model => model.Client.TwnTshipCountyById[residenceKey].Zipcode, "", new { @class = "help-block" })
+                        @Html.Hidden("Hidden_Client_TwnTshipCountyById_" + residenceKey+ "__Zipcode", Model.Client.TwnTshipCountyById[residenceKey].Zipcode)
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						@Html.LabelFor(model => model.Client.TwnTshipCountyById[residenceKey].CityOrTown, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(model => model.Client.TwnTshipCountyById[residenceKey].CityOrTown) })
+						@Html.TextBoxFor(model => model.Client.TwnTshipCountyById[residenceKey].CityOrTown, new { @class = "form-control", data_icjia_role = "residence.cityortown.typeahead", data_icjia_broadcast = $"#{idPrefix}CityOrTown" })
+						@Html.ValidationMessageFor(model => model.Client.TwnTshipCountyById[residenceKey].CityOrTown, "", new { @class = "help-block" })
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<br class="hidden-sm hidden-md hidden-lg" style="margin-top: 15px"/>@* Fixes typeahead layout issues when xs *@
+						@Html.LabelFor(model => model.Client.TwnTshipCountyById[residenceKey].Township, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(model => model.Client.TwnTshipCountyById[residenceKey].Township) })
+						@Html.TextBoxFor(model => model.Client.TwnTshipCountyById[residenceKey].Township, new { @class = "form-control", data_icjia_role = "residence.township.typeahead", data_icjia_broadcast = $"#{idPrefix}Township" })
+						@Html.ValidationMessageFor(model => model.Client.TwnTshipCountyById[residenceKey].Township, "", new { @class = "help-block" })
+					</div>
+				</div>
+			</div>
+			@if (Session.Center().HasShelter && Session.Center().Provider == Provider.DV) {
+				<div class="form-group text-info" style="margin-top: 15px">
+					For shelter/housing clients only
+				</div>
+				<div class="row">
+					<div class="col-sm-12 col-md-6">
+						<div class="form-group"> 
+							@Html.LabelFor(model => model.Client.TwnTshipCountyById[residenceKey].ResidenceTypeID, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the type of residence client lived in at the time of intake (or if entering a residential program, where they lived just prior to entering). If client does not want to disclose this information, select Unknown." })
+							@Html.LookupFor(model => model.Client.TwnTshipCountyById[residenceKey].ResidenceTypeID, "<Pick One>", true, new { @class = "form-control" })
+						</div>
+					</div>
+					<div class="col-sm-12 col-md-6">
+						<div class="form-group">
+							@Html.LabelFor(model => model.Client.TwnTshipCountyById[residenceKey].LengthOfStayInResidenceID, new { @class = "control-label", data_toggle = "tooltip", title = "Enter length of time client lived/has been living at the selected residence type." })
+							@Html.LookupFor(model => model.Client.TwnTshipCountyById[residenceKey].LengthOfStayInResidenceID, "<Pick One>", true, new { @class = "form-control" })
+						</div>
+					</div>
+				</div>
+			}
+			<div class="icjia-well-footer text-right">
+				<button type="button" class="btn btn-danger" aria-label="Delete This Residence" data-icjia-role="residence.delete"><span class="glyphicon glyphicon-trash"></span></button>
+			</div>
+		</div>
+	</td>
+</tr>

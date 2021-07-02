@@ -1,0 +1,22 @@
+﻿.badgebox {
+	opacity: 0;
+	position: absolute;
+}
+
+.badgebox + .badge {
+	width: 27px;
+	text-indent: 1px;
+}
+
+.badgebox:focus + .badge {
+	box-shadow: inset 0 0 3px;
+}
+
+.badgebox:checked + .badge::before {
+	content: '\2713';
+}
+
+.btn-badgebox:active:focus, .btn-badgebox:active, .btn-badgebox:focus {
+	box-shadow:none;
+	outline:none;
+}

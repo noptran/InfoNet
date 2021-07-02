@@ -1,0 +1,34 @@
+﻿@using Infonet.Reporting.Enumerations
+@model Infonet.Reporting.ViewModels.ManagementReportViewModel
+@{ 
+	string panelTitle = (string)ViewData["panelTitle"];
+}
+<div class="panel panel-primary icjia-error-group reportProperty @SubReportSelection.MngRptClientClientDetail.GetShortName()" style="display:none">
+	<div class="panel-heading">
+		<h2 class="panel-title">
+			<span class="icjia-panel-title-text">@panelTitle</span>
+		</h2>
+	</div>
+	<div class="panel-body">
+		<div class="row">
+			@foreach (var field in Model.ClientDetailAvailableColumnSelections) {
+				string chkd = string.Empty;
+				string disabled = string.Empty;
+				if (Model.ClientDetailColumnSelections != null && Model.ClientDetailColumnSelections.Contains(field)) {
+					chkd = "checked='checked'";
+				}
+				if (field == ReportColumnSelectionsEnum.ClientCode || field == ReportColumnSelectionsEnum.CaseID) {
+					chkd = "checked='checked'";
+					disabled = "disabled='disabled'";
+				}
+				<div class="col-xs-6 col-sm-4 col-md-3">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="@Html.NameFor(model => model.ClientDetailColumnSelections)" value="@((int)field)" data-icjia-name="@field.ToString()" data-icjia-parent-id="#selection@((int)ReportSelection.MngRptClient)" @chkd @disabled /> @( field.GetDisplayName() )
+						</label>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+</div>

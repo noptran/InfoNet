@@ -1,0 +1,13 @@
+﻿@model ClientCase
+
+@switch (Session.Center().Provider) {
+	case Provider.DV:
+		@Html.Partial("_ReferredByDV", Model)
+		break;
+	case Provider.SA:
+		@Html.Partial("_ReferredBySA", Model)
+		break;
+	case Provider.CAC:
+		@Html.Partial("_ReferredByCAC", Model)
+		break;
+}

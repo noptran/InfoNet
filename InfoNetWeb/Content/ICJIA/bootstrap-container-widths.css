@@ -1,0 +1,275 @@
+﻿/*
+	************************* ICJIA CONTAINER WIDTHS **************************
+	These widths are measured in 12ths of the .container's width.  They are
+	useful for columns with position fixed because such columns' percentages
+	are relative to the .container (i.e. not the containing element).
+*/
+.container-xs-12 {
+	width: 100%;
+}
+
+.container-xs-11 {
+	width: 91.66666667%;
+}
+
+.container-xs-10 {
+	width: 83.33333333%;
+}
+
+.container-xs-9 {
+	width: 75%;
+}
+
+.container-xs-8 {
+	width: 66.66666667%;
+}
+
+.container-xs-7 {
+	width: 58.33333333%;
+}
+
+.container-xs-6 {
+	width: 50%;
+}
+
+.container-xs-5 {
+	width: 41.66666667%;
+}
+
+.container-xs-4 {
+	width: 33.33333333%;
+}
+
+.container-xs-3 {
+	width: 25%;
+}
+
+.container-xs-2 {
+	width: 16.66666667%;
+}
+
+.container-xs-1 {
+	width: 8.33333333%;
+}
+
+@media (min-width: 768px) { /* .container width 750px */
+	.container-xs-12,
+	.container-sm-12 {
+		width: calc(1.00 * 750px);
+	}
+
+	.container-xs-11,
+	.container-sm-11 {
+		width: calc(0.9166666667 * 750px);
+	}
+
+	.container-xs-10,
+	.container-sm-10 {
+		width: calc(0.8333333333 * 750px);
+	}
+
+	.container-xs-9,
+	.container-sm-9 {
+		width: calc(0.75 * 750px);
+	}
+
+	.container-xs-8,
+	.container-sm-8 {
+		width: calc(0.6666666667 * 750px);
+	}
+
+	.container-xs-7,
+	.container-sm-7 {
+		width: calc(0.5833333333 * 750px);
+	}
+
+	.container-xs-6,
+	.container-sm-6 {
+		width: calc(0.50 * 750px);
+	}
+
+	.container-xs-5,
+	.container-sm-5 {
+		width: calc(0.4166666667 * 750px);
+	}
+
+	.container-xs-4,
+	.container-sm-4 {
+		width: calc(0.3333333333 * 750px);
+	}
+
+	.container-xs-3,
+	.container-sm-3 {
+		width: calc(0.25 * 750px);
+	}
+
+	.container-xs-2,
+	.container-sm-2 {
+		width: calc(0.1666666667 * 750px);
+	}
+
+	.container-xs-1,
+	.container-sm-1 {
+		width: calc(0.0833333333 * 750px);
+	}
+}
+
+@media (min-width: 992px) { /* .container width 970px */
+	.container-xs-12,
+	.container-sm-12,
+	.container-md-12 {
+		width: calc(1.00 * 970px);
+	}
+
+	.container-xs-11,
+	.container-sm-11,
+	.container-md-11 {
+		width: calc(0.9166666667 * 970px);
+	}
+
+	.container-xs-10,
+	.container-sm-10,
+	.container-md-10 {
+		width: calc(0.8333333333 * 970px);
+	}
+
+	.container-xs-9,
+	.container-sm-9,
+	.container-md-9 {
+		width: calc(0.75 * 970px);
+	}
+
+	.container-xs-8,
+	.container-sm-8,
+	.container-md-8 {
+		width: calc(0.6666666667 * 970px);
+	}
+
+	.container-xs-7,
+	.container-sm-7,
+	.container-md-7 {
+		width: calc(0.5833333333 * 970px);
+	}
+
+	.container-xs-6,
+	.container-sm-6,
+	.container-md-6 {
+		width: calc(0.50 * 970px);
+	}
+
+	.container-xs-5,
+	.container-sm-5,
+	.container-md-5 {
+		width: calc(0.4166666667 * 970px);
+	}
+
+	.container-xs-4,
+	.container-sm-4,
+	.container-md-4 {
+		width: calc(0.3333333333 * 970px);
+	}
+
+	.container-xs-3,
+	.container-sm-3,
+	.container-md-3 {
+		width: calc(0.25 * 970px);
+	}
+
+	.container-xs-2,
+	.container-sm-2,
+	.container-md-2 {
+		width: calc(0.1666666667 * 970px);
+	}
+
+	.container-xs-1,
+	.container-sm-1,
+	.container-md-1 {
+		width: calc(0.0833333333 * 970px);
+	}
+}
+
+@media (min-width: 1200px) { /* .container width 1170px */
+	.container-xs-12,
+	.container-sm-12,
+	.container-md-12,
+	.container-lg-12 {
+		width: calc(1.00 * 1170px);
+	}
+
+	.container-xs-11,
+	.container-sm-11,
+	.container-md-11,
+	.container-lg-11 {
+		width: calc(0.9166666667 * 1170px);
+	}
+
+	.container-xs-10,
+	.container-sm-10,
+	.container-md-10,
+	.container-lg-10 {
+		width: calc(0.8333333333 * 1170px);
+	}
+
+	.container-xs-9,
+	.container-sm-9,
+	.container-md-9,
+	.container-lg-9 {
+		width: calc(0.75 * 1170px);
+	}
+
+	.container-xs-8,
+	.container-sm-8,
+	.container-md-8,
+	.container-lg-8 {
+		width: calc(0.6666666667 * 1170px);
+	}
+
+	.container-xs-7,
+	.container-sm-7,
+	.container-md-7,
+	.container-lg-7 {
+		width: calc(0.5833333333 * 1170px);
+	}
+
+	.container-xs-6,
+	.container-sm-6,
+	.container-md-6,
+	.container-lg-6 {
+		width: calc(0.50 * 1170px);
+	}
+
+	.container-xs-5,
+	.container-sm-5,
+	.container-md-5,
+	.container-lg-5 {
+		width: calc(0.4166666667 * 1170px);
+	}
+
+	.container-xs-4,
+	.container-sm-4,
+	.container-md-4,
+	.container-lg-4 {
+		width: calc(0.3333333333 * 1170px);
+	}
+
+	.container-xs-3,
+	.container-sm-3,
+	.container-md-3,
+	.container-lg-3 {
+		width: calc(0.25 * 1170px);
+	}
+
+	.container-xs-2,
+	.container-sm-2,
+	.container-md-2,
+	.container-lg-2 {
+		width: calc(0.1666666667 * 1170px);
+	}
+
+	.container-xs-1,
+	.container-sm-1,
+	.container-md-1,
+	.container-lg-1 {
+		width: calc(0.0833333333 * 1170px);
+	}
+}

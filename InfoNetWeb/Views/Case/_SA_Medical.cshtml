@@ -1,0 +1,54 @@
+﻿@model ClientCase
+
+@{
+	var visitKey = Model.ClientCJProcessesById.Keys.SingleOrDefault() ?? Key.Template(null, "0");
+}
+
+<div class="panel-body">
+	@Html.Hidden(Html.NameFor(m => m.ClientCJProcessesById) + ".index", (visitKey.Components[0] == null ? "+" : "=") + visitKey)
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.LabelFor(m => m.ClientCJProcessesById[visitKey].MedicalVisitId, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate if the client has visited a medical facility as it relates to the primary presenting issue." })
+                @Html.LookupFor(m => m.ClientCJProcessesById[visitKey].MedicalVisitId, "<Pick One>", true, new { @class = "form-control" })
+            </div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.ClientCJProcessesById[visitKey].MedicalTreatmentId, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate if the client received treatment for injuries from a medical facility or healthcare provider." })
+				@Html.LookupFor(m => m.ClientCJProcessesById[visitKey].MedicalTreatmentId, "<Pick One>", true, Model.ClientCJProcessesById[visitKey].MedicalVisitId != 1 ? new { @class = "form-control", disabled = "disabled" } : (object)new { @class = "form-control" })
+				@Html.HiddenFor(m => m.ClientCJProcessesById[visitKey].MedicalTreatmentId, new { id = "", Value = "" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.ClientCJProcessesById[visitKey].InjuryId, new { @class = "control-label", data_toggle = "tooltip", title = "Please indicate if the client required hospital admission due to seriousness of injury(ies)." })
+				@Html.LookupFor(m => m.ClientCJProcessesById[visitKey].InjuryId, "<Pick One>", true, Model.ClientCJProcessesById[visitKey].MedicalVisitId != 1 ? new { @class = "form-control", disabled = "disabled" } : (object)new { @class = "form-control" })
+				@Html.HiddenFor(m => m.ClientCJProcessesById[visitKey].InjuryId, new { id = "", Value = "" })
+			</div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.ClientCJProcessesById[visitKey].PhotosTakenId, new { @class = "control-label", data_toggle = "tooltip", title = "Please indicate if photos were taken of client’s injury(ies)." })
+                @Html.LookupFor(m => m.ClientCJProcessesById[visitKey].PhotosTakenId, "<Pick One>", true, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+			<div class="form-group">
+				@Html.LabelFor(m => m.ClientCJProcessesById[visitKey].MedWhereId, new { @class = "control-label", data_toggle = "tooltip", title = "Select the type of medial facility visited by client." })
+				@Html.LookupFor(m => m.ClientCJProcessesById[visitKey].MedWhereId, "<Pick One>", true, Model.ClientCJProcessesById[visitKey].MedicalVisitId != 1 ? new { @class = "form-control", disabled = "disabled" } : (object)new { @class = "form-control" })
+				@Html.HiddenFor(m => m.ClientCJProcessesById[visitKey].MedWhereId, new { id = "", Value = "" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.ClientCJProcessesById[visitKey].EvidKitId, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate if an evidence kit was used on the client while being treated at the medical facility." })
+				@Html.LookupFor(m => m.ClientCJProcessesById[visitKey].EvidKitId, "<Pick One>", true, Model.ClientCJProcessesById[visitKey].MedicalVisitId != 1 ? new { @class = "form-control", disabled = "disabled" } : (object)new { @class = "form-control" })
+				@Html.HiddenFor(m => m.ClientCJProcessesById[visitKey].EvidKitId, new { id = "", Value = "" })
+			</div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.ClientCJProcessesById[visitKey].SANETreatedId, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate whether or not the victim was treated by a certified Sexual Assault Nurse Examiner (SANE)." })
+                @Html.LookupFor(m => m.ClientCJProcessesById[visitKey].SANETreatedId, "<Pick One>", true, Model.ClientCJProcessesById[visitKey].SANETreatedId != 1 ? new { @class = "form-control", disabled = "disabled" } : (object)new { @class = "form-control" })
+                @Html.HiddenFor(m => m.ClientCJProcessesById[visitKey].SANETreatedId, new { id = "", Value = "" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.ClientCJProcessesById[visitKey].HospitalName, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the name of the hospital or medical facility visited (if applicable)." })
+                @Html.TextBoxFor(m => m.ClientCJProcessesById[visitKey].HospitalName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.ClientCJProcessesById[visitKey].HospitalName, "", new { @class = "help-block" })
+            </div>
+        </div>
+    </div>
+</div>

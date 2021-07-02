@@ -1,0 +1,52 @@
+﻿@model ClientCase
+
+@{
+	var SAMPLE_TWNTSHIPCOUNTY = new TwnTshipCounty();
+}
+
+<div class="panel-body">
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="text-info">
+				You may select any existing residences to view, edit, or delete information. If the client has moved, update by adding a new residence record with their new residence information.
+			</div>
+		</div>
+	</div>
+</div>
+<div class="table-responsive">
+	<table id="tbl_residences" class="table mb-0">
+		<thead class="icjia-panel-subheader">
+			<tr>
+				<th scope="col" style="padding-left: 40px">@Html.DisplayNameFor(m => SAMPLE_TWNTSHIPCOUNTY.MoveDate)</th>
+				<th scope="col" >@Html.DisplayNameFor(m => SAMPLE_TWNTSHIPCOUNTY.StateID)</th>
+				<th scope="col" >@Html.DisplayNameFor(m => SAMPLE_TWNTSHIPCOUNTY.CountyID)</th>
+				<th scope="col" >@Html.DisplayNameFor(m => SAMPLE_TWNTSHIPCOUNTY.Zipcode)</th>
+				<th scope="col" >@Html.DisplayNameFor(m => SAMPLE_TWNTSHIPCOUNTY.CityOrTown)</th>
+				<th scope="col" >@Html.DisplayNameFor(m => SAMPLE_TWNTSHIPCOUNTY.Township)</th>
+                <th scope="col" ><span class="sr-only">Action</span></th>
+			</tr>
+		</thead>
+		<tbody>
+			@{
+				var twntshipcounties = Model.Client.TwnTshipCountyById;
+			}
+			@foreach (var each in twntshipcounties.KeysFor(twntshipcounties.Values.Concat(twntshipcounties.Values.Restorable).OrderByDescending(t => t.LocID.HasValue).ThenBy(t => t.LocID).ThenBy(t => twntshipcounties.KeyFor(t).Occurrence))) {
+				bool isNew = each.Components[0] == null;
+				string action = twntshipcounties.ContainsKey(each) ? (isNew ? "+" : "=") : (isNew ? "~" : "-");
+				@Html.Partial("_ResidencePartial", Model, ViewData.CopyWith(new { residenceKey = each, residenceAction = action }))
+			}
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="7" class="text-right">
+					<button type="button" class="btn btn-primary btn-xs btn-icon" aria-label="Add New Residence" data-icjia-role="residence.add" data-icjia-mustache-next='{ "key": @Model.Client.TwnTshipCountyById.NextOccurrenceFor(null) }'>
+						<span class="glyphicon glyphicon-plus"></span>
+						@using (var mustache = Html.BeginMustache("script", "--d-", "-p--")) {
+							@Html.Partial("_ResidencePartial", Model, ViewData.CopyWith(new { residenceKey = Key.Template(null, mustache.Tag("key")), residenceAction = "+", countyList = Data.Usps.IllinoisCounties }))
+						}
+					</button>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+</div>

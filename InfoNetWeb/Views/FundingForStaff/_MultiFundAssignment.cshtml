@@ -1,0 +1,43 @@
+﻿@model Infonet.Web.ViewModels.Admin.FundingForStaff
+
+@{
+	if (Model != null) {
+		<div class="row ffs-title">
+
+			<div class="col-md-6">
+				<span style="font-weight:bold;">Center: </span><span>@Session.Center().Name</span>
+			</div>
+			<div class="col-md-6">
+				<span style="font-weight:bold;">Staff Member: </span><span id="currentStaffMemberNameMultiFund"></span>
+			</div>
+		</div>
+
+		<div class="panel panel-info icjia-error-group" id="multiFundInstructionsPanel">
+			<div class="panel-heading " data-toggle="collapse" data-target="#multiFundInstructions">
+				<h2 class="panel-title">
+					<span class="icjia-panel-title-text">Instructions</span>
+					<a class="pull-right " data-toggle="collapse" href="#multiFundInstructions" role="button" aria-label="Toggle Panel" aria-controls="multiFundInstructions" aria-expanded="true"><span class="glyphicon glyphicon-triangle-bottom rotate-90-if-collapsed"></span></a>
+				</h2>
+			</div>
+			<div id="multiFundInstructions" class="panel-collapse collapse in">
+				<div class="row">
+
+					<div class="col-md-12">
+						<div class="panel-body">
+							<ol class="text-info">
+								<li>Check the services you want to link to a funding source(s).</li>
+								<li>Select the funding source(s) that will support the selected services. Percentages for all funding sources must sum to 100%.</li>
+								<li>Click the Save button to apply changes or the undo/cancel button to exit without changing.</li>
+							</ol>
+							<span class="text-info">*Indicates funding source is no longer active.</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" id="multiFundAssignmentDiv">
+			@Html.Partial("_MultiFundAssignmentFundsServices")
+		</div>
+	}
+}

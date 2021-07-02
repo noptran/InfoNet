@@ -1,0 +1,59 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>SessionDebug</title>
+</head>
+<body>
+    @{  var sb = new System.Text.StringBuilder();
+                sb.Append("Session.CookieMode : "+ Session.CookieMode+ Environment.NewLine);
+                sb.Append("Session.Count : "+ Session.Count + Environment.NewLine);
+                sb.Append("Session.IsCookieless : "+ Session.IsCookieless + Environment.NewLine);
+                sb.Append("Session.IsNewSession : "+ Session.IsNewSession + Environment.NewLine);
+                sb.Append("Session.IsReadOnly : "+ Session.IsReadOnly + Environment.NewLine);
+                sb.Append("Session.IsSynchronized : "+ Session.IsSynchronized + Environment.NewLine);
+                sb.Append("Session.LCID : "+ Session.LCID + Environment.NewLine);
+                sb.Append("Session.SessionID : "+ Session.SessionID + Environment.NewLine);
+                sb.Append("Session.Timeout : "+ Session.Timeout + Environment.NewLine);
+
+
+
+                List<string> keys = new List<string>();
+
+                foreach (string key in Session.Keys)
+                {
+                    keys.Add(key);
+                }
+                foreach (string key in keys.OrderBy(x => x))
+                {
+                    string value = null;
+                    if ((Session[key] == null))
+                    {
+                        value = "--Nothing--";
+                    }
+                    if (DBNull.Value == Session[key])
+                    {
+                        value = "--DBNull--";
+                    }
+                    if (value == null)
+                    {
+                        value = Session[key].ToString();
+                    }
+                    sb.Append(key + " : " + value + Environment.NewLine);
+                }
+    }
+<pre>
+@Html.Raw(sb.ToString())
+</pre>
+    @Html.Partial("_SessionTracker")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/Scripts/ICJIA/session-tracker.js")
+</body>
+</html>

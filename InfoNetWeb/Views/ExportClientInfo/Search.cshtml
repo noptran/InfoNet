@@ -1,0 +1,72 @@
+﻿@using PagedList.Mvc
+@model Infonet.Web.ViewModels.Admin.ExportClientInfoViewModel
+
+@{
+	ViewBag.Title = "Export Clients";
+}
+
+@using (Html.BeginForm("Search", "ExportClientInfo", FormMethod.Get, new { id = "main", autocomplete = "off" })) {
+	<div class="row">
+		<div class="col-sm-3">
+			<div class="form-group">
+				@Html.LabelFor(m => m.ClientCode, new { @class = "control-label", data_toggle = "tooltip", title = "Please enter the full or partial unique identifier assigned by your location to identify the client." })
+				@Html.TextBoxFor(m => m.ClientCode, new { @class = "form-control", type = "text", autocomplete = "off" })
+				@Html.ValidationMessageFor(m => m.ClientCode, "", new { @class = "help-block" })
+			</div>
+		</div>
+		<div class="col-sm-9">
+			<div class="form-group">
+				@Html.Partial("_DateRangeSelect", Model, new ViewDataDictionary { ["rangeTitle"] = "First Contact Date Range", ["rangeTooltipTitle"] = "Search by client’s First Contact Date." })
+			</div>
+		</div>
+	</div>
+
+	<div style="margin-bottom: 20px">
+		<button type="submit" class="btn btn-primary">
+			Search <span class="glyphicon glyphicon-search"></span>
+		</button>
+		<a href=@(Request.Url?.AbsolutePath) class="btn btn-warning">
+			Reset <span class="glyphicon glyphicon-refresh"></span>
+		</a>
+		<button type="submit" class="btn btn-success pull-right" name="download" value="true">
+			Download&nbsp;<span class="glyphicon glyphicon-download-alt"></span>
+		</button>
+	</div>
+}
+
+<table class="table table-hover table-responsive">
+	<tr>
+		<th scope="col">Client ID</th>
+		<th scope="col">Client Code</th>
+		<th scope="col">Gender</th>
+		<th scope="col">Ethnicity</th>
+		<th scope="col">Race/Ethnicity</th>
+		<th scope="col">First Contact Date</th>
+	</tr>
+	@foreach (var each in Model.SearchResults) {
+		<tr>
+			<td>@each.ClientId</td>
+			<td>@each.Client.ClientCode</td>
+			<td>@(Lookups.GenderIdentity[each.Client.GenderIdentityId]?.Description)</td>
+			<td>@(Lookups.Ethnicity[each.Client.EthnicityId]?.Description)</td>
+			<td>@(string.Join(", ", each.Client.RaceHudIds.Select(r => Lookups.RaceHud[r].Description)))</td>
+			<td>@Html.DisplayFor(m => each.FirstContactDate)</td>
+		</tr>
+	}
+</table>
+
+
+@Html.PagedListPager(Model.SearchResults, page => Url.Action((string)ViewContext.RouteData.Values["action"], new {
+	page,
+	Model.Range,
+	StartDate = Model.StartDate.HasValue ? $"{Model.StartDate:MM/dd/yyyy}" : " ",
+	EndDate = Model.EndDate.HasValue ? $"{Model.EndDate:MM/dd/yyyy}" : " ",
+	Model.ClientCode,
+	Model.PageSize
+}), Html.Snippets().PagedListRenderOptions())
+@Html.Partial("_PagedListFooter", Model.SearchResults)
+
+@section Scripts {
+	@Scripts.Render("~/Scripts/ICJIA/date-ranges.js")
+	@Scripts.Render("~/Scripts/ICJIA/pagedlist.js")
+}

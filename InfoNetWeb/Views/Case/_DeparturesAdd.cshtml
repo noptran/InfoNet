@@ -1,0 +1,75 @@
+﻿@model DepartureAdd
+@{
+	var collapseId = "collapseDeparturesAdd_" + (Model.Index).ToString();
+}
+
+<tr @(Model.IsDeleted ? "class=deleted" : null)>
+	<td>
+		<span data-icjia-view-for=@Html.IdFor(model => model.DepartureDate)></span>
+	</td>
+	<td>
+		<span data-icjia-view-for=@Html.IdFor(model => model.DestinationID)></span>
+	</td>
+	<td>
+		<span data-icjia-view-for=@Html.IdFor(model => model.DestinationTenureID)></span>
+	</td>
+	<td>
+		<span data-icjia-view-for=@Html.IdFor(model => model.DestinationSubsidyID)></span>
+	</td>
+	<td>
+		<span data-icjia-view-for=@Html.IdFor(model => model.ReasonForLeavingID)></span>
+	</td>
+	<td width="40px">
+		<button type="button" class="btn btn-primary btn-xs btn-icon collapsed @(Model.IsDeleted ? "hide" : null)" aria-label="Toggle Add Destination" data-icjia-role="departure.destination.expand" data-toggle="collapse" data-target=@("#" + collapseId)><span class="glyphicon glyphicon-triangle-bottom rotate-90-if-collapsed"></span></button>
+		<button type="button" class="btn btn-primary btn-xs btn-icon @(Model.IsDeleted ? null : "hide")" aria-label="Restore Add Destination" data-icjia-role="departure.destination.restore"><span class="glyphicon glyphicon-undo"></span></button>
+	</td>
+</tr>
+<tr class="cntDeparturesAdd">
+	<td colspan="6" style="border-top: none; padding: 0px">
+		<div id=@collapseId class="collapse well panel" style="margin: 0px 39.3667px 19.68335px;">
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						@Html.LabelFor(model => model.DepartureDate, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the date the client left the residential program (on- or off-site shelter or transitional housing)." })
+						<div class="input-group date" data-provide="datepicker" data-date-end-date=@DateTime.Today.ToShortDateString()>
+							@Html.TextBoxFor(model => model.DepartureDate, true, new { @class = "form-control", data_icjia = "set-view-for" })
+							@Html.Hidden("DepartureDateHidden", Model.DepartureDate.HasValue ? Model.DepartureDate.Value.ToShortDateString() : "")
+							<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+						</div>
+						@Html.ValidationMessageFor(model => model.DepartureDate, "", new { @class = "help-block" })
+
+						@Html.HiddenFor(m => Model.IsDeleted, new { @class = "departures-add" })
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(model => model.DestinationID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the type of destination location that best describes where the client will live following the residential program. If their destination is not an option listed, please select Other. If they chose not to disclose this information, select Not Reported." })
+						@Html.LookupFor(model => model.DestinationID, Lookups.Destination[Provider.DV], "<Pick One>", new { @class = "form-control", data_icjia = "set-view-for" })
+						@Html.ValidationMessageFor(model => model.DestinationID, "", new { @class = "help-block" })
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						@Html.LabelFor(model => model.DestinationTenureID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the intended tenure for the destination location." })
+						@Html.LookupFor(model => model.DestinationTenureID, Lookups.DestinationTenure[Provider.DV], "<Pick One>", new { @class = "form-control", data_icjia = "set-view-for" })
+						@Html.ValidationMessageFor(model => model.DestinationTenureID, "", new { @class = "help-block" })
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(model => model.DestinationSubsidyID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the subsidy being utilized for the client’s destination. If no subsidy is being used, select None. If the client chooses not to disclose this information, select Not Reported." })
+						@Html.LookupFor(model => model.DestinationSubsidyID, Lookups.DestinationSubsidy[Provider.DV], "<Pick One>", new { @class = "form-control", data_icjia = "set-view-for" })
+						@Html.ValidationMessageFor(model => model.DestinationSubsidyID, "", new { @class = "help-block" })
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(model => model.ReasonForLeavingID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the reason that best describes client’s reason for leaving the residential program. If this information cannot be obtained, select Unknown." })
+						@Html.LookupFor(model => model.ReasonForLeavingID, Lookups.ReasonForLeaving[Provider.DV], "<Pick One>", new { @class = "form-control", data_icjia = "set-view-for" })
+						@Html.ValidationMessageFor(model => model.ReasonForLeavingID, "", new { @class = "help-block" })
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-12">
+					<button type="button" class="btn btn-danger pull-right" aria-label="Delete This Destination" data-icjia-role="departure.destination.delete"><span class="glyphicon glyphicon-trash"></span></button>
+				</div>
+			</div>
+		</div>
+	</td>
+</tr>

@@ -1,0 +1,41 @@
+﻿@model ReferralAdd
+
+<tr @(Model.IsDeleted ? "style=display:none;" : "")>
+	<td>
+		<div class="form-group" style="margin:0; min-width:125px;">
+			@Html.LookupFor(model => Model.ReferralTypeID, Session.Center().Provider, "<Pick One>", true, new { @class = "form-control", data_val_servicegrouprequired = "The Referral Type field is required." })
+			@Html.ValidationMessageFor(m => Model.ReferralTypeID, "", new { @class = "help-block" })		
+			
+			@Html.HiddenFor(m => Model.IsAdded)
+			@Html.HiddenFor(m => Model.IsDeleted)
+			@Html.HiddenFor(m => Model.IsEmpty)
+			@Html.ValidationMessageFor(m => Model.ReferralTypeID, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td>
+		<div class="form-group" style="margin:0; min-width:100px;">
+			@Html.TextBoxFor(m => Model.ReferralDate, "{0:MM/dd/yyyy}",
+				Html.Attributes(new { data_provide = "datepicker", data_date_end_date = DateTime.Today.ToShortDateString(), @class = "inline-date form-control date group1", data_val_servicegrouprequired = "The Referral Date field is required." }))
+			@Html.ValidationMessageFor(m => Model.ReferralDate, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td>
+		<div class="form-group" style="margin:0; min-width:300px;">
+			@Html.DropDownListFor(model => model.AgencyID, new SelectList(ViewBag.AgencyLookup, "AgencyID", "AgencyName"), "<Pick One>",
+				Html.Attributes(new { @class = "form-control group1", data_val_servicegrouprequired = "The Agency field is required." }))
+			@Html.ValidationMessageFor(m => Model.AgencyID, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td>
+		<div class="form-group" style="margin:0; min-width:125px;">
+			@Html.LookupFor(model => Model.ResponseID, Session.Center().Provider, "<Pick One>", true,
+				Html.Attributes(new { @class = "form-control group1", onfocusout = "referralCheckIfEmpty(this, 'group1')", data_val_servicegrouprequired = "The Response field is required." }))
+			@Html.ValidationMessageFor(m => Model.ResponseID, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td class="removeReferral" style="text-align: center;" data-icjia-role="glyphicon-remove-toggle">
+		<div style="width:70px;">
+			<button class="btn btn-danger" onclick="addHideRow(this);" type="button"><span class="glyphicon glyphicon-trash"></span></button>
+		</div>
+	</td>
+</tr>

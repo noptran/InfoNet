@@ -1,0 +1,196 @@
+﻿@model Infonet.Web.ViewModels.Admin.FundingSourceLookupViewModel
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Manage Funding Source List";
+}
+
+@{int fundingSourceCount;}
+
+@if (Model.displayForPaging == null) {
+    fundingSourceCount = 0;
+} else {
+    fundingSourceCount = Model.displayForPaging.Count;
+}
+
+@using (Html.BeginForm("Index_Post", "FundingSourceLookup", FormMethod.Post, new { @class = "main", id = "firstForm", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+    @Html.AntiForgeryToken()
+	<div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-primary" style="margin: 0; margin-top:5px;">
+                <div class="panel-heading" data-toggle="collapse" data-target="#addFundingSourceCollapse">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h3 class="panel-title"><a data-toggle="collapse" href="#addFundingSourceCollapse">Add Funding Source</a></h3>
+                        </div>
+                    </div>
+                </div>
+                <div id="addFundingSourceCollapse" class="panel-collapse collapse in">
+					<div class="panel-body">
+						<table class="table table-responsive icjia-table-borderless" id="newFundingSources" style="margin-bottom: 0;">
+							<thead>
+								<tr>
+									<th scope="col" width="40%" style="border:none;"><span data-toggle="tooltip" title="Enter the funding source name.">Funding Source Name</span></th>
+									<th scope="col" width="23%" style="border:none;"><span data-toggle="tooltip" title="Specify the end date for this funding source. Leave blank if it not yet decided or does not have one.">End Date</span></th>
+									<th scope="col" width="23%" style="border:none;"><span data-toggle="tooltip" title="Leave blank if alphabetical sorting is desired.">Display Order</span></th>
+									<th scope="col" width="9%" style="border:none;" class="text-center"><span data-toggle="tooltip" title="Check this box to indicate this is an active funding source. Uncheck if funding source has expired or is no longer needed. Only active funding sources will display in the Funding for Staff utility.">Is Active?</span></th>
+									<th scope="col" width="5%" style="border:none;"></th>
+								</tr>
+							</thead>
+							<tbody></tbody>
+						</table>
+						<div class="row">
+							<div class="col-xs-12">
+								<input type="hidden" class="addfundingsource" value="@fundingSourceCount" />
+								<button type="button" class="btn btn-default btn-outline addfundingsource" value="@fundingSourceCount"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;Add New Funding Source</button>
+							</div>
+						</div>
+					</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="pull-right">
+                @Html.Snippets().SaveButton(new { id = "saveButton", data_icjia_role = "preventDuplicateRequest", accesskey = "s" })
+                @Html.Snippets().UndoLink(Url.Action(), new { accesskey = "u" })
+            </div>
+        </div>
+    </div>
+}
+<hr />
+@using (Html.BeginForm("Index", "FundingSourceLookup", FormMethod.Get, new { autocomplete = "off", id="main" })) {
+	<div class="row">
+		<div class="col-sm-4 col-md-3">
+			<div class="form-group">
+				@Html.LabelFor(model => model.FundingSource, new { @class = "control-label", data_toggle = "tooltip", title = "Search by putting a part of the funding source name you are looking for." })
+				@Html.EditorFor(model => model.FundingSource, new { htmlAttributes = new { @class = @"form-control", type = "text", autocomplete = "off" } })
+				@Html.ValidationMessageFor(model => model.FundingSource, "", new { @class = "help-block" })
+			</div>
+		</div>
+		<div class="col-sm-4 col-md-3">
+			<div class="form-group">
+				@Html.LabelFor(modelItem => modelItem.IsActive, new { @class = "control-label", data_toggle = "tooltip", title = "Is the funding source you are looking for active?" })
+				@Html.DropDownListFor(modelItem => modelItem.IsActive, new[] { new SelectListItem { Text = "", Value = "" }, new SelectListItem { Text = "Yes", Value = "true" }, new SelectListItem { Text = "No", Value = "false" } }, new { @class = "form-control" })
+			</div>
+		</div>
+		<div class="col-sm-4 col-md-3">
+			<div class="form-group">
+				@Html.LabelFor(model => model.DisplayOrder, new { @class = "control-label", data_toggle = "tooltip", title = "Pick your desired sort order." })
+				@Html.EditorFor(model => model.DisplayOrder, new { htmlAttributes = new { @class = @"form-control", type = "number", step = 1, autocomplete = "off" } })
+				@Html.ValidationMessageFor(model => model.DisplayOrder, "", new { @class = "help-block" })
+			</div>
+		</div>
+	</div>
+		<div class="row">
+			<div class="col-md-10">
+				<button type="submit" class="btn btn-primary" id="Search">
+					Filter <span class="glyphicon glyphicon-filter"></span>
+				</button>
+				<button type="submit" class="btn btn-warning" id="clearCriteria">
+					Clear filter criteria <span class="glyphicon glyphicon-erase"></span>
+				</button>
+			</div>
+		</div>
+			<input type="hidden" value="@fundingSourceCount" id="recordCount" />
+			<br />
+}
+
+@using (Html.BeginForm("Index_Post", "FundingSourceLookup", FormMethod.Post, new { @class = "main", id = "secondForm", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+	@Html.AntiForgeryToken()
+            <table class="table table-hover table-bordered table-responsive" id="searchResults">
+                <tr>
+                    <th scope="col" class="text-center" width="18%">
+                        Action
+                    </th>
+                    <th scope="col" width="35%">
+                        Funding Source Name
+                    </th>
+                    <th scope="col" width="22%">
+						End Date
+                    </th>
+                    <th scope="col" width="15%">
+						Display Order
+                    </th>
+                    <th scope="col" class="text-center" width="10%">
+						Active?
+                    </th>
+                </tr>
+                @if (Model.FundingSourceList != null) {
+                    for (int i = 0; i < Model.displayForPaging.Count; i++) {
+                        <tr>
+                            <td class="text-center">
+                                @if (Model.displayForPaging[i].CenterID == Model.CenterID) {
+                                    <div>
+                                        <label>
+											Edit
+											@Html.CheckBoxFor(modelItem => Model.displayForPaging[i].shouldEdit, new { @class = "editRecord" })
+										</label>
+                                        <label>
+											Delete
+											@Html.CheckBoxFor(modelItem => Model.displayForPaging[i].shouldDelete, new { @class = "deleteRecord", data_hasreference = Model.displayForPaging[i].hasReference })
+										</label>
+                                    </div>
+                                }
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    @Html.TextBoxFor(modelItem => Model.displayForPaging[i].FundingSourceName, new { @class = "form-control rowData", disabled = "disabled" })
+                                    @Html.ValidationMessageFor(model => Model.displayForPaging[i].FundingSourceName, "", new { @class = "help-block" })
+                                    @Html.HiddenFor(modelItem => Model.displayForPaging[i].FundingSourceID)
+                                    @Html.HiddenFor(modelItem => Model.displayForPaging[i].ItemAssignmentID)
+                                    @Html.HiddenFor(modelItem => Model.displayForPaging[i].CenterID)
+                                    @Html.HiddenFor(modelItem => Model.displayForPaging[i].hasReference)
+                                    @Html.HiddenFor(modeItem => Model.displayForPaging[i].ICADVAdmin)
+                                    @Html.HiddenFor(modeItem => Model.displayForPaging[i].ICASAAdmin)
+                                    @Html.HiddenFor(modeItem => Model.displayForPaging[i].BeginDate)
+                                </div>
+                            </td>
+                            <td>
+								<div class="form-group">
+									<div class="input-group date" data-provide="datepicker">
+										@Html.TextBoxFor(model => Model.displayForPaging[i].EndDate, "{0:MM/dd/yyyy}", new { @class = "form-control rowData", autocomplete = "off", disabled = "disabled" })
+										<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+									</div>
+									@Html.ValidationMessageFor(model => Model.displayForPaging[i].EndDate, "", new { @class = "help-block" })
+								</div>
+							</td>
+                            <td>
+                                <div class="form-group">
+                                    @Html.TextBoxFor(modelItem => Model.displayForPaging[i].DisplayOrder, new { type = "number", step = 1, @class = "form-control rowData", disabled = "disabled" })
+                                    @Html.ValidationMessageFor(model => Model.displayForPaging[i].DisplayOrder, "", new { @class = "help-block" })
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="form-group" style="padding-top:6px;">
+                                    @Html.CheckBoxFor(modelItem => Model.displayForPaging[i].IsActive, new { @class = "rowData", disabled = "disabled" })
+                                    @Html.ValidationMessageFor(model => Model.displayForPaging[i].IsActive, "", new { @class = "help-block" })
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+
+    @Html.HiddenFor(model => model.CenterID)
+    <input type="hidden" id="pageNumber" name="PageNumber" value="@Model.PageNumber" />
+}
+
+<div class="row">
+	<div class="col-sm-12">
+		@Html.PagedListPager(Model.FundingSourceList, page => Url.Action(Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)),
+	    new {
+		   page, Model.PageSize, Model.FundingSource, Model.IsActive, Model.DisplayOrder
+	     }),
+	    Html.Snippets().PagedListRenderOptions())
+		@Html.Partial("_PagedListDropMenu", Model, new ViewDataDictionary { { "PagedListUrlAction", Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)) } })
+	</div>
+</div>
+
+@section scripts{
+	<script src="~/Scripts/Views/Shared/_SearchEdit.js"></script>
+    <script src="~/Scripts/Views/Admin/FundingSourceLookup.js"></script>
+	<script src="~/Scripts/ICJIA/pagedlist.js"></script>
+	<script src="~/Scripts/Views/Admin/RetainFilters.js"></script>
+}

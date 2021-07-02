@@ -1,0 +1,11 @@
+﻿@model Infonet.Reporting.Core.ReportContainer
+
+@{
+    bool isPdf = ViewBag.IsPDF ?? false;
+    Layout = isPdf ? "~/Views/Shared/Reports/_ReportPDFLayout.cshtml" : "~/Views/Shared/Reports/_ReportHTMLLayout.cshtml";
+    ViewBag.Title = Model.Title;
+    ViewBag.TitleNote = Model.TitleNote;
+    
+    Html.RenderPartial("~/Views/Report/_ReportStyles.cshtml");
+    Model.Write(Html.ViewContext.Writer, null);
+}

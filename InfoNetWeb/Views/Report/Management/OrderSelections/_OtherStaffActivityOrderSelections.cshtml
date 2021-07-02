@@ -1,0 +1,34 @@
+﻿@using Infonet.Reporting.Enumerations
+@model Infonet.Reporting.ViewModels.ManagementReportViewModel
+@{
+	string panelTitle = (string)ViewData["panelTitle"];
+}
+<div class="panel panel-primary icjia-error-group reportProperty @SubReportSelection.MngRptStaffServiceOtherStaffActivity.GetShortName()" style="display:none">
+	<div class="panel-heading">
+		<h2 class="panel-title">
+			<span class="icjia-panel-title-text">@panelTitle</span>
+		</h2>
+	</div>
+	<div class="panel-body">
+		<div class="row">
+			@foreach (var field in Enums.GetValues<RecordDetailOrderSelectionsEnum>()) {
+				string chkd = string.Empty;
+				string disabled = string.Empty;
+				if (Model.StaffClientServiceRecordDetailOrderSelection == field) {
+					chkd = "checked='checked'";
+				}
+				<div class="col-xs-6 col-sm-4 col-md-3">
+					<div class="checkbox">
+						<label>
+							<input type="radio" name="@Html.NameFor(model => model.OtherStaffActivityRecordDetailOrderSelection)" value="@((int)field)" data-icjia-name="@field.ToString()" @chkd @disabled /> @( field.GetDisplayName() )
+							@if (field == RecordDetailOrderSelectionsEnum.GroupBy) {
+								<span style="font-style:italic">Activity Type</span>
+							}
+						</label>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+</div>
+

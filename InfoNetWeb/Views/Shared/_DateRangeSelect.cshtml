@@ -1,0 +1,19 @@
+﻿@model Infonet.Web.ViewModels.Shared.PagedListPagination
+
+@{
+	string rangeTitle = (string)ViewData["RangeTitle"];
+	string rangeTooltipTitle = (string)ViewData["RangeTooltipTitle"];
+}
+
+<div class="row">
+	<div class="form-group col-sm-8 col-md-6 ">
+		@Html.Partial("_DateRangeLabelTextboxes", Model, new ViewDataDictionary { { "rangeTitle", rangeTitle }, { "rangeTooltipTitle", rangeTooltipTitle } })
+	</div>
+
+	<div class="form-group col-sm-4 col-md-3">
+		@Html.Label("rangePeriodChosen", "Ranges", new { @class = "control-label" })
+		<select class="form-control col-md-3" name="Range" id="rangePeriodChosen" data-icjia-role="dateRanges" data-icjia-start="#Start" data-icjia-end="#End" data-icjia-default-range="@Model.Range">
+			@Html.Partial("_DateRangeOptions1-8_13-15")
+		</select>
+	</div>
+</div>

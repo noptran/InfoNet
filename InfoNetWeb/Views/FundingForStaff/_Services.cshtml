@@ -1,0 +1,97 @@
+﻿@model Infonet.Web.ViewModels.Admin.FundingForStaff
+
+@{
+	if (Model.FFSAssignServices.AssignedServices != null) {
+		for (var i = 0; i < Model.FFSAssignServices.AssignedServices.Count; i++) {
+			var collapseId = "collapseServicesEdit_" + i;
+			var cntFundingSources = Model.StaffFundedSources.Count(s => s.ServiceProgramID == Model.FFSAssignServices.AssignedServices[i].ServiceProgramID);
+			var isAdd = cntFundingSources == 0;
+
+			string description = Model.FFSAssignServices.AssignedServices[i].Name.Trim();
+			description = description.Substring(description.Length - 3);
+
+			string borderColor = "";
+			string bgColor = "";
+
+			switch (description) {
+				case "(S)":
+					borderColor = "#f7ecb5";
+					bgColor = "#fcf8e3";
+					break;
+				case "(P)":
+					borderColor = "#afd9ee";
+					bgColor = "#d9edf7";
+					break;
+				case "(H)":
+					borderColor = "#e4b9b9";
+					bgColor = "#f2dede";
+					break;
+			}
+
+			<tr class="cntServicesPrograms" @(Model.FFSAssignServices.AssignedServices[i].IsDeleted ? "class=cell-deleted" : null) style="border-left: solid 5px; border-right: solid 5px; border-color: @(borderColor);" >
+				<td>
+					@Html.HiddenFor(m => m.FFSAssignServices.AssignedServices[i].ServiceProgramID)
+					<span>@Model.FFSAssignServices.AssignedServices[i].Name</span>
+				</td>
+				<td>
+					<span>@Model.FFSAssignServices.AssignedServices[i].PercentFunded</span>
+				</td>
+				<td width="40px">
+					<button type="button" class="btn btn-primary btn-xs btn-icon collapsed @(Model.FFSAssignServices.AssignedServices[i].IsDeleted ? "hide" : null)" aria-label="Toggle Services/Programs" data-icjia-role="fundingforstaff.fundingsource.expand" data-toggle="collapse" data-target=@("#" + collapseId)><span class="glyphicon glyphicon-triangle-bottom rotate-90-if-collapsed"></span></button>
+					<button type="button" class="btn btn-primary btn-xs btn-icon @(Model.FFSAssignServices.AssignedServices[i].IsDeleted ? null : "hide")" aria-label="Restore Services/Programs" data-icjia-role="fundingforstaff.fundingsource.restore"><span class="glyphicon glyphicon-undo"></span></button>
+				</td>
+			</tr>
+			<tr style="border-left: solid 5px; border-right: solid 5px; border-color: @(borderColor);">
+				<td colspan="3" style="border-top: none; padding: 0">
+					<div id=@collapseId class="collapse well panel" style="margin: 0 39.3667px 19.68335px; padding: 0;">
+						<div class="table-responsive" style="min-height:40px;">
+							<table class="table" id="fundingSourceModify">
+								@*<caption class="text-center text-uppercase"></caption>*@
+								<thead class="icjia-panel-subheader">
+									<tr>
+										<th scope="col">Funding Source - <span class="icjia-results">(Results: @cntFundingSources)</span></th>
+										<th scope="col" width="100">Percent</th>
+									</tr>
+								</thead>
+								<tbody>
+
+									@foreach (var fundedSource in Model.StaffFundedSources.Where(s => s.ServiceProgramID == Model.FFSAssignServices.AssignedServices[i].ServiceProgramID)) {								
+										<tr>
+											<td>
+												<span>@fundedSource.Description</span>
+											</td>
+											<td>
+												<span>@fundedSource.PercentFund</span>
+											</td>
+										</tr>
+									}
+								</tbody>
+							</table>
+						</div>
+						<div class="row" style="padding:10px">
+							<div class="col-sm-12">
+
+								<div class="pull-right">
+									<div class="btn-group text-center">
+										@if (isAdd) {
+											<button type="button" class="btn btn-primary btn-white" aria-label="Add Funding Source" data-icjia-role="ffs.assignFundingSource" data-ffs-currentServiceProgramID=@Model.FFSAssignServices.AssignedServices[i].ServiceProgramID data-toggle="tooltip" title="Select to assign funding source(s) to the selected service."><span class="glyphicon glyphicon-plus"></span> Funding Source</button>
+										} else {
+											<button type="button" class="btn btn-primary btn-white" aria-label="Edit Funding Source" data-icjia-role="ffs.assignFundingSource" data-ffs-currentServiceProgramID=@Model.FFSAssignServices.AssignedServices[i].ServiceProgramID data-toggle="tooltip" title="Select to assign or modify funding source(s) to the selected service."><span class="glyphicon glyphicon-pencil"></span> Funding Source</button>
+										}
+										@*<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											<span class="caret"></span>
+											<span class="sr-only">Toggle Dropdown</span>
+										</button>
+										<ul class="dropdown-menu">
+											<li><button class="btn btn-link" data-icjia-role="ffs.multiFundAssignment" data-toggle="tooltip" title="Select to assign identical funding sources and proportions to multiple services on the selected staff." type="button">Multi-Fund Assignment</button></li>
+										</ul>*@
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+		}
+	}
+}

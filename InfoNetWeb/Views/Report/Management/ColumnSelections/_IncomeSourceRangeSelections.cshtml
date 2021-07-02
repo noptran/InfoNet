@@ -1,0 +1,34 @@
+﻿@using Infonet.Reporting.Enumerations
+@model Infonet.Reporting.ViewModels.ManagementReportViewModel
+@{
+	string panelTitle = (string)ViewData["panelTitle"];
+}
+<div class="panel panel-primary icjia-error-group reportProperty @SubReportSelection.MngRptClientIncomeSourceManagement.GetShortName()" style="display:none">
+	<div class="panel-heading">
+		<h2 class="panel-title">
+			<span class="icjia-panel-title-text">@panelTitle</span>
+		</h2>
+	</div>
+	<div class="panel-body">
+		<table class="table table-responsive icjia-table-borderless">
+			<tbody>
+				@Html.Partial("~/Views/Report/Management/ColumnSelections/_NewIncomeRangePartial.cshtml", Model)
+			</tbody>
+			<tfoot>
+				<tr>
+					<td>
+                        <button class="btn btn-default btn-outline" type="button" id="newIncomeRange">
+                            <span class="glyphicon glyphicon-plus-sign"></span>
+                            Add New Annual Income Range
+                        </button>
+						<button class="btn btn-warning" type="button" id="resetIncomeRanges">
+							Reset
+							<span class="glyphicon glyphicon-refresh"></span>
+						</button>
+                        @Html.ValidationMessageFor(model => model.IncomeSourceIncomeRanges, "", new { @class = "help-block" })
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+</div>

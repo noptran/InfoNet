@@ -1,0 +1,79 @@
+﻿@model IList<Infonet.Web.Utilities.UserActivity>
+
+@{
+    ViewBag.Title = "Center Activity";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <h4 class="text-center">
+         @DateTime.Now.ToString()
+    </h4>
+    <div class="text-center">
+        <span>Curently @Model.Count.ToString() user(s) online</span>
+    </div>    
+</div>
+<div class="row">
+    <div class="col-xs-12 text-right">
+        <a class="btn btn-primary hidden-print" role="button" href="~/ReportAdmin/CenterActivity">
+            <span class="glyphicon glyphicon-refresh"></span> Refresh
+        </a>
+    </div>
+</div>
+<br />
+<table class="table">
+    <tr>
+        <th scope="col">
+            Center Name
+        </th>
+        <th scope="col">
+            Center ID
+        </th>
+        <th scope="col">
+            Start Date
+        </th>
+        <th scope="col">
+            Last Access
+        </th>
+        <th scope="col">
+            Elapsed Time
+        </th>
+        <th scope="col">
+            Time Since Last Hit
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @item.CenterName
+            </td>
+            <td class="text-left">
+                @item.CenterId
+            </td>
+            <td>
+                @(item.SessionStart != DateTime.MinValue ? item.SessionStart.ToString() : string.Empty)
+            </td>
+            <td>
+                @(item.LastAccessed != DateTime.MinValue ? item.LastAccessed.ToString() : string.Empty)
+            </td>
+            <td>
+                @{
+	                var ts = DateTime.Now - item.SessionStart;
+	                string elapsedTime = (ts < TimeSpan.Zero ? "-" : "") + ts.ToString(@"mm\:ss");
+                }
+
+                @elapsedTime
+            </td>
+            <td>
+                @{
+	                var ts2 = DateTime.Now - item.LastAccessed;
+	                string lastHit = (ts2 < TimeSpan.Zero ? "-" : "") + ts2.ToString(@"mm\:ss");
+                }
+
+                @lastHit
+            </td>
+        </tr>
+    }
+</table>
+

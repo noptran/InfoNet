@@ -1,0 +1,22 @@
+﻿@using Infonet.Web.ViewModels.Shared
+@model PagedListPagination
+
+<input type="hidden" value="@Model.RecordCount" id="pagedListRecordCount" />
+
+@Html.DropDownListFor(m => m.PageSize, new SelectList(new[] { 10,20,50,100 }, Model.PageSize), new { id = "icjia-pagedlist-drop-menu", @class= "form-control icjia-pagedlist-drop-menu", aria_invalid = "false" })
+
+@{
+	int recordsShownEnd = 0;
+	int recordsShownStart = 0;
+
+	if (Model.RecordCount > 0) {
+		recordsShownEnd = Model.PageSize * (int)Model.PageNumber;
+		recordsShownStart = recordsShownEnd - Model.PageSize + 1;
+
+		if (recordsShownEnd > Model.RecordCount) { recordsShownEnd = (int)Model.RecordCount; }
+
+		if (recordsShownStart < 0) { recordsShownStart = 1; }
+	}
+}
+
+<span class="icjia-pagedlist-page-of">Displaying @recordsShownStart to @recordsShownEnd of @Model.RecordCount Record@(Model.RecordCount == 1 ? "" : "s")</span>

@@ -1,0 +1,55 @@
+@using PagedList; 
+@model ClientCase
+
+<div class="panel-body">
+
+	<div class="row">
+		<div class="col-sm-12">
+			<h4>Add Referral Detail</h4>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="table-responsive">
+				<table class="table table-bordered table-striped table-hover" id="referralTableAdd">
+					<thead>
+						<tr>
+							<th scope="col" class="col-md-4"><span class="icjia-required" data-toggle="tooltip" title="Select the type of referral provided to the client.">Referral Type</span></th>
+							<th scope="col" class="col-md-4"><span class="icjia-required" data-toggle="tooltip" title="Enter the date this referral was provided.">Referral Date</span></th>
+							<th scope="col" class="col-md-2"><span id="referralAgencyAdd" class="icjia-required" data-toggle="tooltip" title="Select the agency this client was referred to. If the specific agency is not listed, drop-down menu can be edited by selecting the logged in user > Manage Lookup Lists > Agencies. You must have permission to access this function.">Agency</span></th>
+							<th scope="col" class="col-md-1"><span class="icjia-required" data-toggle="tooltip" title="Select the referral agency’s response to the client’s request for services.">Response</span></th>
+							<th scope="col" class="col-md-1"><span class="sr-only">Action</span></th>
+						</tr>
+					</thead>
+					<tbody>
+						@{
+							for (int i = 0; i < ViewBag.ReferralAdd.Count; i++) {
+								@Html.Partial("_ReferralAdd", (ReferralAdd)ViewBag.ReferralAdd[i], new ViewDataDictionary(ViewData) { TemplateInfo = new TemplateInfo { HtmlFieldPrefix = $"ReferralAdd[{i}]" } })
+							}
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	@if (Model.ClientReferralDetail != null && Model.ClientReferralDetail.Count > 0) {
+		@Html.Action("ReferralSearchDates", "Case", new { referralSearchDates = ViewBag.ReferralSearchDates })
+	}
+
+    <div class="row">
+		<div class="col-sm-12">
+			<h4>Referral List</h4>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-12" id="searchResult">
+			@{if (Model.ClientReferralDetail != null && Model.ClientReferralDetail.Count > 0) {
+					@Html.Partial("_ReferralEdit", (PagedList<ReferralEdit>)ViewBag.ReferralEdit)
+				}
+			}
+		</div>
+	</div>
+</div>

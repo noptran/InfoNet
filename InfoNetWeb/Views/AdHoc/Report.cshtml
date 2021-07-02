@@ -1,0 +1,26 @@
+﻿@model Infonet.Web.Controllers.AdHocController.ReportViewModel
+
+@{
+	Layout = Model.IsPdf ? "~/Views/Shared/Reports/_ReportPDFLayout.cshtml" : "~/Views/Shared/Reports/_ReportHTMLLayout.cshtml";
+	ViewBag.Title = Model.Title;
+}
+
+<div style="display: inline-block; min-width: calc(100vw - 32px); padding-right: 15px">
+	<div class="panel panel-primary mb-0">
+		<div class="panel-heading">
+			<h2 class="panel-title">Query Results from Perspective of @Model.Perspective.GetDisplayName()</h2>
+		</div>
+		<div class="panel-body text-center" style="padding: 50px 50px 30px">
+			@{
+				var start = DateTime.Now;
+				int rowCount = Model.Renderer(Html.ViewContext.Writer);
+				var elapsed = DateTime.Now - start;
+			}
+		</div>
+		<div class="panel-footer" style="font-size: 10px; font-style: italic">
+			<span style="white-space: nowrap; margin-right: 10px"><span style="font-weight: bold">Start:</span> @start</span>
+			<span style="white-space: nowrap; margin-right: 10px"><span style="font-weight: bold">Elapsed:</span> @elapsed.TotalSeconds secs</span>
+			<span style="white-space: nowrap; margin-right: 10px"><span style="font-weight: bold">Records:</span> @rowCount</span>
+		</div>
+	</div>
+</div>

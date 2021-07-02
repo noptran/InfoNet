@@ -1,0 +1,221 @@
+﻿@using Infonet.Reporting.AdHoc
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
+@model Infonet.Data.Models.Reporting.AdHocQuery
+
+@{
+	var json = JObject.Parse(Model.Json);
+	var perspective = json["perspective"].Enum<Perspective>();
+	var dataModel = DataModel.For(Session.Center().Provider, perspective);
+
+	ViewBag.Title = $"Ad Hoc: {Model.Name}";
+	ViewBag.PageHeader = Model.Id == null ? $"Ad Hoc: <i>{Model.Name}</i>" : $"Ad Hoc: <b>{Model.Name}</b>";
+}
+<form id="main" autocomplete="off" novalidate="novalidate" style="position: relative">
+	<input id="id" type="hidden" name="id" value="@Model.Id" />
+	<input id="name" type="hidden" name="name" value="@(Model.Id == null ? null : Model.Name)" />
+	<input id="perspective" type="hidden" name="perspective" value="@perspective" />
+	<div class="row" style="margin-bottom: 5px">
+		<div class="col-sm-2">
+			<div class="form-group">
+				<div class="btn-group" style="width: 100%">
+					<button type="button" class="btn btn-primary dropdown-toggle" style="width: 100%" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Query&nbsp;&nbsp;<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li><a id="new" href=@Url.Action("Index", "AdHoc", new { perspective, id = UrlParameter.Optional }) accesskey="n"><span class="access-key">N</span>ew</a></li>
+						<li><a id="open" href="#" accesskey="o"><span class="access-key">O</span>pen...</a></li>
+						<li role="separator" class="divider"></li>
+						<li><a id="save" href="#" accesskey="s"><span class="access-key">S</span>ave</a></li>
+						<li><a id="saveAs" href="#" accesskey="a">Save <span class="access-key">A</span>s...</a></li>
+						<li role="separator" class="divider"></li>
+						<li class="@(Model.Id == null ? "disabled" : null)"><a id="delete" href="#">Delete</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-5 col-md-4 col-lg-3">
+			<div class="form-group">
+				<div class="btn-group" style="width: 100%">
+					<button type="button" class="btn btn-primary dropdown-toggle" style="width: 100%" data-toggle="dropdown" @(Model.Id != null ? "disabled" : null) aria-haspopup="true" aria-expanded="false">
+						From&nbsp;Perspective&nbsp;of&nbsp;@perspective.GetDisplayName()&nbsp;&nbsp;<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li class="dropdown-header hidden-xs" aria-hidden="true">Change To...</li>
+						@foreach (var each in DataModel.PerspectivesFor(Session.Center().Provider)) {
+							<li class="@(perspective == each ? "active" : null)"><a href=@Url.Action("Index", "AdHoc", new { id = Model.Id, perspective = each })>@each Perspective</a></li>
+						}
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-3 col-md-4 col-lg-5">
+			<div class="form-group">
+				<label for="title" class="control-label sr-only">Title</label>
+				<input id="title" name="title" type="text" class="form-control" placeholder="Add a title here..." value="@(json["title"])"/>
+			</div>
+		</div>
+		<div class="col-sm-2">
+			<div class="form-group text-right">
+				<div class="btn-group" style="width: 100%">
+					<button id="runHtml" type="button" class="btn btn-success" style="width: calc(100% - 26px)" accesskey="r"><span class="access-key">R</span>un It!</button>
+					<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<span class="caret"></span>
+						<span class="sr-only">Toggle Dropdown</span>
+					</button>
+					<ul class="dropdown-menu">
+						<li><a id="runPdf" href="#">Run as PDF</a></li>
+						<li><a id="exportCsv" href="#">Export Raw Data</a></li>
+						<li role="separator" class="divider"></li>
+						<li><a id="outputSql" href="#">View SQL</a></li>
+						<li><a id="outputJson" href="#">View JSON</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="select" class="panel panel-primary icjia-error-group">
+		<div class="panel-heading" data-toggle="collapse" data-target="#selectCollapse">
+			<h2 class="panel-title">
+				Select...
+				<button type="button" class="btn btn-link icjia-h2-btn-link-icon pull-right" data-toggle="collapse" data-target="#selectCollapse" aria-label="Toggle Panel" aria-controls="selectCollapse" aria-expanded="true">
+					<span class="glyphicon glyphicon-triangle-bottom rotate-90-if-collapsed"></span>
+				</button>
+			</h2>
+		</div>
+		<div id="selectCollapse" class="panel-collapse collapse">
+			@{
+				var selectType = json["select"]?.Type;
+				var dataSelect = new HashSet<string>();
+				string columnHeaders = null;
+				string rowHeaders = null;
+				string aggregate = null;
+				if (selectType == JTokenType.Array) {
+					dataSelect.AddRange(json["select"].Values<string>());
+				} else if (selectType == JTokenType.Object) {
+					columnHeaders = json["select"]["columns"].ToString(Formatting.None);
+					rowHeaders = json["select"]["rows"].ToString(Formatting.None);
+					aggregate = json["select"]["aggregate"]?.Value<string>();
+				}
+			}
+			<div id="data" class="panel-body pb-0 @(selectType == JTokenType.Object ? "hide" : null)">
+				<div id="dataHelp" class="form-group help-block hide" style="margin-top: -5px; margin-bottom: 25px">Please select one or more fields to query.</div>
+				@for (var en = Lookahead.New(dataModel.Entities); en.HasNext;) {
+					<div class="row">
+						@for (int i = 0; i < 4 && en.MoveNext(); i++) {
+							var eachEntity = en.Current;
+							<div class="col-sm-6 col-md-3">
+								<div class="form-group">
+									<label for="select_@eachEntity.Id" class="control-label">@eachEntity.Label</label>
+									<select id="select_@eachEntity.Id" multiple="multiple" data-placeholder="Select Some Fields">
+										@foreach (var eachField in eachEntity.Fields) {
+											<option value="@eachField.Id" @(dataSelect.Contains(eachField.Id) ? "selected" : null)>@eachField.Label</option>
+										}
+									</select>
+								</div>
+							</div>
+						}
+					</div>
+				}
+			</div>
+			<div id="pivot" class="panel-body pb-0 @(selectType == JTokenType.Object ? null : "hide")">
+				<div class="row">
+					<div class="col-sm-6 col-sm-offset-6">
+						<div class="form-group">
+							<label for="columns" class="control-label">Column Headers</label>
+							<select id="columns" multiple="multiple" data-placeholder="Select Some Fields" data-icjia-chosen="@columnHeaders">
+								@foreach (var eachEntity in dataModel.Entities) {
+									<optgroup label="@eachEntity.Label">
+										@foreach (var eachField in eachEntity.Fields) {
+											<option value="@eachField.Id">@eachField.Label</option>
+										}
+									</optgroup>
+								}
+							</select>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label for="rows" class="control-label">Row Headers</label>
+							<select id="rows" multiple="multiple" data-placeholder="Select Some Fields" data-icjia-chosen="@rowHeaders">
+								@foreach (var eachEntity in dataModel.Entities) {
+									<optgroup label="@eachEntity.Label">
+										@foreach (var eachField in eachEntity.Fields) {
+											<option value="@eachField.Id">@eachField.Label</option>
+										}
+									</optgroup>
+								}
+							</select>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label for="aggregate" class="control-label icjia-required">Count Unique</label>
+							<select id="aggregate" data-placeholder="Select a Field" aria-required="true">
+								@foreach (var eachEntity in dataModel.Entities) {
+									<optgroup label="@eachEntity.Label">
+										@foreach (var eachField in eachEntity.Fields) {
+											<option value="@eachField.Id" @(aggregate == eachField.Id ? "selected" : null)>@eachField.Label</option>
+										}
+									</optgroup>
+								}
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="panel-footer pt-0 text-right" style="background-color: transparent; padding-bottom: 7px">
+				<div class="row" style="margin: 0 -23px">
+					<div class="col-xs-offset-6 col-xs-6 col-sm-offset-9 col-sm-3">
+						<div class="btn-group btn-group-sm btn-block" data-toggle="buttons">
+							<label class="btn btn-primary btn-white @(selectType == JTokenType.Object ? null : "active")" style="width: 50%">
+								<input type="radio" name="output" @(selectType == JTokenType.Object ? null : "checked") data-icjia-role="data"> data
+							</label>
+							<label class="btn btn-primary btn-white @(selectType == JTokenType.Object ? "active" : null)" style="width: 50%">
+								<input type="radio" name="output" @(selectType == JTokenType.Object ? "checked" : null) data-icjia-role="pivot"> pivot
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	@Html.Action("Conjunction", new { perspective, conjunctionJson = json["where"]?.ToString() ?? "{ 'operator': 'And', 'predicates': [] }", isRoot = true })
+	
+	@Html.Partial("_SaveAsModal")
+</form>
+
+@section Styles {
+	@Styles.Render("~/Content/bootstrap-chosen.css", "~/Content/ICJIA/bootstrap-chosen-addons.css")
+	<style>
+		.group-name::after {
+			content: ": ";
+		}
+
+		.and-or {
+			font-style: italic;
+			font-weight: bold;
+			margin: 6px 15px 5px;
+		}
+
+		.or-panel { background-color: #f5f5f5; }
+
+		.output-pre {
+			max-height: calc(100vh - 126px); /* largest height that doesn't cause second scroll bar */
+		}
+
+		@@media (min-width: 768px) {
+			.output-pre {
+				max-height: calc(100vh - 166px); /* sm, md, and lg have larger top and bottom margins */
+			}
+		}
+	</style>
+}
+
+@section Scripts {
+	@Scripts.Render("~/Scripts/chosen.jquery.min.js")
+	@Scripts.Render("~/Scripts/chosen.order.jquery.min.js") @* KMS DO create bundle if this works *@
+	@Scripts.Render("~/Scripts/Views/AdHoc/Index.js")
+}

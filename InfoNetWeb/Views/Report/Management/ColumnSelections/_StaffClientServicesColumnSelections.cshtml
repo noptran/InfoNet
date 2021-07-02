@@ -1,0 +1,38 @@
+﻿@using Infonet.Reporting.Enumerations
+@model Infonet.Reporting.ViewModels.ManagementReportViewModel
+@{
+	string panelTitle = (string)ViewData["panelTitle"];
+}
+<div class="panel panel-primary icjia-error-group reportProperty @SubReportSelection.MngRptStaffServiceServiceInformation.GetShortName()" style="display:none">
+	<div class="panel-heading">
+		<h2 class="panel-title">@panelTitle</h2>
+	</div>
+	<div class="panel-body">
+		<div class="row">
+			@foreach (var field in Model.StaffClientServiceAvailableColumnSelections) {
+				string chkd = string.Empty;
+				string disabled = string.Empty;
+				if (Model.StaffClientServiceColumnSelections != null && Model.StaffClientServiceColumnSelections.Contains(field)) {
+					chkd = "checked='checked'";
+				}
+				<div class="col-xs-6 col-sm-4 col-md-3 columnSeletionOption">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="@Html.NameFor(model => model.StaffClientServiceColumnSelections)" value="@((int)field)" data-icjia-name="@field.GetDisplayName()" @chkd @disabled /> @( field.GetDisplayName() )
+						</label>
+						<span class="columnOrderControl">
+							<a href="#" class="moveColumnSelectionLeft"><span class="glyphicon glyphicon-triangle-left"></span></a>
+							<a href="#" class="moveColumnSelectionRight"><span class="glyphicon glyphicon-triangle-right"></span></a>
+						</span>
+					</div>
+				</div>
+			}
+		</div>
+		<div class="row">
+			<div class="col-xs-12 form-group">
+				@Html.Hidden("StaffClientServiceColumnSelectionsVal")
+				@Html.ValidationMessageFor(model => model.StaffClientServiceColumnSelections, "", new { @class = "help-block" })
+			</div>
+		</div>
+	</div>
+</div>

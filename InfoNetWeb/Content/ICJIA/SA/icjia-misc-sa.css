@@ -1,0 +1,17 @@
+﻿/* Well dropdown button link color */
+ul.icjia-dropdown-menu-xs > li > a {
+	color: #007979; /* brand primary color */
+}
+
+/* Used on Cancellation/No Show */
+.icjia-results {
+	color: #007979; /* brand primary color */
+	font-weight: bold;
+}
+
+/*
+	************************** SYSTEM MESSAGES CARDS **************************
+*/
+.state-seal-icjia-card, .card {
+    border-color: #007979; /* brand primary color */
+}

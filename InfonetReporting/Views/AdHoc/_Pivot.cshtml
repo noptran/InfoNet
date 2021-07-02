@@ -1,0 +1,100 @@
+﻿@using System.Linq
+@using Infonet.Core.Collections
+@using Infonet.Reporting.AdHoc
+@inherits RazorEngine.Templating.TemplateBase<Infonet.Reporting.AdHoc.Pivots.QueryPivot>
+
+@{
+	var pivotTable = Model.ToTable();
+	int rowHeaderDepth = pivotTable.RowDimensions.Count;
+	int columnHeaderDepth = pivotTable.ColumnDimensions.Count;
+	bool hasRowHeaders = rowHeaderDepth > 0;
+	bool hasColumnHeaders = columnHeaderDepth > 0;
+	bool hasMultipleRows = pivotTable.Rows.Count > 1;
+	bool hasMultipleColumns = pivotTable.Columns.Count > 1;
+}
+
+<table class="pivot">
+	@if (pivotTable.Caption != null) {
+		<caption>@pivotTable.Caption</caption>
+	}
+	<thead>
+	@for (var enDimensions = Lookahead.New(pivotTable.ColumnDimensions); enDimensions.MoveNext();) {
+		int currentDimensionRank = enDimensions.Current.CoordinateOrdinal + 1;
+		int remainingColSpan = 0;
+
+		<tr>
+			@if (enDimensions.IsFirst && hasRowHeaders && hasColumnHeaders) {
+				<td rowspan="@columnHeaderDepth" colspan="@rowHeaderDepth" class="pivot-spacer"></td>
+			}
+			<th class="pivot-column-dimension" scope="row">@enDimensions.Current.Label</th>
+			@for (var enColumns = Lookahead.New(pivotTable.Columns); enColumns.MoveNext();) {
+				if (remainingColSpan > 0) {
+					remainingColSpan--;
+					continue;
+				}
+				var currentCoordinate = enColumns.Current.Coordinate;
+				remainingColSpan = enDimensions.IsLast ? 1 : pivotTable.Columns.AsSublist(enColumns.Index).TakeWhile(c => currentCoordinate.EqualsThru(c.Coordinate, currentDimensionRank)).Count();
+				<th rowspan="@(enDimensions.IsLast && hasRowHeaders ? (int?)2 : null)" colspan="@(remainingColSpan == 1 ? null : (int?)remainingColSpan)" class="pivot-column-header" scope="@(enDimensions.IsLast ? "col" : "colgroup")">@(Model.GetColumnDimension(currentDimensionRank - 1).Format(currentCoordinate[currentDimensionRank - 1]) ?? Output.EMPTY)</th>
+				remainingColSpan--;
+			}
+			@if (enDimensions.IsFirst) {
+				<th rowspan="@(columnHeaderDepth + (hasRowHeaders ? 1 : 0))" class="pivot-total-column-header" scope="col">@(hasMultipleRows ? "Totals" : "Total")</th>
+			}
+		</tr>
+	}
+	@if (hasRowHeaders) {
+		<tr>
+			@foreach (var each in pivotTable.RowDimensions) {
+				<th class="pivot-row-dimension" scope="col">@each.Label</th>
+			}
+			@if (hasColumnHeaders) {
+				<td class="pivot-spacer"></td>
+			}
+		</tr>
+	}
+	</thead>
+	<tbody>
+	@{
+		var remainingRowSpans = new int[rowHeaderDepth]; @* only rowHeaderDepth - 1 is actually needed but allocating rowHeaderDepth for readability below *@
+	}
+	@for (var enRows = Lookahead.New(pivotTable.Rows); enRows.MoveNext();) {
+		var currentRow = enRows.Current;
+		<tr>
+			@for (int i = 0; i < rowHeaderDepth; i++) {
+				if (remainingRowSpans[i] > 0) {
+					remainingRowSpans[i]--;
+					continue;
+				}
+				var currentCoordinate = currentRow.Coordinate;
+				remainingRowSpans[i] = i == rowHeaderDepth - 1 ? 1 : pivotTable.Rows.AsSublist(enRows.Index).TakeWhile(r => currentCoordinate.EqualsThru(r.Coordinate, i + 1)).Count();
+
+				<th colspan="@(i == rowHeaderDepth - 1 && hasColumnHeaders ? (int?)2 : null)" rowspan="@(remainingRowSpans[i] == 1 ? null : (int?)remainingRowSpans[i])" class="pivot-row-header" scope="@(i == rowHeaderDepth - 1 ? "row" : "rowgroup")">@(Model.GetRowDimension(i).Format(currentCoordinate[i]) ?? Output.EMPTY)</th>
+
+				remainingRowSpans[i]--;
+			}
+			@if (!hasRowHeaders && (hasMultipleRows || hasMultipleColumns)) {
+				<td class="pivot-spacer"></td>
+			}
+			@foreach (var eachCell in currentRow) {
+				<td class="pivot-cell">@eachCell.Value</td>
+			}
+			@if (hasMultipleColumns) {
+				<td class="pivot-row-total">@currentRow.Total</td>
+			}
+		</tr>
+	}
+	</tbody>
+	<tfoot>
+	@if (hasMultipleRows) {
+		<tr>
+			<th colspan="@(rowHeaderDepth + (hasColumnHeaders ? 1 : 0))" class="pivot-total-row-header" scope="row">@(hasMultipleColumns ? "Totals" : "Total")</th>
+			@foreach (var each in pivotTable.Columns) {
+				<td class="pivot-column-total">@each.Total</td>
+			}
+			@if (hasMultipleColumns) {
+				<td class="pivot-row-total pivot-column-total">@pivotTable.Total</td>
+			}
+		</tr>
+	}
+	</tfoot>
+</table>

@@ -1,0 +1,346 @@
+﻿@using Infonet.Reporting.Enumerations
+@using Infonet.Web.ViewModels.Reporting
+@model Infonet.Reporting.ViewModels.SubmitReportViewModel
+@{
+    ViewBag.Title = "Submit Reports";
+    bool isChecked = false;
+
+}
+@helper RenderSelectionGroup(ReportSelection reportType) {
+    string colSize = "col-sm-4";
+    <div class="@colSize">
+        @Html.Hidden("Provider", Session.Center().ProviderId)
+        @Html.Hidden("SubReportGroup1")
+        @Html.Hidden("SubReportGroup2")
+        @Html.Hidden("SubReportGroup3")
+
+        @{
+            bool checkReportType = false;
+            if (Model.ReportTypes != null) {
+                checkReportType = Model.ReportTypes.Contains((int)reportType);
+            }
+            int[] subReportSelectionValues = null;
+
+            if (Model.SubReportSelections != null) {
+                subReportSelectionValues = Array.ConvertAll(Model.SubReportSelections, value => (int)value);
+            }
+        }
+
+        <fieldset>
+            <legend>
+                @* KMS DO label in legend? *@
+                <label style="font-weight: normal; cursor: pointer"><input type="checkbox" name="ReportTypes" class="reportSelectionRadio" id="selectionGroup@((int)reportType)" value="@((int)reportType)" checked="@(checkReportType ? "checked" : null)" data-icjia-name="@reportType.ToString()" /> @reportType.GetDisplayName() (<span>0</span>) </label>
+            </legend>
+            @for (int i = 0; i < Model.AvailableSelections[reportType].Count; i++) {
+                string style = string.Empty;
+                bool skipForDefault = false;
+                if (Model.AvailableSelections[reportType][i] == SubReportSelection.StdRptServiceProgramsHudHmisServiceReport) {
+                    style = "style=margin-top:24px;";
+                    skipForDefault = true;
+                }
+
+                bool checkSubReportSelection = false;
+                if (subReportSelectionValues != null) {
+                    checkSubReportSelection = subReportSelectionValues.Contains((int)Model.AvailableSelections[reportType][i]);
+                }
+
+                <div class="checkbox" @style>
+                    <label>
+                        <input type="checkbox"
+                               name="@Html.NameFor(model => model.SubReportSelections)"
+                               class="subSelection selectionGroup@((int)reportType) @(skipForDefault ? "skipDefault" : "")"
+                               checked="@(checkSubReportSelection ? "checked" : null)"
+                               value="@((int)Model.AvailableSelections[reportType][i])"
+                               data-icjia-parent-id="#selectionGroup@((int)reportType)"
+                               data-icjia-name="@Model.AvailableSelections[reportType][i].ToString()" /> @(Model.AvailableSelections[reportType][i].GetDisplayName())
+                        </label>
+                    </div>
+                }
+        </fieldset>
+    </div>
+}
+
+@using (Html.BeginForm("SubmitReport", "Report", FormMethod.Post, new { id = "main", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+    @Html.AntiForgeryToken()
+    <input id="providerId" type="hidden" value="@Session.Center().ProviderId">
+    <input id="loginCenterId" type="hidden" value="@Session.Center().Id" />
+
+    <div class="row">
+        <div class="col-sm-8 col-md-5">
+            <div class="form-group">
+                @Html.Label("Start", "Date Range", new { @class = "control-label", data_toggle = "tooltip", title = "" })
+                <div class="input-daterange input-group" id="datepicker" data-provide="datepicker">
+                    @Html.TextBoxFor(model => model.StartDate, "{0:MM/dd/yyyy}", new { @class = "form-control", autocomplete = "off", id = "Start" })
+                    <span class="input-group-addon"><b>to</b></span>
+                    @Html.TextBoxFor(model => model.EndDate, "{0:MM/dd/yyyy}", new { @class = "form-control", autocomplete = "off", id = "End" })
+                </div>
+                @Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "help-block" })
+                @Html.ValidationMessageFor(m => m.EndDate, "", new { @class = "help-block" })
+            </div>
+        </div>
+        <div class="col-sm-4 col-md-3">
+            <div class="form-group">
+                @Html.Label("rangePeriodChosen", "Ranges", new { @class = "control-label" })
+                <select class="form-control col-md-3" name="Range" id="rangePeriodChosen" data-icjia-role="dateRanges" data-icjia-start="#Start" data-icjia-end="#End" data-icjia-default-range="@Model.Range">
+                    @Html.Partial("_DateRangeOptions1-4_20_5-19")
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.RunDate, new { @class = "control-label" })
+                <div class="input-group date" data-provide="datepicker" data-date-start-date=@DateTime.Today.ToShortDateString() data-date-end-date="">
+                    @Html.TextBoxFor(model => model.RunDate, true, new { @class = "form-control" })
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-5 col-md-5 col-lg-5">
+            <div class="form-group">
+                @Html.Label("Title", "Batch Report Title", new { @class = "control-label", data_toggle = "tooltip", title = "" })
+                @Html.TextBoxFor(m => m.Title, new { @class = "form-control", id = "ReportTitle" })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "help-block" })
+            </div>
+        </div>
+        <div class="col-sm-5 col-md-4 col-lg-3">
+            <fieldset class="form-group">
+                <legend>@Html.DisplayNameFor(m => m.CenterAction)</legend>
+                <br />
+                <label class="radio-inline">
+                    @Html.RadioButtonFor(m => m.CenterAction, (int)CompletedScheduledReportViewModel.CenterActionsEnum.NoAction, new { data_val = "false", id = "centerActionsNoAction" }) @CompletedScheduledReportViewModel.CenterActionsEnum.NoAction.GetDisplayName()
+                </label>
+                <label class="radio-inline">
+                    @Html.RadioButtonFor(m => m.CenterAction, (int)CompletedScheduledReportViewModel.CenterActionsEnum.Review, new { data_val = "false", id = "centerActionsReview" }) @CompletedScheduledReportViewModel.CenterActionsEnum.Review.GetDisplayName()
+                </label>
+                <label class="radio-inline">
+                    @Html.RadioButtonFor(m => m.CenterAction, (int)CompletedScheduledReportViewModel.CenterActionsEnum.Approve, new { data_val = "false", id = "centerActionsApproval" }) @CompletedScheduledReportViewModel.CenterActionsEnum.Approve.GetDisplayName()
+                </label>
+                @Html.ValidationMessageFor(m => m.CenterAction, "", new { @class = "help-block" })
+            </fieldset>
+        </div>
+        <div class="col-xs-9 col-sm-1 col-md-2 col-lg-2">
+            <div class="form-group">
+                <label for="totalJobCnt">Jobs</label>
+                <br />
+                <span id="totalJobCnt">0</span>
+            </div>
+        </div>
+        <div class="col-xs-3 col-sm-1 col-md-1 col-lg-2">
+            <input type=button class="btn btn-primary btn-outline pull-right" style="margin-top:20px;" onClick="parent.open('')" data-toggle="tooltip" title="" value='Help'>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <div class="panel panel-primary icjia-error-group">
+                <div class="panel-heading clearfix">
+                    <h2 class="panel-title pull-left" style="padding-top: 7.5px;">Center Selection (<span id="centerSelectionCount">0</span>)</h2>
+                    <div class="btn-group-sm pull-right">
+                        <button type="button" class="btn btn-primary btn-white" data-icjia-count-jobs="true" id="centerSelectionSelectAll">Select All</button>
+                        <button type="button" class="btn btn-primary btn-white" data-icjia-count-jobs="true" id="centerSelectionAllCenters">All Centers</button>
+                        <button type="button" class="btn btn-primary btn-white" data-icjia-count-jobs="true" id="centerSelectionAllSatellites">All Satellites</button>
+                    </div>
+                </div>
+                <div id="filtersCollapse" class="panel-collapse">
+                    <div class="panel-body pb-0">
+                        <div class="form-group">
+                            <label class="radio-inline">
+                                @Html.RadioButtonFor(m => m.CenterSelectionRadio, "aggregateall", new { id = "centerSelectionAggregateAll" }) Aggregate All
+                            </label>
+                            <label class="radio-inline">
+                                @Html.RadioButtonFor(m => m.CenterSelectionRadio, "aggregatebycenter", new { id = "centerSelectionAggregateByCenter" }) Aggregate By Center
+                            </label>
+                            <label class="radio-inline">
+                                @Html.RadioButtonFor(m => m.CenterSelectionRadio, "individual", new { id = "centerSelectionIndividual" }) Individual
+                            </label>
+                            @Html.ValidationMessage("centerRadio", "", new { @class = "help-block" })
+                            <div style="height:15px; padding-top:5px" class="form-group">
+                                @Html.Hidden("valCenters")
+                                @Html.ValidationMessageFor(model => model.Centers, "", new { @class = "help-block" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 pre-scrollable">
+                                @for (int i = 0; i < Model.Centers.Count; i++) {
+                                    <div class="checkbox">
+                                        @Html.HiddenFor(m => m.CenterIds)
+                                        @Html.HiddenFor(m => m.Centers[i].CenterName)
+                                        @Html.HiddenFor(m => m.Centers[i].CenterId)
+                                        @Html.HiddenFor(m => m.Centers[i].ParentCenterId)
+                                        @Html.CheckBoxFor(m => m.Centers[i].isChecked, new { @class = "ml-0", data_icjia_role = "centerSelection", data_icjia_satellite = Convert.ToString(Model.Centers[i].isSatellite).ToUpper() })
+                                        @Html.LabelFor(m => m.Centers[i].isChecked, Model.Centers[i].CenterName)
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <div class="panel panel-primary icjia-error-group">
+                <div class="panel-heading clearfix">
+                    <h2 class="panel-title pull-left" style="padding-top: 7.5px;">Funding Filter (<span id="fundingFilterCount">0</span>)</h2>
+                    <div class="btn-group-sm pull-right">
+                        <button type="button" class="btn btn-primary btn-white" data-icjia-count-jobs="true" id="fundingFilterSelectAll">Select All</button>
+                        @if (!User.IsInRole("CDFSSCOALITIONADMIN")) {
+                        <button type="button" class="btn btn-primary btn-white" data-icjia-count-jobs="true" id="fundingFilterAllVOCA">All VOCA</button>
+                        <button type="button" class="btn btn-primary btn-white" data-icjia-count-jobs="true" id="fundingFilterAllVAWA">All VAWA</button>
+                        }
+                    </div>
+                </div>
+                <div id="filtersCollapse" class="panel-collapse">
+                    <div class="panel-body pb-0">
+                        <label class="radio-inline">
+                            @Html.RadioButtonFor(m => m.FundingFilterRadio, "aggregate", new { id = "fundingFilterAggregate" }) Aggregate
+                        </label>
+                        <label class="radio-inline">
+                            @Html.RadioButtonFor(m => m.FundingFilterRadio, "individual", new { id = "fundingFilterIndividual" }) Individual
+                        </label>
+                        <div class="text-info" style="padding-top:10px">
+                            * Indicates funding source is no longer active
+                        </div>                      
+                        <div class="row">
+                            <div class="col-xs-12 pre-scrollable">
+                                @if (Model.FundingFilter != null) {
+                                    for (int i = 0; i < Model.FundingFilter.Count; i++) {
+                                        string fundingFilterVocavawa = "";
+                                        if (Model.FundingFilter[i].Description.Substring(0, 4) == "VAWA") {
+                                            fundingFilterVocavawa = "VAWA";
+                                        }
+                                        if (Model.FundingFilter[i].Description.Substring(0, 4) == "VOCA") {
+                                            fundingFilterVocavawa = "VOCA";
+                                        }
+                                        <div class="checkbox">
+                                            @Html.HiddenFor(m => m.FundingFilter[i].Description)
+                                            @Html.HiddenFor(m => m.FundingFilter[i].CodeId)
+                                            @Html.CheckBoxFor(m => m.FundingFilter[i].IsChecked, new { @class = "ml-0 fundingFilter", data_icjia_role = "fundingFilter", data_icjia_VOCAVAWA = fundingFilterVocavawa })
+                                            @Html.LabelFor(m => m.FundingFilter[i].IsChecked, Model.FundingFilter[i].Description)
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <div class="panel panel-primary icjia-error-group">
+                <div class="panel-heading">
+                    <h2 class="panel-title">Report Selection</h2>
+                </div>
+                <div class="panel-body pb-0">
+                    <div class="row">
+                        @foreach (var reportType in Model.AvailableSelections.Keys) {
+                            if (isChecked) {
+                                @RenderSelectionGroup(reportType) @* KMS DO something's not right here *@
+                            }
+                            else {
+                                @RenderSelectionGroup(reportType)
+                                isChecked = true;
+                            }
+
+                        }
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 form-group">
+                            @Html.Hidden("valSubReport")
+                            @Html.ValidationMessageFor(model => model.SubReportSelections, "", new { @class = "help-block" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12" style="margin-bottom:20px">
+            <button type="button" class="btn btn-primary center-block" id="Submit" name="Submit" data_icjia_role="preventDuplicateRequest">
+                Submit
+            </button>
+        </div>
+    </div>
+   if (User.IsInRole("CDFSSCOALITIONADMIN")) {
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="panel panel-primary icjia-error-group">
+                    <div class="panel-heading" data-toggle="collapse" data-target="#filtersCollapse1">
+                        <h2 class="panel-title">
+                            Filters
+                            <button type="button" class="btn btn-link icjia-h2-btn-link-icon pull-right @(Model.IsFilterCollapsed ? "collapsed" : null)" data-toggle="collapse" data-target="#filtersCollapse1" data-icjia-role="panel.expand" aria-label="Toggle Panel" aria-controls="filtersCollapse" aria-expanded="@(Model.IsFilterCollapsed ? "false" : "true")"><span class="glyphicon glyphicon-triangle-bottom rotate-90-if-collapsed"></span></button>
+                        </h2>
+                    </div>
+                    <div id="filtersCollapse1" class="panel-collapse collapse @(Model.IsFilterCollapsed ? null : "in")">
+                        <div class="panel-body">
+                            <div class="col-sm-6 col-md-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <span class="panel-title">Client Demographic Filters</span>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.RaceIds)
+                                            @Html.DropDownListFor(model => model.RaceIds, new MultiSelectList(Model.RaceDefault, "CodeId", "Description", Model.RaceIds), new { @class = "form-control", multiple = "multiple", data_icjia_role = "chosen" })
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <span class="panel-title">Client Location Filters</span>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.CityOrTowns)
+                                            @Html.DropDownListFor(model => model.CityOrTowns, new MultiSelectList(Model.CityOrTownsDefault, "Description", "Description", Model.CityOrTowns), new { @class = "form-control", multiple = "multiple", data_icjia_role = "chosen" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <span class="panel-title">Other Filters</span>
+                                    </div>
+                                    <div class="panel-body">
+                                        @if (Session.Center().Provider == Provider.DV) {
+                                            <div class="form-group">
+                                                @Html.LabelFor(m => m.ClientTypeIds)
+                                                @Html.DropDownListFor(model => model.ClientTypeIds, new MultiSelectList(Model.ClientTypeDefault, "CodeId", "Description", Model.ClientTypeIds), new { @class = "form-control", multiple = "multiple", data_icjia_role = "chosen" })
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+    }
+
+    @section Styles {
+        @Styles.Render("~/Content/ICJIA/checkbox.css", "~/Content/bootstrap-chosen.css", "~/Content/ICJIA/bootstrap-chosen-addons.css")
+        <style type="text/css">
+            .search-field {
+                border: none;
+            }
+        </style>
+    }
+
+    @section Scripts {
+        @Scripts.Render("~/Scripts/chosen.jquery.min.js")
+        @Scripts.Render("~/Scripts/ICJIA/date-ranges.js")
+        @Scripts.Render("~/Scripts/Views/Reports/SubmitReport.js")
+        @Scripts.Render("~/Scripts/Views/Reports/ReportFilter.js")
+        @Scripts.Render("~/Scripts/ICJIA/system-growl.js")
+    }

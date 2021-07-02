@@ -1,0 +1,119 @@
+﻿/*
+	************************** ICJIA GROUP ERROR ******************************
+	A group error indicates that a container (i.e. group) contains one or more
+	component errors.  Applying 'has-error' to containers results in all inputs
+	display as errors.  Applying 'has-group-error' should result in the
+	group/container showing that it contains errors.  NOTE: The rules below
+	were adapted from 'panel-danger'.
+*/
+.has-group-error {
+	border-color: #ebccd1;
+}
+
+.has-group-error > .panel-heading {
+	color: #a94442;
+	background-color: #f2dede;
+	border-color: #ebccd1;
+}
+
+.has-group-error > .panel-heading + .panel-collapse > .panel-body {
+	border-top-color: #ebccd1;
+}
+
+.has-group-error > .panel-heading .badge {
+	color: #f2dede;
+	background-color: #a94442;
+}
+
+.has-group-error > .panel-footer + .panel-collapse > .panel-body {
+	border-bottom-color: #ebccd1;
+}
+
+.has-group-error > .panel-footer,
+.has-group-error > .panel-collapse > .panel-footer {
+	background-color: #ffebeb;
+}
+
+.has-group-error .icjia-panel-subheader {
+	background-color: #ffebeb; /* has-group-error panel-footer background-color*/
+}
+
+.has-group-error:not(.deleted) > .panel-heading .btn-link {
+	color: #a94442;
+}
+
+/* ReSharper disable once DeclarationIsEmpty */
+.icjia-error-group {
+	/* used to indicate error-groups that expect .has-group-error to be applied by validation scripts */
+}
+
+
+/*
+	************************* ICJIA (PANEL) DELETED ***************************
+	This panel type indicates the panel's content will be (or has been) deleted.
+	NOTE: The rules below were adapted from 'panel-default'.
+*/
+tr.deleted {
+	color: #919191;
+	text-decoration: line-through;
+}
+
+.panel.deleted,
+.deleted .panel {
+	background-color: #f5f5f5;
+	color: #919191;
+	text-decoration: line-through;
+	border-color: #dddddd;
+}
+
+.deleted > .panel-heading {
+	color: #919191;
+	background-color: #f5f5f5;
+	border-color: #dddddd;
+}
+
+.deleted > .panel-heading + .panel-collapse > .panel-body {
+	border-top-color: #dddddd;
+}
+
+.deleted > .panel-heading .badge {
+	color: #f5f5f5;
+	background-color: #919191;
+}
+
+.deleted > .panel-footer + .panel-collapse > .panel-body {
+	border-bottom-color: #dddddd;
+}
+
+.deleted > .panel-footer,
+.deleted > .panel-collapse > .panel-footer {
+	background-color: #f5f5f5;
+}
+
+.deleted .icjia-panel-subheader {
+	background-color: #f5f5f5;
+}
+
+.deleted .control-label,
+.deleted .btn-link:not(.icjia-restore) {
+	text-decoration: line-through;
+	color: #919191;
+}
+
+.deleted .form-control {
+	text-decoration: line-through;
+	color: #919191;
+	background-color: #f5f5f5;
+}
+
+.deleted .icjia-required::after {
+	color: #919191;
+}
+
+.deleted[data-toggle="collapse"] {
+	cursor: inherit;
+}
+
+.deleted [data-toggle="collapse"] {
+	cursor: inherit;
+}

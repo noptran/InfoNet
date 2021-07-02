@@ -1,0 +1,41 @@
+﻿@using System.Linq
+@using Infonet.Reporting.AdHoc
+@inherits RazorEngine.Templating.TemplateBase<Output.DataViewModel>
+
+@{
+	var aligns = Model.Query.Select.Select(f => f.Type.Align == FieldType.Alignment.Left ? null : "text-align: " + f.Type.Align.ToString().ToLower()).ToArray();
+}
+
+@* KMS DO current residence???? *@
+
+<table class="data table-hover">
+	@*@if (Model.Caption != null) {
+		<caption>@Model.Caption</caption>
+	}*@
+	<thead>
+		<tr>
+			@foreach (var each in Model.Query.Select) {
+				<th scope="col">@each.Label</th>
+			}
+		</tr>
+	</thead>
+	<tbody>
+	@{
+		var fields = Model.Query.Select.Select(f => f.CreateReader()).ToArray();
+		while (Model.Reader.Read()) {
+			<tr>
+				@{ int i = 0; }
+				@foreach (var each in fields) {
+					<td style="@aligns[i++]">@each.Field.Format(each.Read(Model.Reader))</td>
+				}
+			</tr>
+			Model.RowCount++;
+		}
+	}
+	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan="@(fields.Length)" class="data-summary">@Model.RowCount records</td>
+		</tr>
+	</tfoot>
+</table>

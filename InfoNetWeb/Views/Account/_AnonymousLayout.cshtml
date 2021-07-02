@@ -1,0 +1,148 @@
+﻿@using Infonet.Web
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head -->
+	<title>@(string.IsNullOrEmpty(ViewBag.Title) ? "" : ViewBag.Title + " - ")ICJIA InfoNet</title>
+	<link rel="icon" type="image/vnd.microsoft.icon" href="~/favicon.ico" />
+	<link rel="apple-touch-icon" type="image/png" href="~/apple-touch-icon.png" />
+    @Styles.Render("~/Content/css/ICJIA/ADMIN")
+	@RenderSection("Styles", false)
+	<style type="text/css">
+		html, body {
+			height: 100%;
+			width: 100%;
+			margin: 0;
+			padding: 0;
+			background-color: #1d262d;
+			overflow-y: auto;
+		}
+
+		hr.colored {
+			border: 0; /* in order to override TWBS stylesheet */
+			height: 5px;
+			background: -webkit-linear-gradient(left, #663399 0, #663399 33.3%, #007373 33.3%, #007373 66.7%, #005db9 66.7%, #005db9 100%); /* Chrome10+,Safari5.1+ */
+			background: -o-linear-gradient(left, #663399 0, #663399 33.3%, #007373 33.3%, #007373 66.7%, #005db9 66.7%, #005db9 100%); /* Opera 11.10+ */
+			background: -ms-linear-gradient(left, #663399 0, #663399 33.3%, #007373 33.3%, #007373 66.7%, #005db9 66.7%, #005db9 100%); /* IE10+ */
+			background: linear-gradient(left, #663399 0, #663399 33.3%, #007373 33.3%, #007373 66.7%, #005db9 66.7%, #005db9 100%); /* W3C */
+		}
+
+		a, label, label.control-label {
+			color: #ffffff;
+			font-weight: bold;
+		}
+
+			a:hover, a:focus {
+				color: #fff;
+				text-decoration: underline;
+			}
+
+		.icjia-anon-white {
+			color: #ffffff;
+		}
+
+		/* Danger/Error text on Login screen */
+		.has-error .help-block, .has-error .control-label, .has-error .radio, .has-error .checkbox, .has-error .radio-inline, .has-error .checkbox-inline, .has-error.radio label, .has-error.checkbox label, .has-error.radio-inline label, .has-error.checkbox-inline label {
+			color: #c87472;
+			margin-bottom: 5px;
+		}
+
+		.has-error .form-control {
+			border-color: #c87472;
+			-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+			box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+		}
+
+		.icjia-required:after {
+			color: #c87472 !important;
+		}
+
+		.logo {
+			opacity: 0.25;
+			transition: opacity 0.5s;
+			outline: none;
+		}
+
+		.logo:hover,
+		.logo:focus {
+			opacity: 1;
+			transition: opacity 0.5s;
+		}
+
+		@@media screen and (min-height: 600.667px) and (min-width: 768px) {
+			#mainContent {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				margin-right: -50%;
+				transform: translate(-50%, -50%);
+			}
+
+			@* required for IE and Edge *@
+			html {
+				overflow-y: hidden;
+			}
+		}
+
+		@@media screen and (min-width: 768px) {
+			#mainContentRow {
+				height: 520.667px;
+			}
+
+			@* required for IE and Edge *@
+			html {
+				overflow-x: hidden;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div id="mainContent" class="container">
+		<div id="mainContentRow" class="row" style="margin-top: 40px; margin-bottom: 40px">
+			<div class="col-sm-6 col-sm-push-3 col-md-push-3">
+				<div style="width: 230px; margin: 0 auto">
+					<div class="text-center">
+						<img src="~/Content/Images/IllinoisSeal.svg" width="200px" alt="Seal of the State of Illinois - Aug. 26th 1818 - State Sovereignty National Union"/>
+						<h1 style="font-size: 30px; color:#ffffff">ICJIA InfoNet @MvcApplication.FileVersionMajorMinor</h1>
+						<hr class="colored" />
+					</div>
+					@RenderBody()
+				</div>
+			</div>
+			<div class="col-sm-3 col-sm-pull-6 col-md-2 col-md-offset-1" style="height: 100%">
+				<div class="center-xy-sm text-center">
+					<div style="margin: 40px 0">
+						<a href="http://www.ilcadv.org/" target="_blank" class="logo"><img src="~/Content/Images/logo-icadv-ffffff.png" height="105px" alt="Illinois Coalition Against Domestic Violence" /></a>
+					</div>
+					<div style="margin: 40px 0">
+						<a href="http://icasa.org/" target="_blank" class="logo"><img src="~/Content/Images/logo-icasa-ffffff.png" height="90px" alt="Illinois Coalition Against Sexual Assault" /></a>
+					</div>
+					<div style="margin: 40px 0">
+						<a href="http://www.childrensadvocacycentersofillinois.org/" target="_blank" class="logo"><img src="~/Content/Images/logo-caci-ffffff.png" height="95px" alt="Children's Advocacy Centers of Illinois - Leading, Educating, Collaborating" /></a>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-3 col-md-2" style="height: 100%">
+                <div class="center-xy-sm text-center">
+                    <div style="margin: 40px 0">
+                        <a href="http://www.dhs.state.il.us/" target="_blank" class="logo"><img src="~/Content/Images/logo-idhs-ffffff.png" height="60px" alt="Illinois Department of Human Services" /></a>
+                    </div>
+                    <div style="margin: 40px 0">
+                        <a href="http://www.chicago.gov/city/en/depts/fss/provdrs/dom_violence.html" target="_blank" class="logo"><img src="~/Content/Images/logo-cdfss-ffffff.png" height="110px" alt="Chicago Department of Family & Support Services" /></a>
+                    </div>
+                    <div style="margin: 40px 0">
+                        <a href="http://www.icjia.state.il.us/" target="_blank" class="logo"><img src="~/Content/Images/logo-icjia-ffffff.png" height="85px" alt="Illinois Criminal Justice Information Authority" /></a>
+                    </div>
+                </div>
+			</div>
+		</div>
+	</div>
+	@Scripts.Render("~/bundles/jquery")
+	@Scripts.Render("~/bundles/bootstrap")
+	@Scripts.Render("~/bundles/jqueryval")
+	@RenderSection("Scripts", false)
+</body>
+</html>

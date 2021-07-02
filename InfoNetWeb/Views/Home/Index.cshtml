@@ -1,0 +1,64 @@
+﻿@model List<SystemMessage>
+
+<div class="row" style="margin-top: 30px">
+	@if (Model.Count > 0) {
+		<div class="col-md-8" style="margin-bottom: 30px">
+			<div id="carousel-jumbo-cards" class="carousel slide" data-ride="carousel" data-interval="7000">
+				<ol class="carousel-indicators">
+					@for (int i = 0; i < Model.Count; i++) {
+						string priority = Model[i].IsHot ? "hot" : (Model[i].IsNew ? "info" : "primary");
+						<li data-target="#carousel-jumbo-cards" data-slide-to=@i class="indicator indicator-@priority @(i == 0 ? "active" : "") @(Model.Count == 1 ? "hide" : "")"></li>
+					}
+				</ol>
+				<div class="carousel-inner" role="listbox">
+					@for (int i = 0; i < Model.Count; i++) {
+						string priority = Model[i].IsHot ? "hot" : (Model[i].IsNew ? "info" : "primary");
+						<div class="item @(i == 0 ? "active" : null)">
+							<div class="jumbo-card border-@priority">
+								<div class="center-y" style="padding: 0 30px">
+									<h1>
+										<strong>@Model[i].Title</strong>
+									</h1>
+									@if (!string.IsNullOrEmpty(Model[i].Message)) {
+										<p class="h2">@Html.Raw(Model[i].Message)</p>
+									}
+									@if (!string.IsNullOrEmpty(Model[i].Details)) {
+										<p>@Html.Raw(Model[i].Details)</p>
+									}
+								</div>
+							</div>
+						</div>
+					}
+				</div>
+			</div>
+		</div>
+	}
+	<div class="col-md-@(Model.Count > 0 ? 4 : 12)" style="margin-bottom: 30px">
+		<div class="state-seal-icjia-card">
+			<div class="center-xy">
+				<div style="display: inline-block">
+					<img src="~/Content/Images/IllinoisSeal.svg" alt="Seal of the State of Illinois - Aug. 26th 1818 - State Sovereignty National Union"/>
+					<p>ILLINOIS<br/><span>Criminal<br/>Justice<br/>Information<br/>Authority</span></p>
+					<a href="http://www.icjia.state.il.us/systems/infonet" target="_blank">Visit ICJIA Website <span class="glyphicon glyphicon-new-window small" aria-hidden="true"></span></a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+    <div id="messages" data-columns="" class="icjia-columns" data-icjia-total-available="@ViewBag.TotalAvailable">
+    </div>
+</div>
+
+<div id="progress" class="text-center hide" style="background-color: #eeeeee; border-top: 1px solid #e3e3e3; padding: 20px; margin-bottom: 30px;"><img src="~/Content/Images/ajax-loader.gif" />&nbsp;Loading More</div>
+
+@section Styles {
+	<link rel="stylesheet" href="~/Content/Views/Home/Index.css" type="text/css">
+}
+
+@section Scripts {
+    @Scripts.Render("~/Scripts/salvattore-1.0.8-balanced-columns.min.js")
+    @Scripts.Render("~/Scripts/ICJIA/debounce.js")
+    @Scripts.Render("~/Scripts/Views/Home/SystemMessages.js")
+}

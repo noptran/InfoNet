@@ -1,0 +1,16 @@
+﻿@using Infonet.Reporting.Core
+@inherits RazorEngine.Templating.TemplateBase<IReportTable>
+
+@foreach (IReportTable innerTable in Model.ReportTables) {
+	if (!Model.HideTitle) {
+		<tr class="avoid-break-after">
+			<th scope="row" colspan="100">
+				<span>@innerTable.Title</span>
+			</th>
+		</tr>
+	}
+	@Include("_SubReportCountRowRenderer", innerTable, typeof(IReportTable))
+	if (!innerTable.HideSubtotal) {
+		@Include("_SubReportCountTableSubtotal", innerTable, typeof(IReportTable))
+	}
+}

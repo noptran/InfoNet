@@ -1,0 +1,15 @@
+﻿@model Infonet.Web.ViewModels.Shared.IDateRange
+
+@{
+	string rangeTitle = (string)ViewData["RangeTitle"];
+	string rangeTooltipTitle = (string)ViewData["RangeTooltipTitle"];
+}
+
+@Html.Label("Start", rangeTitle, new { @class = "control-label", data_toggle = "tooltip", title = rangeTooltipTitle })
+<div class="input-daterange input-group" id="datepicker" data-provide="datepicker">
+	@Html.TextBoxFor(model => model.StartDate, "{0:MM/dd/yyyy}", new { @class = "form-control dirtyignore", autocomplete = "off", id = "Start" })
+	<span class="input-group-addon"><b>to</b></span>
+	@Html.TextBoxFor(model => model.EndDate, "{0:MM/dd/yyyy}", new { @class = "form-control dirtyignore", autocomplete = "off", id = "End" })
+</div>
+<div>@Html.ValidationMessageFor(model => model.StartDate)</div>
+<div>@Html.ValidationMessageFor(model => model.EndDate)</div>

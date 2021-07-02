@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head -->
+    <title>@(string.IsNullOrEmpty(ViewBag.Title) ? "" : ViewBag.Title + " - ")ICJIA InfoNet</title>
+    @Styles.Render("~/Content/css/ICJIA/" + (Session.Center().Provider != Provider.None ? Session.Center().Provider.ToString() : "ADMIN"))
+	@RenderSection("Styles", false)
+    <style>
+		body {
+			padding-top:0;
+			margin-bottom: 0;
+		}
+    </style>
+</head>
+<body>
+	<div class="container-fluid">
+        <div id="pageHeader">
+            @if (!string.IsNullOrEmpty(ViewBag.PageHeader)) {
+                <h1 class="page-header">@ViewBag.PageHeader</h1>
+            }
+            else if (!string.IsNullOrEmpty(ViewBag.Title)) {
+                <h1 class="page-header">@ViewBag.Title</h1>
+            }
+            @if (!string.IsNullOrEmpty(ViewBag.TitleNote)) {
+                <div class="icjia-report-footer avoid-break avoid-break-before">
+                    <i>@Html.Raw(ViewBag.TitleNote)</i>
+                </div>
+            }
+        </div>
+		@RenderBody()
+	</div>
+	@Scripts.Render("~/bundles/jquery")
+	@Scripts.Render("~/bundles/bootstrap")
+	@RenderSection("Scripts", false)
+</body>
+</html>

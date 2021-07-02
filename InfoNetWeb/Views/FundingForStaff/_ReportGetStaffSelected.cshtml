@@ -1,0 +1,10 @@
+﻿@model Infonet.Web.ViewModels.Admin.FundingForStaff
+
+@{
+	if (Model.FFSReports.UseDefaultMasterPage == false) {
+		Layout = "_ReportPDFLayout.cshtml";
+	}
+}
+
+@Html.Partial("_ReportStaffHeader")
+@Html.Partial("_ReportStaffDetails")

@@ -1,0 +1,45 @@
+﻿@model Infonet.Web.ViewModels.Account.RoleViewModel
+
+@{
+	ViewBag.Title = "Edit Role";
+}
+
+@using (Html.BeginForm("Edit", "RolesAdmin", FormMethod.Post, new { id = "main", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
+	<div class="form-group">
+		@Html.Label("Name", "Role Name")
+		@Html.TextBoxFor(model => model.Name, new { @class = "form-control", @readonly = "readonly" })
+		@Html.ValidationMessageFor(model => model.Name)
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(model => model.Description, new { @class = "control-label" })
+		@Html.TextBoxFor(model => model.Description, new { @class = "form-control" })
+		@Html.ValidationMessageFor(model => model.Description)
+	</div>
+	<fieldset class="form-group">
+		<legend>Users in This Role</legend>
+		<div class="row">
+			@foreach (var each in Model.Users) {
+				<div class="col-xs-4 col-sm-3 col-md-2">
+					<a href="@Url.Action("Edit", "UsersAdmin", new { id = each.Id})">@each.UserName</a>
+				</div>
+			}
+		</div>
+	</fieldset>
+	<div class="form-group">
+		@Html.Snippets().SaveButton(new { id = "saveMain", data_icjia_role = "preventDuplicateRequest", accesskey = "s" })
+		@Html.Snippets().UndoLink(Url.Action(), new { accesskey = "u" })
+	</div>
+	<div class="form-group">
+		<a href="@Url.Action("Index")"><span class='glyphicon glyphicon-chevron-left' aria-hidden='true'></span><span class='glyphicon glyphicon-chevron-left' style='margin-left:-6px' aria-hidden='true'></span>Back to Manage Roles</a>
+	</div>
+}
+
+@section Scripts {
+	<script>
+		$(document.body).on('click', '#saveMain', function () {
+			$("#main").submit();
+		});
+	</script>
+}

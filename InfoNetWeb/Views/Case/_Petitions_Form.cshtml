@@ -1,0 +1,89 @@
+﻿@model ClientCase
+
+@{
+	var petitionKey = (Key)ViewData["petitionKey"];
+	string petitionAction = (string)ViewData["petitionAction"];
+	string idPrefix = ("petition_" + petitionKey + "_").Replace(':', '_');
+	bool isDeleted = "-~".Contains(petitionAction);
+	List<string> selectedRespondents = null;
+	if (!petitionKey.IsTemplate) {
+		var respondentsDictionary = (Dictionary<Key, List<string>>)ViewBag.PetitionRespondentsDictionary;
+		selectedRespondents = respondentsDictionary[petitionKey];
+	}
+}
+
+<tr class=@(isDeleted ? "deleted" : null) data-toggle="collapse" data-target="#@(idPrefix)Collapse">
+	<td style="padding-left: 40px">
+		<span id="@(idPrefix)Respondents"></span>
+	</td>
+	<td>
+		<span id="@(idPrefix)AbuseNeglectPetition"></span>
+	</td>
+	<td>
+		<span id="@(idPrefix)PetitionDate"></span>
+	</td>
+	<td>
+		<span id="@(idPrefix)Adjudicated"></span>
+	</td>
+	<td>
+		<span id="@(idPrefix)AdjudicatedDate"></span>
+	</td>
+	<td width="40px">
+		<button type="button" class="btn btn-primary btn-xs btn-icon collapsed @(isDeleted ? "hide" : null)" aria-label="Toggle Petition Editing" aria-controls="#@(idPrefix)Collapse" aria-expanded="false" data-icjia-role="petition.expand" data-toggle="collapse" data-target="#@(idPrefix)Collapse"><span class="glyphicon glyphicon-triangle-bottom rotate-90-if-collapsed"></span></button>
+		<button type="button" class="btn btn-primary btn-xs btn-icon @(isDeleted ? null : "hide")" aria-label="Restore Deleted Petition" data-icjia-role="petition.restore"><span class="glyphicon glyphicon-undo"></span></button>
+		@Html.Hidden(Html.NameFor(m => m.AbuseNeglectPetitionsById) + ".index", petitionAction + petitionKey, new { data_icjia_role = "petition.index" })
+	</td>
+</tr>
+<tr class="dataRow">
+	<td colspan="6" style="border-top: none; padding: 0">
+		<div id="@(idPrefix)Collapse" class="collapse well" style="position: relative; margin: 0 39.3667px 19.68335px">
+			@Html.HiddenFor(model => model.AbuseNeglectPetitionsById[petitionKey].Id)
+			@Html.HiddenFor(model => model.AbuseNeglectPetitionsById[petitionKey].ClientId)
+			@Html.HiddenFor(model => model.AbuseNeglectPetitionsById[petitionKey].CaseId)
+			<div class="row">
+				<div class="col-md-6">				
+					<div class="form-group">
+						@Html.LabelFor(model => model.AbuseNeglectPetitionsById[petitionKey].RespondentArray, new { data_toggle = "tooltip", title = "Select the ID numbers of the person(s) named as respondents on the petition." })	
+						@Html.DropDownListFor(model => model.AbuseNeglectPetitionsById[petitionKey].RespondentArray, new MultiSelectList(ViewBag.Respondents, "ID", "Display", selectedRespondents), new { @class = "form-control petitionsChosen", data_icjia_broadcast = "#" + idPrefix + "Respondents", multiple = "multiple" })
+						@Html.ValidationMessageFor(model => model.AbuseNeglectPetitionsById[petitionKey].RespondentArray, "", new { @class = "help-block" })
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						@Html.LabelFor(model => model.AbuseNeglectPetitionsById[petitionKey].AbuseNeglectPetitionId, new { data_toggle = "tooltip", title = "Select the type of petition." })
+						@Html.LookupFor(model => model.AbuseNeglectPetitionsById[petitionKey].AbuseNeglectPetitionId, Session.Center().Provider, "<Pick One>", true, new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "AbuseNeglectPetition" })
+						@Html.ValidationMessageFor(model => model.AbuseNeglectPetitionsById[petitionKey].AbuseNeglectPetitionId, "", new { @class = "help-block" })
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(model => model.AbuseNeglectPetitionsById[petitionKey].PetitionDate, new { data_toggle = "tooltip", title = "Enter the date the petition was filed." })
+						<div class="input-group date" data-provide="datepicker" data-date-end-date=@DateTime.Today.ToShortDateString()>
+							@Html.TextBoxFor(model => model.AbuseNeglectPetitionsById[petitionKey].PetitionDate, "{0:MM/dd/yyyy}", new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "PetitionDate" })
+							<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+						</div>
+						@Html.ValidationMessageFor(model => model.AbuseNeglectPetitionsById[petitionKey].PetitionDate, "", new { @class = "help-block" })
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(model => model.AbuseNeglectPetitionsById[petitionKey].AdjudicatedId, new { data_toggle = "tooltip", title = "Select the adjudication outcome. If not known, select Unknown." })
+						@Html.LookupFor(model => model.AbuseNeglectPetitionsById[petitionKey].AdjudicatedId, Session.Center().Provider, "<Pick One>", true, new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "Adjudicated" })
+						@Html.ValidationMessageFor(model => model.AbuseNeglectPetitionsById[petitionKey].AdjudicatedId, "", new { @class = "help-block" })
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(model => model.AbuseNeglectPetitionsById[petitionKey].AdjudicatedDate, new { data_toggle = "tooltip", title = "Enter the date this petition was adjudicated." })
+						<div class="input-group date" data-provide="datepicker" data-date-end-date=@DateTime.Today.ToShortDateString()>
+							@Html.TextBoxFor(model => model.AbuseNeglectPetitionsById[petitionKey].AdjudicatedDate, "{0:MM/dd/yyyy}", new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "AdjudicatedDate" })
+							<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+						</div>
+						@Html.ValidationMessageFor(model => model.AbuseNeglectPetitionsById[petitionKey].AdjudicatedDate, "", new { @class = "help-block" })
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="form-group">
+						<button type="button" class="btn btn-danger pull-right" aria-label="Delete This Petition" data-icjia-role="petition.delete"><span class="glyphicon glyphicon-trash"></span></button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</td>
+</tr>

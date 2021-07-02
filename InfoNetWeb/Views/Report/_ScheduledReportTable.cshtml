@@ -1,0 +1,457 @@
+﻿@using PagedList.Mvc;
+@using PagedList;
+@using Infonet.Web.ViewModels.Reporting
+@model CompletedScheduledReportViewModel
+
+@{
+	string viewRole = Model.ViewRole.ToUpper();
+	int colspan = 0;
+	if (Model.ReportTitle == "Completed") {
+		colspan = 11;
+	} else if (Model.ReportTitle == "Scheduled") {
+		colspan = 8;
+	}
+	if (viewRole == "FUNDER") {
+		++colspan;
+	}
+
+	var approved = CompletedScheduledReportViewModel.ReportApprovalStatusDescription.Approved;
+	var pending = CompletedScheduledReportViewModel.ReportApprovalStatusDescription.Pending;
+	var rejected = CompletedScheduledReportViewModel.ReportApprovalStatusDescription.Rejected;
+	var reviewOnly = CompletedScheduledReportViewModel.ReportApprovalStatusDescription.ReviewOnly;
+
+	//var colorHold = "#ffffff"; //White
+	var colorReady = "#e0e0e0"; //Light Gray
+								//var colorFetching = "#c0c0c0"; //Silver
+	var colorRunning = "#afd9ee"; //Blue
+	var colorError = "#f7ecb5"; //Yellow
+	var colorFailed = "#e4b9b9"; //Red
+								 //var colorDeleting = "#ffc966"; //Orange
+								 //var colorDeletingFailed = "#e59400"; //OrangeRed
+}
+
+<div class="panel-body" style="padding: 0px;">
+	<div class="table" style="border-right:15px; border-left:15px; margin:0px;">
+
+		@Html.Hidden("approvalRejected", (int)rejected)
+		@Html.Hidden("approvalApproved", (int)approved)
+		@Html.Hidden("approvalPending", (int)pending)
+
+		<table class="table" id="reports" style="margin:0px;">
+			<thead class="icjia-panel-subheader">
+				<tr>
+                    <th scope="col">@Html.DisplayName("ID")</th>
+					@if (viewRole == "FUNDER") {
+						<th scope="col">Action</th>
+					} else {
+						<th scope="col"><span class="sr-only">Action</span></th>
+					}
+					@if (Model.ReportTitle == "Completed") {
+						<th scope="col">@Html.DisplayName("Center Approval")</th>
+						<th scope="col">@Html.DisplayName("Center Approval/ Rejection Date")</th>
+						<th scope="col">@Html.DisplayName("Center Comments")</th>
+					}
+					<th scope="col">@Html.DisplayNameFor(m => m.RunDate)</th>
+
+					@if (Model.ReportTitle == "Scheduled" && viewRole != "FUNDER") {
+						<th scope="col">@Html.DisplayName("Center Action")</th>
+					}
+
+					<th scope="col">@Html.DisplayNameFor(m => m.Title)</th>
+
+					@if (viewRole != "FUNDER") {
+						<th scope="col">@Html.DisplayNameFor(m => m.SubmitterCenter)</th>
+					}
+
+					<th scope="col">@Html.DisplayNameFor(m => m.StartDate)</th>
+					<th scope="col">@Html.DisplayNameFor(m => m.EndDate)</th>
+					@if (Model.ReportTitle == "Completed") {
+						<th scope="col">@Html.DisplayNameFor(m => m.SubmittedDate)</th>
+					}
+					<th scope="col">@Html.DisplayNameFor(m => m.ReportType)</th>
+					<th scope="col">@Html.DisplayNameFor(m => m.SpecialCenterSelectionType)</th>
+					<th scope="col">@Html.DisplayNameFor(m => m.SpecialFundingSelectionType)</th>
+                    <th scope="col"><span class="sr-only">Action</span></th>
+				</tr>
+				<tr id="filters" style="background-color:#f1f1f1;">
+					@*<th style="font-weight:bold; vertical-align: middle;">Filters</th>*@                   
+                    <th scope="col"><span class="sr-only">Action</span></th>
+                    <th scope="col"><span class="sr-only">Action</span></th>
+					@if (Model.ReportTitle == "Completed") {
+						<th scope="col">
+							@if (Model.FilterCenterApproval != null) {
+								@Html.DropDownListFor(m => m.SelectedCenterApproval, Model.FilterCenterApproval, "", new { @class = "form-control dirtyignore" })
+							}
+						</th>
+						<th scope="col">
+							@if (Model.FilterCenterApprovalRejectionDate != null) {
+								@Html.DropDownListFor(m => m.SelectedCenterApprovalRejectionDate, Model.FilterCenterApprovalRejectionDate, "", new { @class = "form-control dirtyignore" })
+							}
+						</th>
+                        <th scope="col"><span class="sr-only">Action</span></th>
+					}
+					<th scope="col">
+						@if (Model.FilterRunDate != null) {
+							@Html.DropDownListFor(m => m.SelectedRunDate, Model.FilterRunDate, "", new { @class = "form-control dirtyignore" })
+						}
+					</th>
+
+					@if (Model.ReportTitle == "Scheduled" && viewRole != "FUNDER") {
+						<th scope="col">
+							@if (Model.FilterCenterApproval != null) {
+								@Html.DropDownListFor(m => m.SelectedCenterApproval, Model.FilterCenterApproval, "", new { @class = "form-control dirtyignore" })
+							}
+						</th>
+					}
+					<th scope="col">
+						@if (Model.FilterTitle != null) {
+							@Html.DropDownListFor(m => m.SelectedTitle, Model.FilterTitle, "", new { @class = "form-control dirtyignore" })
+						}
+					</th>
+
+					@if (viewRole != "FUNDER") {
+						<th scope="col">
+							@if (Model.FilterSubmitterCenter != null) {
+								@Html.DropDownListFor(m => m.SelectedSubmitterCenterId, Model.FilterSubmitterCenter, "", new { @class = "form-control dirtyignore" })
+							}
+						</th>
+					}
+					<th scope="col">
+						@if (Model.FilterBeginDate != null) {
+							@Html.DropDownListFor(m => m.SelectedBeginDate, Model.FilterBeginDate, "", new { @class = "form-control dirtyignore" })
+						}
+					</th>
+					<th scope="col">
+						@if (Model.FilterEndDate != null) {
+							@Html.DropDownListFor(m => m.SelectedEndDate, Model.FilterEndDate, "", new { @class = "form-control dirtyignore" })
+						}
+					</th>
+					@if (Model.ReportTitle == "Completed") {
+						<th scope="col">
+							@if (Model.FilterSubmittedDate != null) {
+								@Html.DropDownListFor(m => m.SelectedSubmittedDate, Model.FilterSubmittedDate, "", new { @class = "form-control dirtyignore" })
+							}
+						</th>
+					}
+					<th scope="col">
+						@if (Model.FilterType != null) {
+							@Html.DropDownListFor(m => m.SelectedType, Model.FilterType, "", new { @class = "form-control dirtyignore" })
+						}
+					</th>
+					<th scope="col">
+						@if (Model.FilterCenterName != null) {
+							@Html.DropDownListFor(m => m.SelectedCenterId, Model.FilterCenterName, "", new { @class = "form-control dirtyignore" })
+						}
+					</th>
+					<th scope="col">
+						@if (Model.FilterFundingSource != null) {
+							@Html.DropDownListFor(m => m.SelectedFundingSource, Model.FilterFundingSource, "", new { @class = "form-control dirtyignore" })
+						}
+					</th>
+					<th scope="col">
+						<button type="button" id="filterClear" class="btn btn-default btn-outline btn-sm">
+							<span class="glyphicon glyphicon-erase" data-toggle="tooltip" title="Clear Filters"></span>
+						</button>
+					</th>
+				</tr>
+			</thead>
+
+			<tbody id="searchResult">
+				@Html.HiddenFor(m => m.ViewRole)
+
+				@if (Model.ReportTitle == "Completed" && Model.RptJobId != null) {
+					@Html.HiddenFor(m => m.RptJobId)
+				}
+
+				@{
+					if (Model.ReportRecordsDisplayed != null) {
+						for (var i = 0; i < Model.ReportRecordsDisplayed.Count(); i++) {
+							var collapseId = "collapse_" + i.ToString();
+
+							string borderColor = "";
+							switch (Model.ReportRecordsDisplayed[i].StatusId) {
+								//case 1: //Hold
+								//    borderColor = colorHold;
+								//    break;
+								case 2: //Ready
+									borderColor = colorReady;
+									break;
+								case 3: //Fetching
+								case 4: //Running
+									borderColor = colorRunning;
+									break;
+								case 5://Error
+									borderColor = colorError;
+									break;
+								case 7: //Failed
+									borderColor = colorFailed;
+									break;
+									//case 8: //Deleting
+									//    borderColor = colorDeleting;
+									//    break;
+									//case 9: //Deleting Failed
+									//    borderColor = colorDeletingFailed;
+									//    break;
+							}
+
+							var borderStyle = "";
+							if (Model.ReportTitle == "Scheduled") {
+								borderStyle = $"border-left: solid 5px {borderColor}; border-right: solid 5px {borderColor};";
+							}
+
+						<tr class="" style="@borderStyle">
+							@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].Id)
+                            <td>@Model.ReportRecordsDisplayed[i].Id</td>
+							@if (viewRole == "FUNDER") {
+								<td>
+									@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].RowVersion)
+									<label style="font-weight:normal;">@Html.CheckBoxFor(m => m.ReportRecordsDisplayed[i].FlagForDelete) @Html.DisplayNameFor(m => m.ReportRecordsDisplayed[i].FlagForDelete)</label>
+									<br />
+
+									@if (Model.ReportTitle == "Scheduled") {
+										if (Model.ReportRecordsDisplayed[i].SpecialCenterSelectionType == "(All Centers and Satellites)") {
+											@Html.DropDownListFor(
+x => x.ReportRecordsDisplayed[i].SelectedCenterActionId,
+new SelectList(Model.CenterActionNoAction, "Value", "Text", Model.ReportRecordsDisplayed[i].SelectedCenterActionId), new { @class = "form-control", style = "margin-top:5px;" }
+)
+										} else {
+											@Html.DropDownListFor(
+x => x.ReportRecordsDisplayed[i].SelectedCenterActionId,
+new SelectList(Model.CenterActions, "Value", "Text", Model.ReportRecordsDisplayed[i].SelectedCenterActionId), new { @class = "form-control", style = "margin-top:5px;" }
+)
+										}
+										@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].CenterActionModified)
+									}
+								</td>
+							}
+
+							@if (Model.ReportTitle == "Completed") {
+								if (viewRole != "FUNDER") {
+									<td></td>
+								}
+								<td>
+									@{
+										var CenterApprovalDescriptionStyle = "";
+
+										if (Model.ReportRecordsDisplayed[i].CenterApprovalDescription[0].Text == pending.GetDisplayName()) {
+											CenterApprovalDescriptionStyle = "btn-warning";
+										} else if (Model.ReportRecordsDisplayed[i].CenterApprovalDescription[0].Text == approved.GetDisplayName()) {
+											CenterApprovalDescriptionStyle = "btn-success";
+										} else if (Model.ReportRecordsDisplayed[i].CenterApprovalDescription[0].Text == rejected.GetDisplayName()) {
+											CenterApprovalDescriptionStyle = "btn-danger";
+										} else if (Model.ReportRecordsDisplayed[i].CenterApprovalDescription[0].Text == reviewOnly.GetDisplayName()) {
+											CenterApprovalDescriptionStyle = "btn-info";
+										} else if (Model.ReportRecordsDisplayed[i].CenterApprovalDescription[0].Text == "No Action") {
+											CenterApprovalDescriptionStyle = "btn-success btn-outline";
+										}
+									}
+
+									<a role="button" class="btn btn-block btn-xs @CenterApprovalDescriptionStyle openCompletedReportModal" data-toggle="modal" data-target="#completedReportApproval" href="#completedReportApproval">@Model.ReportRecordsDisplayed[i].CenterApprovalDescription[0].Text</a>
+								</td>
+								<td>
+									@if (Model.ReportRecordsDisplayed[i].CenterApprovalDescription[0].Text == approved.GetDisplayName() || Model.ReportRecordsDisplayed[i].CenterApprovalDescription[0].Text == rejected.GetDisplayName()) {
+										@Model.ReportRecordsDisplayed[i].CenterActionApprovalDate.Value.ToShortDateString()
+
+									}
+								</td>
+								<td>@Model.ReportRecordsDisplayed[i].CenterComment</td>
+								@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].CenterApprovalDescription[0].Value)
+										@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].CenterApprovalDescription[0].Text)
+										@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].CenterActionApprovalDate)
+										@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].CenterComment)
+										@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].ApprovalStatusId)
+}
+
+							@if (Model.ReportTitle == "Scheduled" && viewRole != "FUNDER") {
+								<td></td>
+							}
+							<td>@Model.ReportRecordsDisplayed[i].RunDate.Value.ToShortDateString()</td>
+
+							@if (Model.ReportTitle == "Scheduled" && viewRole != "FUNDER") {
+								<td>@Model.ReportRecordsDisplayed[i].CenterAction[0].Text</td>
+								@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].CenterAction[0].Value)
+								@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].CenterAction[0].Text)
+							}
+
+							<td>
+								@Model.ReportRecordsDisplayed[i].Title
+							</td>
+
+							@if (viewRole != "FUNDER") {
+								<td>@Model.ReportRecordsDisplayed[i].SubmitterCenter[0].Text</td>
+								@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].SubmitterCenter[0].Value)
+								@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].SubmitterCenter[0].Text)
+							}
+
+							<td>@Model.ReportRecordsDisplayed[i].StartDate.Value.ToShortDateString()</td>
+							<td>@Model.ReportRecordsDisplayed[i].EndDate.Value.ToShortDateString()</td>
+							@if (Model.ReportTitle == "Completed") {
+								<td>@Model.ReportRecordsDisplayed[i].SubmittedDate.Value.ToShortDateString()</td>
+							}
+							<td>@Model.ReportRecordsDisplayed[i].ReportTypeDescription</td>
+							<td>@Model.ReportRecordsDisplayed[i].SpecialCenterSelectionType</td>
+							<td>@Model.ReportRecordsDisplayed[i].SpecialFundingSelectionType</td>
+
+							@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].RunDate)
+							@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].Title)
+							@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].StartDate)
+							@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].EndDate)
+							@if (Model.ReportTitle == "Completed") {
+								@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].SubmittedDate)
+							}
+							@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].ReportTypeDescription)
+							@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].SpecialCenterSelectionType)
+							@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].SpecialFundingSelectionType)
+
+							@{
+								var urlOutputFormat = "/Report/ViewCompleted/" + Model.ReportRecordsDisplayed[i].Id.ToString() + "?format=";
+								var CSVUrl = urlOutputFormat + "csv";
+								var HTMLUrl = urlOutputFormat + "html";
+								var PDFUrl = urlOutputFormat + "pdf";
+							}
+
+							<td style="min-width:120px">
+								<div class="btn-group btn-group-xs">
+									<a href=@HTMLUrl class="btn btn-primary btn-outline" role="button" target="_blank">HTML</a>
+									<button type="button" class="btn dropdown-toggle btn-primary btn-outline" style="padding-left: 4px; padding-right: 4px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										<span class="caret"></span>
+										<span class="sr-only">Toggle Dropdown</span>
+									</button>
+									<ul class="dropdown-menu dropdown-menu-right" role="menu">
+										<li><a href=@PDFUrl target="_blank">PDF</a></li>
+										@if (viewRole != "FUNDER") {
+											<li><a href=@CSVUrl target="_self">CSV</a></li>
+										}
+									</ul>
+								</div>
+
+								<button type="button" class="btn btn-primary btn-xs btn-icon collapsed" aria-label="Toggle Services/Programs" data-icjia-role="" data-toggle="collapse" data-target=@("#" + collapseId)>
+									<span class="glyphicon glyphicon-triangle-bottom rotate-90-if-collapsed"></span>
+								</button>
+							</td>
+						</tr>
+						<tr style="@borderStyle">
+							<td colspan="@colspan" style="border-top: none; padding: 0px">
+
+								<div id=@collapseId class="collapse" style="margin: 0px 39.3667px 19.68335px; padding: 0px;">
+									<div class="row">
+										<div class="col-sm-4">
+											<div class="table-responsive">
+												<table class="table" id="ReportTypeSelections">
+													<thead class="icjia-panel-subheader">
+														<tr>
+															<th scope="col">@Html.DisplayNameFor(m => m.ReportType)</th>
+														</tr>
+													</thead>
+													<tbody class="scrollableTbody">
+														@if (Model.ReportRecordsDisplayed[i].Type != null) {
+															for (int x = 0; x < Model.ReportRecordsDisplayed[i].Type.Count; x++) {
+																@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].Type[x].Value)
+																@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].Type[x].Text)
+																<tr>
+																	<td>@Model.ReportRecordsDisplayed[i].Type[x].Text</td>
+																</tr>					}
+														}
+													</tbody>
+												</table>
+											</div>
+										</div>
+
+										<div class="col-sm-4">
+											<div class="table-responsive">
+												<table class="table" id="CenterSelections">
+													<thead class="icjia-panel-subheader">
+														<tr>
+															<th scope="col">@Html.DisplayNameFor(m => m.SpecialCenterSelectionType)</th>
+														</tr>
+													</thead>
+													<tbody class="scrollableTbody">
+														@if (Model.ReportRecordsDisplayed[i].Center != null) {
+															for (int x = 0; x < Model.ReportRecordsDisplayed[i].Center.Count; x++) {
+																@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].Center[x].Value)
+																@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].Center[x].Text)
+																<tr>
+																	<td>@Model.ReportRecordsDisplayed[i].Center[x].Text</td>
+																</tr>				}
+														}
+													</tbody>
+												</table>
+											</div>
+										</div>
+
+										<div class="col-sm-4">
+											<div class="table-responsive">
+												<table class="table" id="FundingSelections">
+													<thead class="icjia-panel-subheader">
+														<tr>
+															<th scope="col">@Html.DisplayNameFor(m => m.SpecialFundingSelectionType)</th>
+														</tr>
+													</thead>
+													<tbody class="scrollableTbody">
+														@if (Model.ReportRecordsDisplayed[i].FundingSourceDescription != null) {
+															for (int x = 0; x < Model.ReportRecordsDisplayed[i].FundingSourceDescription.Count; x++) {
+																@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].FundingSourceDescription[x].Value)
+																@Html.HiddenFor(m => m.ReportRecordsDisplayed[i].FundingSourceDescription[x].Text)
+																<tr>
+																	<td>@Model.ReportRecordsDisplayed[i].FundingSourceDescription[x].Text</td>
+																</tr>				}
+														}
+													</tbody>
+												</table>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</td>
+						</tr>
+										}
+									}
+								}
+			</tbody>
+		</table>
+	</div>
+</div>
+<div class="panel-footer">
+	<div class="row">
+
+		@if (Model.ReportTitle == "Scheduled") {
+			<div class="col-sm-12 col-md-4">
+				<ul class="legend">
+					@*<li><span style="background-color:@(colorHold);"></span> Hold</li>*@
+					<li><span style="background-color:@(colorReady);"></span> Ready</li>
+					@*<li><span style="background-color:@(colorFetching);"></span> Fetching</li>*@
+					<li><span style="background-color:@(colorRunning);"></span> Running</li>
+					<li><span style="background-color:@(colorError);"></span> Error - Will Retry</li>
+					<li><span style="background-color:@(colorFailed);"></span> Failed</li>
+					@*<li><span style="background-color:@(colorDeleting);"></span> Deleting</li>
+						<li><span style="background-color:@(colorDeletingFailed);"></span> Deleting Failed</li>*@
+				</ul>
+			</div>
+			<div class="col-sm-12 col-md-8" id="paginationDiv">
+				@{
+					if (Model.ReportRecordsDisplayed != null) {
+						@Html.PagedListPager(
+										 new StaticPagedList<CompletedScheduledReportViewModel.ReportRecord>(Model.ReportRecordsDisplayed, Model.PagingMetaData),
+										 page => Url.Action("ScheduledReportFilter", "Report", new { page }),
+									 Html.Snippets().PagedListRenderOptions(new[] { "scheduledPagedList", "dirtyignore" }, new[] { "pagedListMultiples" }))
+						@Html.Partial("_PagedListFooter", new StaticPagedList<CompletedScheduledReportViewModel.ReportRecord>(Model.ReportRecordsDisplayed, Model.PagingMetaData))
+					}
+				}
+			</div>
+		} else {
+			<div class="col-sm-12" id="paginationDiv">		
+				@{
+					if (Model.ReportRecordsDisplayed != null) {
+						@Html.PagedListPager(
+											  new StaticPagedList<CompletedScheduledReportViewModel.ReportRecord>(Model.ReportRecordsDisplayed, Model.PagingMetaData),
+											  page => Url.Action("CompletedReportFilter", "Report", new { page }),
+										  Html.Snippets().PagedListRenderOptions(new[] { "completedPagedList", "dirtyignore" }, new[] { "pagedListMultiples" }))
+						@Html.Partial("_PagedListFooter", new StaticPagedList<CompletedScheduledReportViewModel.ReportRecord>(Model.ReportRecordsDisplayed, Model.PagingMetaData))
+						}
+					}
+			</div>
+		}
+		@Html.HiddenFor(m => m.PageNumber)
+	</div>
+</div>

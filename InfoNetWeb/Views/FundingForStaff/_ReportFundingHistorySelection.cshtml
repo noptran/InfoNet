@@ -1,0 +1,21 @@
+﻿@model Infonet.Web.ViewModels.Admin.FundingForStaff
+
+<div class="row ffs-title">
+	<div class="col-md-6">
+		<span style="font-weight:bold;">Center: </span><span>@Session.Center().Name</span>
+	</div>
+	<div class="col-md-6">
+		<span style="font-weight:bold;">Staff Member: </span><span class="reportCurrentStaffMemberName"></span>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<span class="text-info">* Indicates previously selected statement.</span>
+	</div>
+</div>
+
+<div class="form-group" id="reportFundingHistorySelectionMultiSelect">
+	@Html.LabelFor(m => m.FFSReports.FundingDateIDs, new { @class = "control-label" })
+	@Html.ListBoxFor(m => m.FFSReports.FundingDateIDs, Model.FFSReports.FundingDates, new { @class = "form-control dirtyignore" })
+</div>

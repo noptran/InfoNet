@@ -1,0 +1,191 @@
+﻿@model ClientCase
+
+@{
+	var offenderKey = (Key)ViewData["offenderKey"];
+	string offenderKeyPrefix = (string)ViewData["offenderKeyPrefix"];
+	string idPrefix = ("offender" + offenderKey).Replace(':', '_');
+}
+<div class="panel-body">
+   <div class="row">
+		<div class="col-sm-6">
+			<input type="hidden" id="provider" value="@Session.Center().Provider">
+			@if (Model.Provider == Provider.CAC) {
+				@Html.HiddenFor(m => m.OffendersById[offenderKey].OffenderListingId)
+				if (Model.OffendersById[offenderKey].OffenderListingId == null) {
+					<div class="form-group">
+						@Html.LabelFor(m => m.OffendersById[offenderKey].OffenderListing.OffenderCode, new { @class = "control-label", data_toggle = "tooltip", title = "This is the unique identifier assigned to the offender to protect their identifying information. This identifier must not contain any personal information about the offender, e.g. birth dates, initials, etc." })
+						@Html.TextBoxFor(m => m.OffendersById[offenderKey].OffenderListing.OffenderCode, new { @class = "form-control"})
+						@Html.ValidationMessageFor(m => m.OffendersById[offenderKey].OffenderListing.OffenderCode, "", new { @class = "help-block" })
+					</div>
+				} else {
+					<div class="form-group">
+						@Html.LabelFor(m => m.OffendersById[offenderKey].OffenderListing.OffenderCode, new { @class = "control-label", data_toggle = "tooltip", title = "This is the unique identifier assigned to the offender to protect their identifying information. This identifier must not contain any personal information about the offender, e.g. birth dates, initials, etc." })
+						<div class="input-group">
+							@Html.TextBoxFor(m => m.OffendersById[offenderKey].OffenderListing.OffenderCode, new { @class = "form-control", @readonly = "readonly" })
+							<span class="input-group-btn">
+							    @Html.ActionLink("Other Offender Cases", "Edit", "Offender", new { id = Model.OffendersById[offenderKey].OffenderListing.OffenderListingId }, new { @class = "btn btn-primary", id = "@(offenderKey)_OffenderSummary" })
+							</span>
+						</div>
+						@Html.ValidationMessageFor(m => m.OffendersById[offenderKey].OffenderListing.OffenderCode, "", new { @class = "help-block" })
+					</div>
+				}
+			} else {
+				<div class="form-group">
+					@Html.LabelFor(m => m.OffendersById[offenderKey].OffenderId, new { @class = "control-label", data_toggle = "tooltip", title = "This is the unique identifier generated for the offender." })
+					<input type="text" id="@Html.IdFor(m => m.OffendersById[offenderKey].OffenderId)" value="@Model.OffendersById[offenderKey].OffenderId" readonly="readonly" class="form-control"/>
+				</div>
+			}
+			<div class="form-group">
+				@Html.LabelFor(m => m.OffendersById[offenderKey].Age, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the offender's Age (or approximate age) at the time of victim intake. If the offender's age is not known or client does not want to provide this information, enter -1." })
+				@Html.TextBoxFor(m => m.OffendersById[offenderKey].Age, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.OffendersById[offenderKey].Age, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.OffendersById[offenderKey].SexId, new { @class = "control-label", data_toggle = "tooltip", title = Html.HelpFor(m => m.OffendersById[offenderKey].SexId) })
+				@Html.LookupFor(m => m.OffendersById[offenderKey].SexId, Lookups.GenderIdentity[Model.Provider].ExcludeFor(Provider.DV, 8).IncludeFor(Provider.DV, 3).IncludeFor(Provider.CAC, 6, 5, 7, 4), "<Pick One>", true, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.OffendersById[offenderKey].SexId, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.OffendersById[offenderKey].RaceId, new { @class = "control-label", data_toggle = "tooltip", title = "Select the offender's Race/Ethnicity from the drop-down menu. If this information is not known or client does not want to provide this information, select Unknown." })
+				@Html.LookupFor(m => m.OffendersById[offenderKey].RaceId, "<Pick One>", true, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.OffendersById[offenderKey].RaceId, "", new { @class = "help-block" })
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="form-group">
+				@Html.LabelFor(m => m.OffendersById[offenderKey].RelationshipToClientId, new { @class = "control-label", data_toggle = "tooltip", title = "Select the offender's Relationship to the Victim from the drop-down menu. If this information is not known or client does not want to provide, select Unknown." })
+				@Html.LookupFor(m => m.OffendersById[offenderKey].RelationshipToClientId, Lookups.RelationshipToClient[Model.Provider].ExcludeFor(Provider.SA, 35).ExcludeFor(Provider.CAC, 50, 51, 60), "<Pick One>", true, new { @class = "form-control", data_icjia_broadcast = $"#{idPrefix} .icjia-panel-title-text, a[href=\"#{idPrefix}\"]", data_icjia_broadcast_default = "Someone" })
+				@Html.ValidationMessageFor(m => m.OffendersById[offenderKey].RelationshipToClientId, "", new { @class = "help-block" })
+			</div>
+			@if (Model.Provider == Provider.DV) {
+				<div class="form-group">
+					@Html.LabelFor(m => m.OffendersById[offenderKey].VisitationId, new { @class = "control-label icjia-required", data_toggle = "tooltip", title = "If there are children involved, select the type of Visitation the offender is allowed from the drop-down menu. If no children are involved, select Visitation Not an Issue. If this information is not known or client does not want to provide, select Unknown." })
+					@Html.LookupFor(m => m.OffendersById[offenderKey].VisitationId, "<Pick One>", true, new { @class = "form-control", aria_required = "true", data_val_required = "The Visitation field is required." })
+					@Html.ValidationMessageFor(m => m.OffendersById[offenderKey].VisitationId, "", new { @class = "help-block" })
+				</div>
+			}
+			<div class="form-group">
+				@Html.LabelFor(m => m.OffendersById[offenderKey].StateId, new { @class = "control-label", data_toggle = "tooltip", title = "Select the offender's State of Residence from the drop-down menu. If the offender resides outside the United States, select Out of Country at the bottom of the drop-down menu." })
+				@Html.DropDownListFor(m => m.OffendersById[offenderKey].StateId, new SelectList(Data.Usps.StatesAndOutOfCountry, "ID", "StateName", Model.OffendersById[offenderKey].StateId), "<Pick One>", new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.OffendersById[offenderKey].StateId, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.OffendersById[offenderKey].CountyId, new { @class = "control-label", data_toggle = "tooltip", title = "Select the offender's county of residence from the drop-down menu.  If this information is not known, or client does not want to provide, leave this field blank." })
+				@Html.DropDownListFor(m => m.OffendersById[offenderKey].CountyId, new SelectList(Data.Usps.GetCountiesByState(Model.OffendersById[offenderKey].StateId ?? Data.Usps.Illinois.ID), "ID", "CountyName", Model.OffendersById[offenderKey].CountyId), "<Pick One>", Html.Attributes(new { @class = "form-control" }).AndIf(Model.OffendersById[offenderKey].StateId == Data.Usps.OutOfCountry.ID, new { disabled = "disabled" }))
+				@Html.ValidationMessageFor(m => m.OffendersById[offenderKey].CountyId, "", new { @class = "help-block" })
+			</div>
+			@if (Model.Provider != Provider.DV) {
+				<div class="form-group">
+					@Html.LabelFor(m => m.OffendersById[offenderKey].RegisteredId, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate if the offender is a registered offender from the drop-down menu. If this information is not known or client does not want to provide this information, select unknown." })
+					@Html.LookupFor(m => m.OffendersById[offenderKey].RegisteredId, "<Pick One>", true, new { @class = "form-control" })
+					@Html.ValidationMessageFor(m => m.OffendersById[offenderKey].RegisteredId, "", new { @class = "help-block" })
+				</div>
+			}
+		</div>
+	</div>
+</div>
+<div class="table-responsive">
+	<table class="table">
+		<caption class="text-center text-uppercase">Police Charges</caption>
+		<colgroup>
+			<col />
+			<col />
+			<col />
+			<col />
+			<col />
+			<col style="width: 40px" />
+		</colgroup>
+		<thead class="icjia-panel-subheader">
+			@{
+				var SAMPLE_POLICE_CHARGE = new PoliceCharge();
+			}
+			<tr>
+				<th scope="col" class="text-center">@Html.DisplayNameFor(m => SAMPLE_POLICE_CHARGE.ArrestMadeId)</th>
+				<th scope="col">@Html.DisplayNameFor(m => SAMPLE_POLICE_CHARGE.ArrestDate)</th>
+				<th scope="col">@Html.DisplayNameFor(m => SAMPLE_POLICE_CHARGE.StatuteId)</th>
+				<th scope="col">@(Model.Provider == Provider.CAC ? "Class" : Html.DisplayNameFor(m => SAMPLE_POLICE_CHARGE.ChargeTypeId).ToHtmlString())</th>
+				<th scope="col">@Html.DisplayNameFor(m => SAMPLE_POLICE_CHARGE.ChargeDate)</th>
+                <th scope="col"><span class="sr-only">Action</span></th>
+			</tr>
+		</thead>
+		<tbody>
+			@{
+				var policeCharges = Model.OffendersById[offenderKey].PoliceChargesById;
+			}
+			@foreach (var each in policeCharges.KeysFor(policeCharges.Values.IncludingRestorable.OrderBy(c => c.PoliceChargeId, true).ThenBy(c => policeCharges.KeyFor(c).Occurrence))) {
+				bool isNew = each.Components[0] == null;
+				string prefix = policeCharges.ContainsKey(each) ? (isNew ? "+" : "=") : (isNew ? "~" : "-");
+				@Html.Partial("_Offender_PoliceCharge", Model, ViewData.CopyWith(new { chargeKey = each, chargeKeyPrefix = prefix }))
+			}
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="6" class="text-right">
+					<button type="button" class="btn btn-primary btn-xs btn-icon" aria-label="Add New Charge"
+							data-icjia-role="offender.policecharge.add" data-icjia-mustache-next='{ "key": @Model.OffendersById[offenderKey].PoliceChargesById.NextOccurrenceFor(null) }'>
+						<span class="glyphicon glyphicon-plus"></span>
+						@using (var mustache = Html.BeginMustache(offenderKey.IsTemplate ? "--dd-!protect outer-pp--script" : "script", "--d-", "-p--")) {
+							@Html.Partial("_Offender_PoliceCharge", Model, ViewData.CopyWith(new { chargeKey = Key.Template(null, mustache.Tag("key")), chargeKeyPrefix = "+" }))
+						}
+					</button>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+</div>
+<div class="table-responsive">
+	<table class="table">
+		<caption class="text-center text-uppercase">State's Attorney Charges</caption>
+		<colgroup>
+			<col />
+			<col />
+			<col />
+			<col />
+			<col />
+			<col />
+			<col style="width: 40px" />
+		</colgroup>
+		<thead class="icjia-panel-subheader">
+			@{
+				var SAMPLE_TRIAL_CHARGE = new TrialCharge();
+			}
+			<tr>
+				<th scope="col" class="text-center">@Html.DisplayNameFor(m => SAMPLE_TRIAL_CHARGE.ChargesFiledId)</th>
+				<th scope="col">@Html.DisplayNameFor(m => SAMPLE_TRIAL_CHARGE.StatuteId)</th>
+				<th scope="col">@Html.DisplayNameFor(m => SAMPLE_TRIAL_CHARGE.ChargeDate)</th>
+				<th scope="col">@Html.DisplayNameFor(m => SAMPLE_TRIAL_CHARGE.DispositionId)</th>
+				<th scope="col">@Html.DisplayNameFor(m => SAMPLE_TRIAL_CHARGE.DispositionDate)</th>
+				<th scope="col">Sentences</th>
+                <th scope="col"><span class="sr-only">Action</span></th>
+			</tr>
+		</thead>
+		<tbody>
+			@{
+				var trialCharges = Model.OffendersById[offenderKey].TrialChargesById;
+			}
+			@foreach (var each in trialCharges.KeysFor(trialCharges.Values.IncludingRestorable.OrderBy(c => c.TrialChargeId, true).ThenBy(c => trialCharges.KeyFor(c).Occurrence))) {
+				bool isNew = each.Components[0] == null;
+				string prefix = trialCharges.ContainsKey(each) ? (isNew ? "+" : "=") : (isNew ? "~" : "-");
+				@Html.Partial("_Offender_TrialCharge", Model, ViewData.CopyWith(new { chargeKey = each, chargeKeyPrefix = prefix }))
+			}
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="7" class="text-right">
+					<button type="button" class="btn btn-primary btn-xs btn-icon" aria-label="Add New Charge"
+							data-icjia-role="offender.trialcharge.add" data-icjia-mustache-next='{ "key": @Model.OffendersById[offenderKey].TrialChargesById.NextOccurrenceFor(null) }'>
+						<span class="glyphicon glyphicon-plus"></span>
+						@using (var mustache = Html.BeginMustache(offenderKey.IsTemplate ? "--dd-!protect outer-pp--script" : "script", "--d-", "-p--")) {
+							@Html.Partial("_Offender_TrialCharge", Model, ViewData.CopyWith(new { chargeKey = Key.Template(null, mustache.Tag("key")), chargeKeyPrefix = "+" }))
+						}
+					</button>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+</div>
+<div class="panel-footer text-right">
+	<button type="button" class="btn btn-danger" aria-label="Delete This Offender" data-icjia-role="offender.delete"><span class="glyphicon glyphicon-trash"></span></button>
+	@Html.Hidden(Html.NameFor(m => m.OffendersById) + ".index", offenderKeyPrefix + offenderKey, new { data_icjia_role = "offender.index" })
+</div>
+

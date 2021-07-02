@@ -1,0 +1,110 @@
+﻿@model Infonet.Web.ViewModels.Services.HotlineViewModel
+
+@{
+	ViewBag.Title = Model.PH_ID == null ? "New Hotline Call" : "Edit Hotline Call";
+}
+
+<div id="Hotlines">
+	@using (Html.BeginForm("Form", "Hotline", FormMethod.Post, new { id = "main", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+		@Html.AntiForgeryToken()
+		@Html.HiddenFor(m => m.PH_ID)
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.LabelFor(m => m.Date, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the date of the call. If multiple calls are being entered for a time period, e.g. week, month, etc., enter the last date of the period." })
+					<div class="input-group date" data-provide="datepicker" data-date-end-date=@DateTime.Today.ToShortDateString()>
+						@Html.TextBoxFor(m => m.Date, "{0:MM/dd/yyyy}", new { @class = "form-control" })
+						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+					</div>
+					@Html.ValidationMessageFor(m => m.Date, "", new { @class = "help-block" })
+				</div>
+				<div class="form-group">
+					@Html.LabelFor(m => m.NumberOfContacts, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the cumulative or total number of contacts/calls documented for this record." })
+					@Html.TextBoxFor(m => m.NumberOfContacts, new { @class = "form-control", type = "number" })
+					@Html.ValidationMessageFor(m => m.NumberOfContacts, "", new { @class = "help-block" })
+				</div>
+				<div class="form-group">
+					@Html.LabelFor(m => m.CallTypeID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the type of call from the drop-down menu. If more than one call is being documented for this record, ensure all calls were of the same type." })
+					@Html.LookupFor(m => m.CallTypeID, Session.Center().Provider, "<Pick One>", new { @class = "form-control" })
+					@Html.ValidationMessageFor(m => m.CallTypeID, "", new { @class = "help-block" })
+				</div>
+				<div class="form-group">
+					@Html.LabelFor(m => m.ReferralFromID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the caller(s) referral source from the drop-down menu." })
+					@Html.LookupFor(m => m.ReferralFromID, Session.Center().Provider, "<Pick One>", new { @class = "form-control" })
+					@Html.ValidationMessageFor(m => m.ReferralFromID, "", new { @class = "help-block" })
+				</div>
+				<div class="form-group">
+					@Html.LabelFor(m => m.ReferralToID, new { @class = "control-label", data_toggle = "tooltip", title = "Select where the caller(s) was referred to from the drop-down menu." })
+					@Html.LookupFor(m => m.ReferralToID, Session.Center().Provider, "<Pick One>", new { @class = "form-control" })
+					@Html.ValidationMessageFor(m => m.ReferralToID, "", new { @class = "help-block" })
+				</div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.SVID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the name of the staff person/volunteer who responded to the call(s) from the drop-down menu" })
+                    @Html.DropDownListFor(m => m.SVID, new SelectList(Data.Centers.GetStaffForCenterAndDateRetainCurrentSvid(Model.Date, Session.Center().Id, Model.SVID), "SVID", "EmployeeName", Model.SVID), "<Pick One>", new { @class = "form-control staffData" })
+                    @Html.ValidationMessageFor(m => m.SVID, "", new { @class = "help-block" })
+                </div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.LabelFor(m => m.TimeOfDay, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the time of day the first call was received." })
+					@Html.TextBoxFor(m => m.TimeOfDay, true, new { @class = "form-control timepicker", placeholder = "hh:mm AM/PM" })
+					@Html.ValidationMessageFor(m => m.TimeOfDay, "", new { @class = "help-block" })
+				</div>
+				<div class="form-group">
+					@Html.LabelFor(m => m.TotalTime, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the total number of MINUTES spent on the call, or the cumulative / total number of minutes spent on all calls being entered. Do not enter time in quarter hour increments as for services." })
+					@Html.TextBoxFor(m => m.TotalTime, new { @class = "form-control", type = "number" })
+					@Html.ValidationMessageFor(m => m.TotalTime, "", new { @class = "help-block" })
+				</div>
+				<div class="form-group" style="min-height:59px">
+					@Html.LabelFor(m => m.CountyID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the county from where caller(s) were calling from the drop-down menu. If the caller was not from Illinois, select 'Out of State'. If the caller’s location was unknown, select 'Unknown'." })
+					@Html.DropDownListFor(m => m.CountyID, new SelectList(Data.Usps.IllinoisCounties, "ID", "CountyName", Model.CountyID), "<Pick One>", new { @class = "form-control", data_icjia_county_source="CountyID" })
+					@Html.ValidationMessageFor(m => m.CountyID, "", new { @class = "help-block" })
+				</div>
+				<div class="form-group" style="min-height:59px">
+					@Html.LabelFor(m => m.Town, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the city/town of the caller if known." })
+					@Html.TextBoxFor(m => m.Town, new { @class = "form-control", data_icjia_role = "typeahead.cityortown", data_icjia_county = "CountyID" })
+					@Html.ValidationMessageFor(m => m.Town, "", new { @class = "help-block" })
+				</div>
+				<div class="form-group" style="min-height:59px">
+					@Html.LabelFor(m => m.Township, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the township of the caller if known." })
+					@Html.TextBoxFor(m => m.Township, new { @class = "form-control", data_icjia_role = "typeahead.township", data_icjia_county = "CountyID" })
+					@Html.ValidationMessageFor(m => m.Township, "", new { @class = "help-block" })
+				</div>
+				<div class="form-group" style="min-height:59px">
+					@Html.LabelFor(m => m.ZipCode, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the zip code of the caller." })
+					@Html.TextBoxFor(m => m.ZipCode, new { @class = "form-control", maxlength = "10", data_icjia_role = "typeahead.zipcode", data_icjia_county = "CountyID" })
+					@Html.ValidationMessageFor(m => m.ZipCode, "", new { @class = "help-block" })
+				</div>
+			</div>
+			<input type="hidden" id="saveAddNew" name="saveAddNew" value="0" />
+			<input type="hidden" id="returnURL" value="@TempData.Peek("HotlineReturnUrl")" name="ReturnURL" />
+		</div>				
+	}
+	<div class="form-group text-right" style="margin-top:20px">
+		<div class="btn-group">
+			@Html.Snippets().SaveButton(new { onclick = "if(validateMyForm()) $('#main').submit();", data_icjia_role = "preventDuplicateRequest", accesskey = "s" })
+			<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<span class="caret"></span>
+				<span class="sr-only">Toggle Dropdown</span>
+			</button>
+			<ul class="dropdown-menu icjia-btn-dropdown">
+                <li>@Html.Snippets().SaveAddButton(new { onclick = "if (validateMyForm2()) $('#main').submit();", data_icjia_role = "preventDuplicateRequest", accesskey = "a" })</li>
+				@*<li><a class="btn-success" onclick="if (validateMyForm2()) $('#main').submit();" href="#">Save & Add New</a></li>*@
+			</ul>
+		</div>
+		@Html.Snippets().UndoLink(Url.Action(), new { accesskey = "u" })
+		@if (Model.PH_ID == 0 || Model.PH_ID == null) {
+			<a href="@TempData.Peek("HotlineReturnUrl")" class="btn btn-danger">Cancel</a>
+		} else {
+		    @Html.Snippets().DeleteLink(Url.Action("Delete", "Hotline", new { id = Model.PH_ID , r = TempData.Peek("HotlineReturnUrl") }), new { accesskey = "d" })
+		}
+	</div>
+</div>
+<div class="form-group">
+	<a href="@TempData.Peek("HotlineReturnUrl")"><span class='glyphicon glyphicon-chevron-left' aria-hidden='true'></span><span class='glyphicon glyphicon-chevron-left' style='margin-left:-6px' aria-hidden='true'></span>Back to Hotline Search</a>
+</div>
+
+@section Scripts{
+    @Scripts.Render("~/bundles/typeahead")
+	<script src="~/Scripts/Views/Services/_Hotline.js"></script>
+}

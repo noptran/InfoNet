@@ -1,0 +1,70 @@
+﻿@model Infonet.Web.ViewModels.Services.CrisisSearchViewModel
+@using PagedList.Mvc;
+@{
+	ViewBag.Title = "Non-Client Crisis Intervention";
+}
+
+@using (Html.BeginForm("Search", "CrisisIntervention", FormMethod.Get, new { id = "main" })) {
+	@Html.Partial("_DateRangeSelect", Model, new ViewDataDictionary { { "rangeTitle", "Service Date Range" }, { "rangeTooltipTitle", "Enter the date range of non-client crisis intervention contacts to search." } })
+	<div class="row">
+		<div class="col-sm-6 col-md-4">
+            <div class="form-group">
+                @Html.LabelFor(m => m.SVID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the staff person/volunteer responding to the non-client crisis intervention contact to narrow search results." })
+                @Html.DropDownListFor(m => m.SVID, new SelectList(Data.Centers.GetStaffForCentersAndDateRange(Model.StartDate,Model.EndDate, Session.Center().Id), "SVID", "EmployeeName"), "<Pick One>", new { @class = "form-control staffData" })
+                @Html.ValidationMessageFor(m => m.SVID, "", new { @class = "help-block" })
+            </div>
+		</div>
+		<div class="col-sm-6 col-md-5">
+			<div class="form-group">
+				@Html.LabelFor(m => m.CallTypeID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the intervention type to narrow search results." })
+				@Html.LookupFor(m => m.CallTypeID, Session.Center().Provider, "<Pick One>", new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.CallTypeID, "", new { @class = "help-block" })
+			</div>
+		</div>
+	</div>
+			@Html.Partial("_SearchResetNewButtons", Model, new ViewDataDictionary { { "NewButtonUrl", "/CrisisIntervention/FormRedirect" }, { "NewButtonText", "New <span class=\"hidden-xs\">Non-Client Crisis</span> Intervention" } })
+}
+
+<table class="table table-hover table-responsive">
+	<tr>
+		<th scope="col">
+			Date
+		</th>
+        <th scope="col">
+            Staff/Volunteer
+        </th>
+		<th scope="col">
+			Intervention Type
+		</th>
+        <th scope="col"><span class="sr-only">Action</span></th>
+	</tr>
+	@foreach (var item in Model.CrisisList) {
+		<tr>
+			<td>
+				@Html.DisplayFor(m => item.Date)
+			</td>
+			<td>
+				@item.Staff
+			</td>
+			<td>
+				@(Lookups.HotlineCallType[item.CallTypeID]?.Description)
+			</td>
+			<td class="text-right">
+				@Html.ActionLink("Edit", "FormRedirect", new { id = item.PH_ID }, new { @class = "btn btn-xs btn-primary btn-outline" })
+			</td>
+		</tr>
+			}
+</table>
+
+<div class="row">
+	<div class="col-sm-12">
+		@Html.PagedListPager(Model.CrisisList, page => Url.Action(@Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)), @Html.Snippets().PagedListPagerRouteValues(page, Model)), @Html.Snippets().PagedListRenderOptions())
+		@Html.Partial("_PagedListDropMenu", Model, new ViewDataDictionary { { "PagedListUrlAction", @Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)) } })
+	</div>
+</div>
+
+@section Scripts {
+	<script src="~/Scripts/ICJIA/date-ranges.js"></script>
+	<script src="~/Scripts/ICJIA/pagedlist.js"></script>
+    <script src="~/Scripts/Views/Services/ServicesSearchUpdateStaffList.js"></script>
+}

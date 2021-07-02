@@ -1,0 +1,46 @@
+﻿/* -- Primary Button -- */
+.btn-primary {
+    color: #007373;
+    background-color: #cbece7;
+	border-color: #87c7c7;
+}
+.btn-primary:hover,
+.btn-primary:focus {
+	color: #006666;
+    background-color: #a6ded6;
+    border-color: #8cd5ca;
+}
+.btn-primary:active,
+.btn-primary.active,
+.open > .dropdown-toggle.btn-primary {
+	color: #005E5E;
+    background-color: #8cd5ca;
+    border-color: #5bc3b3;
+}
+.btn-primary:active:hover,
+.btn-primary.active:hover,
+.open > .dropdown-toggle.btn-primary:hover,
+.btn-primary:active:focus,
+.btn-primary.active:focus,
+.open > .dropdown-toggle.btn-primary:focus,
+.btn-primary:active.focus,
+.btn-primary.active.focus,
+.open > .dropdown-toggle.btn-primary.focus {
+	color: #005E5E;
+    background-color: #8cd5ca;
+    border-color: #5bc3b3;
+}
+/* Primary Button - Disabled */
+.btn-primary.disabled:hover,
+.btn-primary[disabled]:hover,
+fieldset[disabled] .btn-primary:hover,
+.btn-primary.disabled:focus,
+.btn-primary[disabled]:focus,
+fieldset[disabled] .btn-primary:focus,
+.btn-primary.disabled.focus,
+.btn-primary[disabled].focus,
+fieldset[disabled] .btn-primary.focus {
+    color: #007373;
+    background-color: #cbece7;
+	border-color: #87c7c7;
+}

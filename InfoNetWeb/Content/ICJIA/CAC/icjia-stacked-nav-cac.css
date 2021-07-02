@@ -1,0 +1,94 @@
+﻿/*
+	**************************** ICJIA STACKED NAV ****************************
+*/
+ul.icjia-nav-stacked a {
+	color: #767676; /* changed from #aaa; */
+	padding: 0 8px 0 4px;
+	border: 0 solid transparent;
+}
+
+ul.icjia-nav-stacked > li {
+	margin-bottom: 8px;
+}
+
+ul.icjia-nav-stacked > li > a {
+	font-size: 15px;
+	font-weight: bold;
+}
+
+ul.icjia-nav-stacked > li > a:hover {
+	color: #005db9; /* .panel-primary > .panel-heading color (brand primary) */
+}
+
+ul.icjia-nav-stacked ul a {
+	padding-left: 16px;
+}
+
+ul.icjia-nav-stacked > li.active > a {
+	color: #005db9; /* .panel-primary > .panel-heading color (brand primary) */
+}
+
+ul.icjia-nav-stacked > li.active ul a {
+	padding-right: 6px;
+	border-right-width: 2px;
+	border-color: #c2daf3; /* panel-primary border color */
+	color: #272727;
+}
+
+ul.icjia-nav-stacked li.active li.active a {
+	padding-right: 6px;
+	border-right-width: 2px;
+	border-color: #005db9; /* .panel-primary > .panel-heading color (brand primary) */
+	color: #005db9; /* .panel-primary > .panel-heading color (brand primary) */
+	font-weight: bold;
+}
+
+ul.icjia-nav-stacked li ul li a:hover {
+	border-color: #005db9; /* .panel-primary > .panel-heading color (brand primary) */
+	color: #005db9; /* .panel-primary > .panel-heading color (brand primary) */
+	background-color: #e7f3ff; /* panel-primary > .panel-footer background-color */
+}
+
+ul.icjia-nav-stacked > li:hover li a {
+	padding-right: 7px;
+	border-right-width: 1px;
+	border-color: #c2daf3; /* panel-primary border color */
+}
+
+ul.icjia-nav-stacked li ul.nav li.has-error a {
+	color: #a94442 !important; /* panel-danger panel-heading color */
+	font-style: italic !important;
+	border-color: #dea5a9 !important; /* btn-danger border color default state */
+}
+
+ul.icjia-nav-stacked li ul.nav li.has-error a:hover {
+	background-color: #ffebeb !important; /* has-group-error panel-footer background-color*/
+	border-color: #a94442 !important; /* panel-danger panel-heading color */
+}
+
+ul.icjia-nav-stacked li.active ul.nav li.active.has-error a {
+	border-color: #a94442 !important; /* panel-danger panel-heading color */
+}
+
+ul.icjia-nav-stacked li ul.nav li.deleted a {
+	color: #919191 !important;
+	text-decoration: line-through !important;
+}
+
+ul.icjia-nav-stacked li ul.nav li.deleted a:hover {
+	background-color: #f5f5f5 !important;
+	border-color: #919191 !important;
+}
+
+ul.icjia-nav-stacked li.active ul.nav li.active.deleted a {
+	border-color: #919191 !important;
+}
+
+ul.icjia-nav-stacked.icjia-nav-stacked-accordion li ul.nav,
+nav ul.nav.icjia-nav-stacked.icjia-nav-stacked-collapsed li ul.nav {
+	display: none;
+}
+
+ul.icjia-nav-stacked.icjia-nav-stacked-accordion li.active ul.nav {
+	display: block;
+}

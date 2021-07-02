@@ -1,0 +1,46 @@
+﻿@model Infonet.Web.ViewModels.Admin.FundingForStaff
+
+@{
+	if (Model != null) {
+		<div class="row ffs-title">
+
+			<div class="col-md-6">
+				<span style="font-weight:bold;">Center: </span><span>@Session.Center().Name</span>
+			</div>
+			<div class="col-md-6">
+				<span style="font-weight:bold;">Staff Member: </span><span id="currentStaffMemberNameAssignFunding"></span>
+			</div>
+			<div class="col-md-12">
+				<span style="font-weight:bold;">Service: </span><span class="currentService"></span>
+			</div>
+		</div>
+
+		<div class="panel panel-info icjia-error-group" id="assignFundingSourceInstructionsPanel">
+			<div class="panel-heading " data-toggle="collapse" data-target="#assignFundingSourceInstructions">
+				<h2 class="panel-title">
+					<span class="icjia-panel-title-text">Instructions</span>
+					<a class="pull-right " data-toggle="collapse" href="#assignFundingSourceInstructions" role="button" aria-label="Toggle Panel" aria-controls="assignFundingSourceInstructions" aria-expanded="true"><span class="glyphicon glyphicon-triangle-bottom rotate-90-if-collapsed"></span></a>
+				</h2>
+			</div>
+			<div id="assignFundingSourceInstructions" class="panel-collapse collapse in">
+				<div class="row">
+
+					<div class="col-md-12">
+						<div class="panel-body">
+							<ol class="text-info">
+								<li>Select the funding sources that will support the selected service and the percentage each source will support this service. Percentages for all funds must sum to 100%.</li>
+								<li>Click the Save button to apply changes or the Undo/Cancel Button to exit without changing.</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" id="assignFundingSourceDiv">
+			<div class="col-md-12" id="servicesSelectionTableAFS" style="min-height: 100px; overflow: hidden;">
+				@Html.Partial("_AssignFundingSourceFunds")
+			</div>
+		</div>
+	}
+}

@@ -1,0 +1,66 @@
+﻿@using System.Linq
+@using Infonet.Reporting.Core
+@inherits RazorEngine.Templating.TemplateBase<System.Collections.Generic.List<IReportTable>>   
+
+@foreach (var group in Model) {
+	if (!string.IsNullOrEmpty(group.PreHeader)) {
+		<div class="icjia-report-preheader avoid-break avoid-break-after">
+			@group.PreHeader
+		</div>
+	}
+	<div class="table-responsive">
+		<table class="table table-condensed table-bordered table-hover">
+			<thead>
+				@if (!group.HideHeaders) {
+					<tr>
+						<th scope="col">
+							@if (!group.HideTitle) {
+								<span>@group.Title</span>
+							}
+						</th>
+						@foreach (var header in group.Headers) {
+                            if (header.SubHeaders.Count > 1) {
+                                <th scope="colgroup" class="text-center" colspan="@(header.SubHeaders.Count)">@header.Title</th>
+                            }
+                            else {
+                                <th scope="col" class="text-center" colspan="@(header.SubHeaders.Count)">@header.Title</th>
+                            }
+
+                        }
+					</tr>
+					if (!group.HideSubheaders) {
+						<tr>
+                            <th scope="row"><span class="sr-only">Category</span></th>
+							@foreach (var header in group.Headers) {
+								foreach (var subheader in header.SubHeaders) {
+									<th scope="col"class="text-center">@subheader.Title</th>
+							}
+						}
+						</tr>
+					}
+				}
+			</thead>
+			<tbody>
+				@if (group.ReportTables.Any()) {
+					@Include("_SubReportCountTableGroupRenderer", group, typeof(IReportTable))
+				} else {
+					@Include("_SubReportCountRowRenderer", group, typeof(IReportTable))
+				}			
+			</tbody>
+			<tfoot>
+				@if (!group.HideSubtotal) {
+					if (group.ReportTables.Any()) {
+						@Include("_SubReportCountTableGroupGrandTotal", group, typeof(IReportTable))
+					} else {
+						@Include("_SubReportCountTableSubtotal", group, typeof(IReportTable))
+					}
+				}
+			</tfoot>
+		</table>
+		@if(!string.IsNullOrEmpty(group.Footer)){
+            <div class="icjia-report-footer avoid-break avoid-break-before">
+                <i>@Raw(group.Footer)</i>
+            </div>
+		}
+	</div>
+}

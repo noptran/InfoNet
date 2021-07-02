@@ -1,0 +1,19 @@
+﻿@using Infonet.Reporting.Core
+@inherits RazorEngine.Templating.TemplateBase<IReportTable>
+<tr>
+	<th scope="row">Grand Total</th>
+	@foreach (var header in Model.Headers) {
+		foreach (var subheader in header.SubHeaders) {
+			if (Model.UseNonDuplicatedSubtotal) { 
+				<td class="text-right">
+					@Model.GrandTotalFor(header.Code, subheader.Code)
+				</td>
+			} else {
+				double subtotal = Model.GrandTotalFor(header.Code, subheader.Code);
+				<td class="text-right"><b>
+					@string.Format(subtotal % 1 == 0 ? "{0:n0}" : "{0:n2}", subtotal)
+				</b></td>
+			}
+		}
+	}
+</tr>

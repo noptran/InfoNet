@@ -1,0 +1,32 @@
+﻿@model HousingServicesAdd
+
+<tr @(Model.IsDeleted ? "style=display:none;" : "")>
+	<td>
+		<div class="form-group" style="margin:0px; min-width:250px;">
+			@Html.LookupFor(m => Model.ServiceID, Lookups.HousingServices[Session.Center().Provider], "<Pick One>", new { Class = "form-control", data_val_servicegrouprequired = "The Service field is required." })
+			@Html.HiddenFor(m => Model.IsAdded)
+			@Html.HiddenFor(m => Model.IsDeleted)
+			@Html.HiddenFor(m => Model.IsEmpty)
+			@Html.ValidationMessageFor(m => Model.ServiceID, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td>
+		<div class="form-group" style="margin:0px; min-width:100px;">
+			@Html.TextBoxFor(m => Model.ShelterBegDate, "{0:MM/dd/yyyy}",
+			Html.Attributes(new { data_provide = "datepicker", data_date_end_date = @DateTime.Today.ToShortDateString(), Class = "inline-date form-control date group1", data_val_firstcontactdate = "Shelter Begin cannot be earlier than the case's First Contact Date.", data_val_servicegrouprequired = "The Shelter Begin field is required." }))
+			@Html.ValidationMessageFor(m => Model.ShelterBegDate, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td>
+		<div class="form-group" style="margin:0px; min-width:100px;">
+			@Html.TextBoxFor(m => Model.ShelterEndDate, "{0:MM/dd/yyyy}",
+				Html.Attributes(new { data_provide = "datepicker", data_date_end_date = @DateTime.Today.ToShortDateString(), Class = "inline-date form-control date group1", onfocusout = "housingServiceCheckIfEmpty(this, 'group1')", data_val_firstcontactdate = "Shelter End cannot be earlier than the case's First Contact Date." }))
+			@Html.ValidationMessageFor(m => Model.ShelterEndDate, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td class="removeHousingService" style="text-align: center;">
+		<div style="width:70px;">
+			<button class="btn btn-danger" onclick="addHideRow(this);" type="button"><span class="glyphicon glyphicon-trash"></span></button>
+		</div>
+	</td>
+</tr>

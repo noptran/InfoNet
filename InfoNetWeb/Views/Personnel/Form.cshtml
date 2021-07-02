@@ -1,0 +1,135 @@
+﻿@model Infonet.Web.ViewModels.Admin.PersonnelViewModel
+
+@{
+	ViewBag.Title = Model.SvId == 0 ? "Add Personnel" : "Edit Personnel";
+}
+
+@using (Html.BeginForm("Form", "Personnel", FormMethod.Post, new { id = "main", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+	@Html.AntiForgeryToken()
+	<input type="hidden" id="saveAddNew" name="saveAddNew" value="0" />
+	<input type="hidden" id="returnURL" value="@TempData.Peek("PersonnelReturnUrl")" name="ReturnURL" />
+	@Html.HiddenFor(m => m.SvId)
+	@Html.HiddenFor(m => m.Type)
+	<div class="row">
+		<div class="col-sm-4 col-md-3">
+			<div class="form-group radioType" style="display:none">
+				<label>
+					@Html.RadioButtonFor(m => m.TypeId, "1", new { style="margin:0", data_val="false" })
+					Paid Staff
+				</label>
+				&nbsp;
+				&nbsp;
+				&nbsp;
+				<label>
+					@Html.RadioButtonFor(m => m.TypeId, "2", new { style="margin:0", data_val = "false" })
+					Volunteer
+				</label>
+			</div>
+		</div>	
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="form-group">
+				@Html.LabelFor(m => m.FirstName, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the staff member/volunteer’s first name." })
+				@Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", maxlength = "50" })
+				@Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.LastName, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the staff member/volunteer’s last name." })
+				@Html.TextBoxFor(m => m.LastName, new { @class = "form-control", maxlength = "50" })
+				@Html.ValidationMessageFor(m => m.LastName, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group staffPersonnelTypes">
+				@Html.LabelFor(m => m.PersonnelTypeId, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the staff member/volunteer’s Personnel Type." })
+				@Html.DropDownListFor(m => m.PersonnelTypeId, new SelectList(ViewBag.StaffPersonnelTypes, "CodeID", "Description", Model.PersonnelTypeId), "<Pick One>", new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.PersonnelTypeId, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group volunteerPersonnelTypes" style="display:none">
+				@Html.LabelFor(m => m.PersonnelTypeId, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the staff member/volunteer’s Personnel Type." })
+				@Html.DropDownListFor(m => m.PersonnelTypeId, new SelectList(ViewBag.VolunteerPersonnelTypes, "CodeID", "Description", Model.PersonnelTypeId), "<Pick One>", new { @class = "form-control", disabled="disabled" })
+				@Html.ValidationMessageFor(m => m.PersonnelTypeId, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group supervisorID" style="display:none">
+				@Html.LabelFor(m => m.SupervisorId, new { @class = "control-label", data_toggle = "tooltip", title = "Select the volunteer’s supervisor from the staff list." })
+				@Html.DropDownListFor(m => m.SupervisorId, new SelectList(ViewBag.Supervisors, "SVID", "EmployeeName", Model.SupervisorId), "<Pick One>", new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.SupervisorId, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.StartDate, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the staff member/volunteer’s start date." })
+				<div class="input-group date" data-provide="datepicker" data-date-end-date=@DateTime.Today.ToShortDateString()>
+					@Html.TextBoxFor(m => m.StartDate, "{0:MM/dd/yyyy}", new { @class = "form-control" })
+					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+				</div>
+				@Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.TerminationDate, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the staff member/volunteer’s termination date." })
+				<div class="input-group date" data-provide="datepicker" data-date-end-date=@DateTime.Today.ToShortDateString()>
+					@Html.TextBoxFor(m => m.TerminationDate, "{0:MM/dd/yyyy}", new { @class = "form-control" })
+					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+				</div>
+				@Html.ValidationMessageFor(m => m.TerminationDate, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.CheckBoxFor(m => m.CollegeUnivStudent)
+				@Html.LabelFor(m => m.CollegeUnivStudent, new { @class = "control-label", data_toggle = "tooltip", title = "Check the box if the staff member/volunteer is currently a student." })
+				@Html.ValidationMessageFor(m => m.CollegeUnivStudent, "", new { @class = "help-block" })
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="form-group">
+				@Html.LabelFor(m => m.Title, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the staff member/volunteer’s job title."  })
+				@Html.TextBoxFor(m => m.Title, new { @class = "form-control", maxlength = "50" })
+				@Html.ValidationMessageFor(m => m.Title, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.Department, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the staff member/volunteer’s department." })
+				@Html.TextBoxFor(m => m.Department, new { @class = "form-control", maxlength = "50" })
+				@Html.ValidationMessageFor(m => m.Department, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.WorkPhone, new { @class = "control-label", type="tel", data_toggle = "tooltip", title = "Enter the staff member/volunteer’s center phone number." })
+				@Html.TextBoxFor(m => m.WorkPhone, new { @class = "form-control", type="tel" })
+				@Html.ValidationMessageFor(m => m.WorkPhone, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.Email, new { @class = "control-label", type="email", data_toggle = "tooltip", title = "Enter the staff member/volunteer’s center email address." })
+				@Html.TextBoxFor(m => m.Email, new { @class = "form-control", maxlength = "50", placeholder="" })
+				@Html.ValidationMessageFor(m => m.Email, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.SexId, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the staff member/volunteer’s gender identity." })
+				@Html.LookupFor(m => m.SexId, Lookups.Sex[Session.Center().Provider].Exclude(3), "<Pick One>", true, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.SexId, "", new { @class = "help-block" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.RaceId, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the staff member/volunteer’s race/ethnicity. If more than one apply, select Multi-racial. If none apply, select Other." })
+				@Html.LookupFor(m => m.RaceId, Session.Center().Provider, "<Pick One>", true, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.RaceId, "", new { @class = "help-block" })
+			</div>
+		</div>
+	</div>
+	<div class="form-group text-right">
+		<div class="btn-group text-center">
+			@Html.Snippets().SaveButton(new { id = "saveButton", data_icjia_role = "preventDuplicateRequest", accesskey = "s" })
+			<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<span class="caret"></span>
+				<span class="sr-only">Toggle Dropdown</span>
+			</button>
+			<ul class="dropdown-menu icjia-btn-dropdown">
+                <li>@Html.Snippets().SaveAddButton(new { id = "saveAddNewButton", data_icjia_role = "preventDuplicateRequest", accesskey = "a" })</li>
+			</ul>
+		</div>
+		@Html.Snippets().UndoLink(Url.Action(), new { accesskey = "u" })
+		@if (Model.SvId == 0) {
+			<a href=@TempData.Peek("PersonnelReturnUrl") class="btn btn-danger">Cancel</a>
+		}
+	</div>
+}
+<div class="form-group">
+	<a href="@TempData["PersonnelReturnUrl"]"><span class='glyphicon glyphicon-chevron-left' aria-hidden='true'></span><span class='glyphicon glyphicon-chevron-left' style='margin-left:-6px' aria-hidden='true'></span>Back to Personnel Search</a>
+</div>
+
+@section Scripts{
+	@Scripts.Render("~/Scripts/Views/Admin/Personnel.js")
+}

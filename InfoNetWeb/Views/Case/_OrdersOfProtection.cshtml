@@ -1,0 +1,41 @@
+﻿@model ClientCase
+
+<div class="table-responsive">
+    <table id="tbl_ordersOfProtection" class="table mb-0">
+        <thead class="icjia-panel-subheader">
+            @{ var SAMPLE_ORDER_OF_PROTECTION = new OrderOfProtection(); }
+            <tr>
+                <th scope="col" style="padding-left: 40px">@Html.DisplayNameFor(m => SAMPLE_ORDER_OF_PROTECTION.StatusID)</th>
+                <th scope="col">@Html.DisplayNameFor(m => SAMPLE_ORDER_OF_PROTECTION.CountyID)</th>
+                <th scope="col">@Html.DisplayNameFor(m => SAMPLE_ORDER_OF_PROTECTION.TypeOfOPID)</th>
+                <th scope="col">@Html.DisplayNameFor(m => SAMPLE_ORDER_OF_PROTECTION.ForumID)</th>
+                <th scope="col">@Html.DisplayNameFor(m => SAMPLE_ORDER_OF_PROTECTION.DateFiled)</th>
+                <th scope="col" class="text-center">Number of Activities</th>
+                <th scope="col"><span class="sr-only">Action</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var ordersOfProtection = Model.OrdersOfProtectionById;
+            }
+            @foreach (var each in ordersOfProtection.KeysFor(ordersOfProtection.Values.Concat(ordersOfProtection.Values.Restorable).OrderByDescending(c => c.OP_ID.HasValue).ThenBy(c => c.OP_ID).ThenBy(c => ordersOfProtection.KeyFor(c).Occurrence))) {
+                bool isNew = each.Components[0] == null;
+                string prefix = ordersOfProtection.ContainsKey(each) ? (isNew ? "+" : "=") : (isNew ? "~" : "-");
+                @Html.Partial("_OrdersOfProtection_Order", Model, ViewData.CopyWith(new { orderKey = each, orderKeyPrefix = prefix }))
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="7" class="text-right">
+                    <button type="button" class="btn btn-xs btn-primary btn-icon" aria-label="Add New Order Of Protection"
+                            data-icjia-role="orderofprotection.add" data-icjia-mustache-next='{ "key": @Model.OrdersOfProtectionById.NextOccurrenceFor(null) }'>
+                        <span class="glyphicon glyphicon-plus"></span>
+                        @using (var mustache = Html.BeginMustache("script","--q-", "-p--")) {
+                            @Html.Partial("_OrdersOfProtection_Order", Model, ViewData.CopyWith(new { orderKey = Key.Template(null, mustache.Tag("key")), orderKeyPrefix = "+" }))
+                        }
+                    </button>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

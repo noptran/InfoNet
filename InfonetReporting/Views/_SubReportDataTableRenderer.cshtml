@@ -1,0 +1,17 @@
+﻿@using Infonet.Core.Collections
+@inherits RazorEngine.Templating.TemplateBase<Infonet.Reporting.ViewModels.SubReportDataViewModel>
+
+<div class="table-responsive">
+	<table class="table table-condensed table-bordered table-hover">
+		<thead>
+			<tr>
+				@foreach (var each in Model.ColumnSelections) {
+					<th scope="col">@each.ColumnSelection.GetDisplayName()</th>
+				}
+			</tr>
+		</thead>
+		<tbody>
+			@Raw(Model.Output)
+		</tbody>
+	</table>
+</div>

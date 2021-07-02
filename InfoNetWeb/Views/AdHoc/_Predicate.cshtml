@@ -1,0 +1,33 @@
+﻿@using Newtonsoft.Json.Linq
+@model Infonet.Reporting.AdHoc.Model
+
+@{
+	JObject json = ViewBag.Json;
+	string fieldId = json["field"]?.Value<string>();
+
+	string predicateField = "field-" + Session.NextFieldId();
+}
+
+<div class="row" style="margin-left: -5px; margin-right: -5px; position: relative" data-icjia-role="predicate">
+	<div class="col-sm-4" style="padding-left: 5px; padding-right: 5px" data-icjia-role="predicateField">
+		<div class="form-group mb-0">
+			<select name="@predicateField" class="validate-even-hidden" data-placeholder="Select a Field" data-val="true" data-val-required="The field must contain a value.">
+				<option value=""></option>
+				@foreach (var eachEntity in Model.Entities) {
+					<optgroup label="@eachEntity.Label">
+						@foreach (var eachField in eachEntity.Fields) {
+							<option value="@eachField.Id" selected="@(eachField.Id == fieldId ? "selected" : null)" @(eachField.AvailableConditions.Any() ? null : "disabled")>@eachField.Label</option>
+						}
+					</optgroup>
+				}
+			</select>
+			<span class="field-validation-valid help-block" data-valmsg-for="@predicateField" data-valmsg-replace="true"></span>
+		</div>
+	</div>
+	@if (fieldId != null) {
+		@Html.Action("PredicateCondition", new { perspective = ViewBag.Perspective, predicateJson = json.ToString() })
+	}
+	<button type="button" class="btn btn-xs btn-danger btn-icon" style="position:absolute; right: 2px; top: 6px; z-index: 1" aria-label="Delete This Condition" data-icjia-role="deletePredicate">
+		<span class="glyphicon glyphicon-trash"></span>
+	</button>
+</div>

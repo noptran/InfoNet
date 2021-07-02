@@ -1,0 +1,70 @@
+﻿@model ClientCase
+
+@{
+    var orderKey = (Key)ViewData["orderKey"];
+    var orderActivityKey = (Key)ViewData["orderActivityKey"];
+    string orderActivityKeyPrefix = (string)ViewData["orderActivityKeyPrefix"];
+    bool isDeleted = "-~".Contains(orderActivityKeyPrefix);
+    string idPrefix = ("orderOfProtectionActivity" + orderKey + "_" + orderActivityKey).Replace(':', '_');
+}
+<tr class=@(isDeleted ? "hidden" : null)>
+    <td style="padding-left: 10px">
+        <div class="form-group mb-0">
+            @Html.LookupFor(m => m.OrdersOfProtectionById[orderKey].OrderOfProtectionActivitiesById[orderActivityKey].OpActivityCodeID, "<Pick One>", true, new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "OpActivityCodeID" })
+            @Html.ValidationMessageFor(m => m.OrdersOfProtectionById[orderKey].OrderOfProtectionActivitiesById[orderActivityKey].OpActivityCodeID, "", new { @class = "help-block" })
+        </div>
+    </td>
+    <td>
+        <div class="form-group mb-0">
+            <div class="input-group date" data-provide="datepicker" style="width: 100%">
+                @Html.TextBoxFor(m => m.OrdersOfProtectionById[orderKey].OrderOfProtectionActivitiesById[orderActivityKey].OpActivityDate, "{0:MM/dd/yyyy}", new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "OpActivityDate" })
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+            </div>
+            @Html.ValidationMessageFor(m => m.OrdersOfProtectionById[orderKey].OrderOfProtectionActivitiesById[orderActivityKey].OpActivityDate, "", new { @class = "help-block" })
+        </div>
+    </td>
+    <td>
+        <div class="form-group mb-0">
+            <div class="input-group date" data-provide="datepicker" style="width: 100%">
+                @Html.TextBoxFor(m => m.OrdersOfProtectionById[orderKey].OrderOfProtectionActivitiesById[orderActivityKey].NewExpirationDate, "{0:MM/dd/yyyy}", new { @class = "form-control", data_icjia_broadcast = "#" + idPrefix + "NewExpirationDate" })
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+            </div>
+            @Html.ValidationMessageFor(m => m.OrdersOfProtectionById[orderKey].OrderOfProtectionActivitiesById[orderActivityKey].NewExpirationDate, "", new { @class = "help-block" })
+        </div>
+    </td>
+    <td class="text-right pl-0" style="padding-top: 10px">
+        <button type="button" class="btn btn-xs btn-danger btn-icon" aria-label="Delete This Activity" data-icjia-role="orderofprotection.activity.delete"><span class="glyphicon glyphicon-trash"></span></button>
+        @Html.Hidden(Html.NameFor(m => m.OrdersOfProtectionById[orderKey].OrderOfProtectionActivitiesById) + ".index", orderActivityKeyPrefix + orderActivityKey, new { data_icjia_role = "orderofprotection.activity.index" })
+
+    </td>
+</tr>
+
+<tr class="deleted @(isDeleted ? null : "hidden")">
+    <td style="padding-left: 10px">
+        <div class="form-group mb-0">
+            @Html.LookupFor(m => m.OrdersOfProtectionById[orderKey].OrderOfProtectionActivitiesById[orderActivityKey].OpActivityCodeID, "<Pick One>", true, new { id = idPrefix + "OpActivityCodeID", @class = "form-control", disabled = "disabled" })
+            @Html.ValidationMessageFor(m => m.OrdersOfProtectionById[orderKey].OrderOfProtectionActivitiesById[orderActivityKey].OpActivityCodeID, "", new { @class = "help-block" })
+        </div>
+    </td>
+    <td>
+        <div class="form-group mb-0">
+            <div class="input-group date" data-provide="datepicker" style="width: 100%">
+                @Html.TextBoxFor(m => m.OrdersOfProtectionById[orderKey].OrderOfProtectionActivitiesById[orderActivityKey].OpActivityDate, "{0:MM/dd/yyyy}", new { id = idPrefix + "OpActivityDate", @class = "form-control", disabled = "disabled" })
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+            </div>
+            @Html.ValidationMessageFor(m => m.OrdersOfProtectionById[orderKey].OrderOfProtectionActivitiesById[orderActivityKey].OpActivityDate, "", new { @class = "help-block" })
+        </div>
+    </td>
+    <td>
+        <div class="form-group mb-0">
+           <div class="input-group date" data-provide="datepicker" style="width: 100%">
+                @Html.TextBoxFor(m => m.OrdersOfProtectionById[orderKey].OrderOfProtectionActivitiesById[orderActivityKey].NewExpirationDate, "{0:MM/dd/yyyy}", new { id = idPrefix + "NewExpirationDate", @class = "form-control", disabled = "disabled" })
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+            </div>
+            @Html.ValidationMessageFor(m => m.OrdersOfProtectionById[orderKey].OrderOfProtectionActivitiesById[orderActivityKey].NewExpirationDate, "", new { @class = "help-block" })
+        </div>
+    </td>
+    <td class="text-right pl-0" style="padding-top: 10px">
+        <button type="button" class="btn btn-xs btn-primary btn-icon" aria-label="Restore Deleted Order" data-icjia-role="orderofprotection.activity.restore"><span class="glyphicon glyphicon-undo"></span></button>
+    </td>
+</tr>

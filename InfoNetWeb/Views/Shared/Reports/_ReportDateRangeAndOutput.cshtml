@@ -1,0 +1,74 @@
+﻿@using Infonet.Reporting.Enumerations
+@using Infonet.Web.Models.Reporting
+@model Infonet.Reporting.ViewModels.IDateRangeWithOutputType
+
+<div class="row">
+	<div class="col-sm-8 col-md-5">
+		<div class="form-group">
+			@Html.Label("Start", "Date Range", new { @class = "control-label", data_toggle = "tooltip", title = "" })
+			<div class="input-daterange input-group" id="datepicker" data-provide="datepicker">
+				@Html.TextBoxFor(model => model.StartDate, "{0:MM/dd/yyyy}", new { @class = "form-control", autocomplete = "off", id = "Start" })
+				<span class="input-group-addon"><b>to</b></span>
+				@Html.TextBoxFor(model => model.EndDate, "{0:MM/dd/yyyy}", new { @class = "form-control", autocomplete = "off", id = "End" })
+			</div>
+			@Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "help-block" })
+			@Html.ValidationMessageFor(m => m.EndDate, "", new { @class = "help-block" })
+		</div>
+	</div>
+	<div class="col-sm-4 col-md-3">
+		<div class="form-group">
+			@Html.Label("rangePeriodChosen", "Ranges", new { @class = "control-label" })
+			<select class="form-control col-md-3" name="Range" id="rangePeriodChosen" data-icjia-role="dateRanges" data-icjia-start="#Start" data-icjia-end="#End" data-icjia-default-range="@Model.Range">
+				@Html.Partial("_DateRangeOptions1-4_20_5-19")
+			</select>
+		</div>
+	</div>
+	<div class="col-sm-6 col-md-4">
+		<div class="row">
+			<div class="col-xs-7 col-sm-8 col-md-9" style="padding-right:4px">
+				<div class="form-group">
+					@Html.LabelFor(m => m.OutputType, new { @class = "control-label" })
+					<select id="@Html.IdFor(m => m.OutputType)" name="@Html.NameFor(m => m.OutputType)" class="form-control pull-right">
+						@foreach (ReportOutputType type in Enum.GetValues(typeof(ReportOutputType))) {
+							<option value="@(type.ToInt32())">@type.GetDisplayName()</option>
+						}
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-5 col-sm-4 col-md-3" style="padding-left:4px">
+				<a id="pdfModalToggle" href="#pdfModal" data-toggle="modal" class="btn btn-default hide pull-left" style="margin-top:25px"><span class="glyphicon glyphicon-cog"></span></a>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="pdfModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">PDF Settings</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group">
+							@Html.LabelFor(m => m.PdfSize)
+							@Html.DropDownListFor(m => m.PdfSize, ReportFilterListGenerator.GetPdfSizeSelectList(), new { @class = "form-control" })
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							@Html.LabelFor(m => m.Orientation)
+							@Html.DropDownListFor(m => m.Orientation, ReportFilterListGenerator.GetPdfOrientationSelectList(), new { @class = "form-control" })
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+
+	</div>
+</div>

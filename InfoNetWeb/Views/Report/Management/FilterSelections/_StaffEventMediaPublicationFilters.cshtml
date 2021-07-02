@@ -1,0 +1,24 @@
+﻿@using Infonet.Reporting.Enumerations
+@model Infonet.Reporting.ViewModels.ManagementReportViewModel
+
+<div class="panel panel-primary icjia-error-group reportProperty @SubReportSelection.MngRptStaffServiceEventMediaPublication.GetShortName()" style="display:none">
+	<div class="panel-heading">
+		<h2 class="panel-title">
+			<span class="icjia-panel-title-text">Filters</span>
+		</h2>
+	</div>
+	<div class="panel-body">
+		<div class="form-group">
+			@Html.LabelFor(m => m.StaffMediaPublicationStaffSelections)
+			@Html.DropDownListFor(model => model.StaffMediaPublicationStaffSelections, new MultiSelectList(Model.StaffDefault, "SVID", "StaffName", Model.StaffMediaPublicationStaffSelections), new { @class = "form-control chosen staffSelection", multiple = "multiple" })
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(m => m.StaffMediaPublicationPublicationTypeSelections)
+			@Html.DropDownListFor(model => model.StaffMediaPublicationPublicationTypeSelections, new MultiSelectList(Model.MediaPubTypeDefault, "CodeId", "Description", Model.StaffMediaPublicationPublicationTypeSelections), new { @class = "form-control chosen", multiple = "multiple", data_icjia_ajax_url = "/Report/Publications" })
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(m => m.StaffMediaPublicationLocationSelections)
+			@Html.DropDownListFor(model => model.StaffMediaPublicationLocationSelections, new MultiSelectList(Model.ServiceLocationDefault, "CodeId", "Description", Model.StaffMediaPublicationLocationSelections), new { @class = "form-control chosen", multiple = "multiple", data_icjia_ajax_url = "/Report/EventLocations" })
+		</div>
+	</div>
+</div>

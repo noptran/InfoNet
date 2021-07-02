@@ -1,0 +1,128 @@
+﻿@model Infonet.Web.ViewModels.Services.CrisisViewModel
+
+@{
+    ViewBag.Title = Model.PH_ID == null ? "New Non-Client Crisis Intervention" : "Edit Non-Client Crisis Intervention";
+}
+
+<div id="crisis">
+    @using (Html.BeginForm("Form", "CrisisIntervention", FormMethod.Post, new { id = "main", autocomplete = "off", data_icjia_role = "dirty.form" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.PH_ID)
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Date, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the date of the intervention. If multiple interventions are being entered for a time period, e.g. week, month, etc., enter the last date of the period." })
+                    <div class="input-group date" data-provide="datepicker" data-date-end-date=@DateTime.Today.ToShortDateString()>
+                        @Html.TextBoxFor(m => m.Date, true, new { @class = "form-control" })
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.Date, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.CallTypeID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the type of intervention (phone or in-person) from the drop-down menu." })
+                    @Html.LookupFor(m => m.CallTypeID, Session.Center().Provider, "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.CallTypeID, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.NumberOfContacts, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the cumulative or total number of contacts documented for this record." })
+                    @Html.TextBoxFor(m => m.NumberOfContacts, new { @class = "form-control", type = "number" })
+                    @Html.ValidationMessageFor(m => m.NumberOfContacts, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.TotalTime, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the total number of hours spent on the contact(s) rounded to the nearest quarter hour. If more than one contact occurred, enter the cumulative/total number of hours spent on all contacts." })
+                    @Html.TextBoxFor(m => m.TotalTime, new { @class = "form-control", type = "number" })
+                    @Html.ValidationMessageFor(m => m.TotalTime, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Age, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the age of the non-client. If the non-client’s age is unknown, enter -1." })
+                    @Html.TextBoxFor(m => m.Age, new { @class = "form-control", type = "number" })
+                    @Html.ValidationMessageFor(m => m.Age, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.RaceID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the race/ethnicity of the non-client from the drop-down menu. If the non-client’s race/ethnicity is not known, select Unknown." })
+                    @Html.LookupFor(m => m.RaceID, Session.Center().Provider, "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.RaceID, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.SexID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the gender of the non-client from the drop-down menu. If gender is not known, select Unknown." })
+                    @Html.LookupFor(m => m.SexID, Session.Center().Provider, "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.SexID, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ClientTypeID, new { @class = "control-label", data_toggle = "tooltip", title = "Select whether this contact occurred with the direct victim of sexual violence or a significant other of a victim from the drop-down menu if known." })
+                    @Html.LookupFor(m => m.ClientTypeID, Session.Center().Provider, "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.ClientTypeID, "", new { @class = "help-block" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.SVID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the staff person/volunteer who responded to the contact(s) from the drop-down menu." })
+                    @Html.DropDownListFor(m => m.SVID, new SelectList(Data.Centers.GetStaffForCenterAndDateRetainCurrentSvid(Model.Date, Session.Center().Id, Model.SVID), "SVID", "EmployeeName", Model.SVID), "<Pick One>", new { @class = "form-control staffData" })
+                    @Html.ValidationMessageFor(m => m.SVID, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ReferralFromID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the non-client’s referral source from the drop-down menu best describing how this person was referred to the center if known." })
+                    @Html.LookupFor(m => m.ReferralFromID, Session.Center().Provider, "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.ReferralFromID, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ReferralToID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the primary resource this non-client was referred to by the staff person/volunteer during the contact from the drop-down menu if known. If no referral was provided, leave blank." })
+                    @Html.LookupFor(m => m.ReferralToID, Session.Center().Provider, "<Pick One>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.ReferralToID, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.CountyID, new { @class = "control-label", data_toggle = "tooltip", title = "Select the county where non-client(s) resides from the drop-down menu. If the non-client was not from Illinois, select Out of State . If the non-client’s location was unknown, select Unknown." })
+                    @Html.DropDownListFor(m => m.CountyID, new SelectList(Data.Usps.IllinoisCountiesAndOutOfIllinois, "ID", "CountyName", Model.CountyID), "<Pick One>", new { @class = "form-control", data_icjia_role = "typeahead.source.county" })
+                    @Html.ValidationMessageFor(m => m.CountyID, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group" style="min-height:59px">
+                    @Html.LabelFor(m => m.Town, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the city/town of the non-client if known." })
+                    @Html.TextBoxFor(m => m.Town, new { @class = "form-control", data_icjia_role = "typeahead.cityortown", data_icjia_county = Model.CountyID, data_icjia_state = Data.Usps.Illinois.ID })
+                    @Html.ValidationMessageFor(m => m.Town, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group" style="min-height:59px">
+                    @Html.LabelFor(m => m.Township, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the township of the non-client if known." })
+                    @Html.TextBoxFor(m => m.Township, new { @class = "form-control", data_icjia_role = "typeahead.township", data_icjia_county = Model.CountyID, data_icjia_state = Data.Usps.Illinois.ID })
+                    @Html.ValidationMessageFor(m => m.Township, "", new { @class = "help-block" })
+                </div>
+                <div class="form-group" style="min-height:59px">
+                    @Html.LabelFor(m => m.ZipCode, new { @class = "control-label", data_toggle = "tooltip", title = "Enter the zip code of the non-client if known." })
+                    @Html.TextBoxFor(m => m.ZipCode, new { @class = "form-control", maxlength = "10", data_icjia_role = "typeahead.zipcode", data_icjia_county = Model.CountyID, data_icjia_state = Data.Usps.Illinois.ID, data_val_zipcode = "true" })
+                    @Html.ValidationMessageFor(m => m.ZipCode, "", new { @class = "help-block" })
+                </div>
+            </div>
+            <input type="hidden" id="saveAddNew" name="saveAddNew" value="0" />
+            <input type="hidden" id="returnURL" value="@TempData.Peek("CrisisReturnUrl")" name="ReturnURL" />
+        </div>
+    }
+    <div class="form-group text-right" style="margin-top:20px">
+        <div class="btn-group">
+            @Html.Snippets().SaveButton(new { onclick = "if(validateMyForm()) $('#main').submit();", data_icjia_role = "preventDuplicateRequest", accesskey = "s" })
+            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu icjia-btn-dropdown">
+                <li><a class="btn-success" onclick="if (validateMyForm2()) $('#main').submit();" formmethod="post" href="#">Save & Add New</a></li>
+            </ul>
+        </div>
+        @Html.Snippets().UndoLink(Url.Action(), new { accesskey = "u" })
+        @if (Model.PH_ID == 0 || Model.PH_ID == null)
+        {
+            <a href="@TempData.Peek("CrisisReturnUrl")" class="btn btn-danger">Cancel</a>
+        }
+        else
+        {
+            @Html.Snippets().DeleteLink(Url.Action("Delete", "CrisisIntervention", new { id = Model.PH_ID }), new { accesskey = "d" })
+        }
+    </div>
+</div>
+<div class="form-group">
+    <a href="@TempData.Peek("CrisisReturnUrl")"><span class='glyphicon glyphicon-chevron-left' aria-hidden='true'></span><span class='glyphicon glyphicon-chevron-left' style='margin-left:-6px' aria-hidden='true'></span>Back to Non-Client Crisis Intervention Search</a>
+</div>
+
+@section Scripts{
+    @Scripts.Render("~/bundles/typeahead")
+    <script src="~/Scripts/Views/Services/CrisisIntervention.js"></script>
+}

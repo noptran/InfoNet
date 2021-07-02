@@ -1,0 +1,35 @@
+﻿@model Infonet.Web.ViewModels.Account.RoleViewModel
+@{
+	ViewBag.Title = "Create Role";
+}
+@using (Html.BeginForm("Create", "RolesAdmin", FormMethod.Post, new { id = "main", autocomplete = "off", data_icjia_role = "dirty.form" })) { 
+	@Html.AntiForgeryToken()
+
+	<div class="row">
+		<div class="col-sm-6">
+			@Html.ValidationSummary(true)
+			<div class="form-group">
+				@Html.LabelFor(model => model.Name, new { @class = "control-label" })
+				@Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+				@Html.ValidationMessageFor(model => model.Name)
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(model => model.Description, new { @class = "control-label" })
+				@Html.TextBoxFor(model => model.Description, new { @class = "form-control" })
+				@Html.ValidationMessageFor(model => model.Description)
+			</div>
+			<div class="form-group">
+				@Html.Snippets().SaveButton(new { Value = "Create", id = "saveMain", data_icjia_role = "preventDuplicateRequest", accesskey = "s" })
+				@Html.Snippets().UndoLink(Url.Action(), new { accesskey = "u" })
+			</div>
+		</div>
+	</div>
+	<a href="@Url.Action("Index")"><span class='glyphicon glyphicon-chevron-left' aria-hidden='true'></span><span class='glyphicon glyphicon-chevron-left' style='margin-left:-6px' aria-hidden='true'></span>Back to Manage Roles</a>
+}
+@section Scripts {
+	<script>
+		$(document.body).on('click', '#saveMain', function () {
+			$("#main").submit();
+		});
+	</script>
+}

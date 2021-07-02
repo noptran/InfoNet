@@ -1,0 +1,39 @@
+﻿@model DirectServiceAdd
+
+<tr @(Model.IsDeleted ? "style=display:none;" : "")>
+	<td>
+		<div class="form-group" style="margin:0; min-width:225px;">
+			@Html.LookupFor(m => Model.ServiceID, Lookups.DirectServices[Session.Center().Provider], "<Pick One>", new { Class = "form-control", data_val_servicegrouprequired = "The Service field is required." })
+			@Html.HiddenFor(m => Model.IsAdded)
+			@Html.HiddenFor(m => Model.IsDeleted)
+			@Html.HiddenFor(m => Model.IsEmpty)
+			@Html.ValidationMessageFor(m => Model.ServiceID, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td>
+		<div class="form-group" style="margin:0; min-width:250px;">
+			@Html.DropDownListFor(m => Model.SVID, new SelectList(Data.Centers.GetStaffForCenterAndDateRetainCurrentSvid(DateTime.Now, Session.Center().Id, null), "SVID", "EmployeeName", ""), "<Pick One>",
+				Html.Attributes(new { Class = "form-control group1", data_val_servicegrouprequired = "The Staff/Volunteer field is required." }))
+			@Html.ValidationMessageFor(m => Model.SVID, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td>
+		<div class="form-group" style="margin:0; min-width:100px;">
+			@Html.TextBoxFor(m => Model.ServiceDate, "{0:MM/dd/yyyy}",
+				Html.Attributes(new { data_provide = "datepicker", data_date_end_date = DateTime.Today.ToShortDateString(), Class = "inline-date form-control date group1", data_val_firstcontactdate = "Cannot be earlier than the case's First Contact Date.", data_val_servicegrouprequired = "The Date field is required." }))
+			@Html.ValidationMessageFor(m => Model.ServiceDate, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td>
+		<div class="form-group" style="margin:0; min-width:75px;">
+			@Html.TextBoxFor(m => Model.ReceivedHours, "",
+				Html.Attributes(new { type = "number", min = 0, max = 100, step = 0.25, Class = "form-control group1", onfocusout = "directServiceCheckIfEmpty(this, 'group1')", data_val_servicegrouprequired = "The Hours field is required." }))
+			@Html.ValidationMessageFor(m => Model.ReceivedHours, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td class="removeDirectService" style="text-align: center;" data-icjia-role="glyphicon-remove-toggle">
+		<div style="width:70px;">
+			<button class="btn btn-danger" onclick="addHideRow(this);" type="button"><span class="glyphicon glyphicon-trash"></span></button>
+		</div>
+	</td>
+</tr>

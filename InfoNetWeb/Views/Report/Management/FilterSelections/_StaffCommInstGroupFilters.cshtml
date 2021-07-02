@@ -1,0 +1,28 @@
+﻿@using Infonet.Reporting.Enumerations
+@model Infonet.Reporting.ViewModels.ManagementReportViewModel
+
+<div class="panel panel-primary icjia-error-group reportProperty @SubReportSelection.MngRptStaffServiceCommunityGroup.GetShortName()" style="display:none">
+	<div class="panel-heading">
+		<h2 class="panel-title">
+			<span class="icjia-panel-title-text">Filters</span>
+		</h2>
+	</div>
+	<div class="panel-body">
+		<div class="form-group">
+			@Html.LabelFor(m => m.StaffClientServiceStaffSelections)
+			@Html.DropDownListFor(model => model.StaffCommGroupServiceStaffSelections, new MultiSelectList(Model.StaffDefault, "SVID", "StaffName", Model.StaffClientServiceStaffSelections), new { @class = "form-control chosen staffSelection", multiple = "multiple", data_icjia_ajax_url = "/Report/StaffNames" })
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(m => m.StaffClientServiceServiceNameSelections)
+			@Html.DropDownListFor(model => model.StaffCommGroupServiceServiceNameSelections, new MultiSelectList(Model.ServiceNameDefault, "CodeId", "Description", Model.StaffClientServiceServiceNameSelections), new { @class = "form-control chosen", multiple = "multiple", data_icjia_ajax_url = "/Report/ProgramNames" })
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(m => m.StaffCommGroupServiceAgencySelections)
+			@Html.DropDownListFor(model => model.StaffCommGroupServiceAgencySelections, new MultiSelectList(Model.AgencyDefault, "CodeId", "Description", Model.StaffCommGroupServiceAgencySelections), new { @class = "form-control chosen", multiple = "multiple", data_icjia_ajax_url = "/Report/Agencies" })
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(m => m.StaffCommGroupServiceLocationSelections)
+			@Html.DropDownListFor(model => model.StaffCommGroupServiceLocationSelections, new MultiSelectList(Model.ServiceLocationDefault, "CodeId", "Description", Model.StaffCommGroupServiceLocationSelections), new { @class = "form-control chosen", multiple = "multiple", data_icjia_ajax_url = "/Report/ServiceLocations" })
+		</div>
+	</div>
+</div>

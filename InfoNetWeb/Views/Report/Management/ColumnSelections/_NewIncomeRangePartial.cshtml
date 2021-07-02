@@ -1,0 +1,22 @@
+﻿@model Infonet.Reporting.ViewModels.ManagementReportViewModel
+
+<tr class="newIncomeRangeRow">
+	<td>
+		<div class="form-group ">
+			<div class="input-group">
+				@Html.TextBoxFor(m => m.IncomeSourceIncomeRanges[0].LowerBound, new { @class = "form-control incomeRangeLowerBound newIncomeRangeRowData", type="number", step="1" })
+				<span class="input-group-addon" id="basic-addon1"><b>to</b></span>
+				@Html.TextBoxFor(m => m.IncomeSourceIncomeRanges[0].UpperBound, new { @class = "form-control incomeRangeUpperBound newIncomeRangeRowData", type = "number", step = "1" })
+			</div>
+		</div>
+		<div>
+			@Html.ValidationMessageFor(m => m.IncomeSourceIncomeRanges[0].LowerBound, "", new { @class = "help-block" })
+			@Html.ValidationMessageFor(m => m.IncomeSourceIncomeRanges[0].UpperBound, "", new { @class = "help-block" })
+		</div>
+	</td>
+	<td>
+		<button class="btn btn-danger deleteIncomeRange" type="button">
+			<span class="glyphicon glyphicon-trash"></span>
+		</button>
+	</td>
+</tr>

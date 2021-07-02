@@ -1,0 +1,64 @@
+﻿@model Infonet.Web.ViewModels.Admin.FundingForStaff
+
+@{
+	bool isReport = false;
+	if (ViewData["isReport"] != null) { isReport = (bool)ViewData["isReport"]; }
+
+	var baseName = ((string)ViewData["baseName"]).Trim();
+	var styleName = char.ToLower(baseName[0]) + baseName.Substring(1);
+	var codeName = char.ToUpper(baseName[0]) + baseName.Substring(1);
+
+	var modalId = styleName + "Modal";
+	var modalBodyId = modalId + "Body";
+	var formAction = codeName;
+	var formId = codeName;
+	var modalSize = (string)ViewData["modalSize"];
+	var title = (string)ViewData["title"];
+	var partial = "_" + codeName;
+	var saveButtonRole = "ffs." + codeName + ".save";
+	var undoButtonRole = "ffs." + codeName + ".undo";
+}
+
+<div class="modal fade" id="@modalId" role="dialog">
+	@using (Html.BeginForm(formAction, "FundingForStaff", FormMethod.Get, new { id = formId, autocomplete = "off", data_icjia_role = "dirty.form" })) {
+		<div class="modal-dialog modal-@modalSize">
+			<div class="modal-content">
+				<div class="modal-header">
+					@Html.Snippets().ModalCloseButton()
+					<h4 class="modal-title">@title</h4>
+				</div>
+				<div class="modal-body @(isReport ? "ffs-reportModalBody" : "")" id="@modalBodyId">
+					@*@Html.Partial(@partial)*@
+					@if (codeName == "ReportSelectedFunding" || codeName == "ReportFundingHistory") {
+						@Html.Partial("_ReportGetStaffAll")
+					} else if (codeName == "ReportStaffSelectedFunding" || codeName == "ReportStaffFundingHistory") {
+						@Html.Partial("_ReportGetStaffSelected")
+					} else {
+						@Html.Partial(@partial)
+					}
+				</div>
+
+				<div class="@(modalId == "addFundingIssueDateModal"? "modal-footer": "modal-footer navbar-fixed-bottom" )" style="@(modalId == "addFundingIssueDateModal"? "": "position:absolute;" )">
+					@if (isReport) {
+						var viewPDFButtonRole = "ffs." + codeName + ".viewPDF";
+						var savePDFButtonRole = "ffs." + codeName + ".savePDF";
+
+						<button class="btn btn-primary" data-icjia-pdf-view="@savePDFButtonRole" data-icjia-url="@Url.Action("PDF", "FundingForStaff")">Save PDF <span class="glyphicon glyphicon-save"></span></button>
+						<button class="btn btn-primary" data-icjia-pdf-view="@viewPDFButtonRole" data-icjia-url="@Url.Action("PDF", "FundingForStaff")">View PDF <span class="glyphicon glyphicon-new-window"></span></button>
+
+						<button class="btn btn-primary btn-outline" data-icjia-role="dirty.modal.confirm" type="button"><span>Close</span></button>
+					} else if (codeName == "ReportFundingHistorySelection") {
+						var selectButtonRole = "ffs." + codeName + ".select";
+						<button id="select@(codeName)" class="btn btn-success" data-icjia-role="@selectButtonRole" type="button"><span>Select</span></button>
+						@Html.Snippets().UndoButton(DirtyMode.Modal, new { data_icjia_undo = undoButtonRole, id="save@(codeName)" })
+					} else {
+						@Html.Snippets().SaveButton(DirtyMode.Modal, new { type = "submit", data_icjia_save = saveButtonRole })
+						@Html.Snippets().UndoButton(DirtyMode.Modal, new { data_icjia_undo = undoButtonRole })
+					}
+				</div>
+			</div>
+		</div>
+	}
+</div>
+
+

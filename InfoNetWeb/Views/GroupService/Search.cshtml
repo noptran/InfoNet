@@ -1,0 +1,72 @@
+﻿@model Infonet.Web.ViewModels.Services.GroupServiceViewModel
+@using PagedList.Mvc;
+@{
+	ViewBag.Title = "Group Services";
+}
+
+@using (Html.BeginForm("Search", "GroupService", FormMethod.Get, new { id = "main" })) {
+	@Html.Partial("_DateRangeSelect", Model, new ViewDataDictionary { { "rangeTitle", "Group Service Date Range" }, { "rangeTooltipTitle", "" } })
+	@Html.Partial("_SearchResetNewButtons", Model, new ViewDataDictionary { { "NewButtonUrl", "/GroupService/FormRedirect" }, { "NewButtonText", "New Group Service" } })
+}
+<table class="table table-hover table-responsive">
+	<tr>
+		<th scope="col">
+			Date
+		</th>
+		<th scope="col">
+			Service
+		</th>
+		<th scope="col">
+			Number of Sessions
+		</th>
+		<th scope="col">
+			Hours
+		</th>
+		<th scope="col">
+			Number of Participants
+		</th>
+		<th scope="col">
+			Staff/Volunteer
+		</th>
+        <th scope="col"><span class="sr-only">Action</span></th>
+	</tr>
+
+	@foreach (var item in Model.GroupServiceList) {
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.PDate)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.ProgramName)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.NumOfSession)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Hours)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.ParticipantsNum)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.employeeNames)
+			</td>
+			<td class="text-right">
+				@Html.ActionLink("Edit", "FormRedirect", new { id = item.ICS_ID }, new { @class = "btn btn-xs btn-primary btn-outline" })
+			</td>
+		</tr>
+	}
+</table>
+
+<div class="row">
+	<div class="col-sm-12">
+		@Html.PagedListPager(Model.GroupServiceList, page => Url.Action(@Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)), @Html.Snippets().PagedListPagerRouteValues(page, Model)), @Html.Snippets().PagedListRenderOptions())
+		@*@Html.Partial("_PagedListDropMenu", Model, new ViewDataDictionary { { "PagedListUrlAction", @Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)) } })*@
+		@Html.Partial("_PagedListDropMenu", Model)
+	</div>
+</div>
+
+@section Scripts {
+	<script src="~/Scripts/ICJIA/date-ranges.js"></script>
+	<script src="~/Scripts/ICJIA/pagedlist.js"></script>
+}

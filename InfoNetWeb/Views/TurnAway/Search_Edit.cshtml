@@ -1,0 +1,167 @@
+﻿@model Infonet.Web.ViewModels.Services.TurnAwayViewModel
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Turn Aways";
+}
+
+@{int recordCount;}
+
+@if (Model.displayForPaging == null) {
+    recordCount = 0;
+} else {
+    recordCount = Model.displayForPaging.Count;
+}
+
+@using (Html.BeginForm("Search_Edit_Post", "TurnAway", FormMethod.Post, new { @class = "main", id = "firstForm", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+	@Html.AntiForgeryToken()
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="panel panel-primary" style="margin: 0; margin-top:5px;">
+				<div class="panel-heading" data-toggle="collapse" data-target="#addTurnAwayCollapse">
+					<div class="row">
+						<div class="col-sm-8">
+							<h3 class="panel-title"><a data-toggle="collapse" href="#addTurnAwayCollapse">Add Turn Aways</a></h3>
+						</div>
+					</div>
+				</div>
+				<div id="addTurnAwayCollapse" class="panel-collapse collapse in">
+					<div class="panel-body">
+						<table class="table table-responsive icjia-table-borderless" id="turnAways" style="margin-bottom: 0;">
+							<thead>
+								<tr>
+									<th scope="col" width="25%"><span class="icjia-required" data-toggle="tooltip" title="Enter date family or individual was turned away from your emergency shelter due to lack of bed space. If data are being entered for all families/individuals turned away monthly, enter the last date of the reporting month.">Date</span></th>
+									<th scope="col" width="23%"><span class="icjia-required" data-toggle="tooltip" title="Enter number of adults in the family(ies) that were turned away due to lack of bed space.">Number of Adults</span></th>
+									<th scope="col" width="23%"><span class="icjia-required" data-toggle="tooltip" title="Enter number of children in the family(ies) that were turned away due to lack of bed space.">Number of Children</span></th>
+									<th scope="col" width="23%"><span class="icjia-required" data-toggle="tooltip" title="Select whether or not a referral was made to another shelter.">Referral Made to Another Shelter?</span></th>
+									<th scope="col" width="6%"><span class="sr-only">Action</span></th>
+								</tr>
+							</thead>
+							<tbody></tbody>
+						</table>
+						<input type="hidden" class="addturnaway" value="@recordCount" />
+						<button type="button" class="btn btn-default btn-outline addturnaway" value="@recordCount"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;Add New Turn Away</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+    <br />
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="pull-right">
+				@Html.Snippets().SaveButton(new { id = "saveButton", data_icjia_role = "preventDuplicateRequest", accesskey = "s" })
+				@Html.Snippets().UndoLink(Url.Action(), new { accesskey = "u" })
+            </div>
+        </div>
+    </div>
+
+}
+<hr />
+@using (Html.BeginForm("Search_Edit", "TurnAway", FormMethod.Get, new { autocomplete = "off", id="main" })) {
+	<div class="row">
+		<div class="form-group col-md-6 ">
+			@Html.Partial("_DateRangeLabelTextboxes", Model, new ViewDataDictionary { { "rangeTitle", "Turn Away Date Range" }, { "rangeTooltipTitle", "Search by the date that family or individual was turned away from your emergency shelter." } })
+		</div>
+		<div class="form-group col-md-3">
+			@Html.Label("rangePeriodChosen", "Ranges", new { @class = "control-label dirtyignore" })
+			<select class="form-control col-md-3" name="Range" id="rangePeriodChosen" data-icjia-role="dateRanges" data-icjia-start="#Start" data-icjia-end="#End" data-icjia-default-range="@Model.Range">
+				<option value="0">Custom Range</option>
+				<option value="1">This Month</option>
+				<option value="2">This Quarter</option>
+				<option value="3">This Fiscal Year</option>
+				<option value="4">This Calendar Year</option>
+				<option value="20">Last 30 Days</option>
+				<option value="5">Last Month</option>
+				<option value="6">Last Quarter</option>
+				<option value="7">Last Fiscal Year</option>
+				<option value="8">Last Calendar Year</option>
+				<option value="13">Last 3 Months</option>
+				<option value="14">Last 6 Months</option>
+				<option value="15">Last 12 Months</option>
+			</select>
+		</div>
+	</div>
+			@Html.Partial("_SearchResetButtons")
+			<input type="hidden" value="@recordCount" id="recordCount" />
+}
+
+@using (Html.BeginForm("Search_Edit_Post", "TurnAway", FormMethod.Post, new { @class = "main", id = "secondForm", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+	@Html.AntiForgeryToken()
+
+	<table class="table table-hover table-bordered table-responsive" style="margin-top: 20px" id="searchResults">
+		<tr>
+			<th scope="col" class="text-center" width="18%">
+				Action
+			</th>
+			<th scope="col" width="22%">
+				Date
+			</th>
+			<th scope="col" width="20%">
+				Number of Adults
+			</th>
+			<th scope="col" width="20%">
+				Number of Children
+			</th>
+			<th scope="col" width="20%">
+				Referral Made to Another Shelter?
+			</th>
+		</tr>
+		@if (Model.TurnAwaysList != null) {
+			for (int i = 0; i < Model.displayForPaging.Count; i++) {
+				<tr>
+					<td class="text-center">
+						<label>
+							Edit
+							@Html.CheckBoxFor(modelItem => Model.displayForPaging[i].shouldEdit, new { @class = "editRecord" })
+						</label>
+						<label>
+							Delete
+							@Html.CheckBoxFor(modelItem => Model.displayForPaging[i].shouldDelete, new { @class = "deleteRecord" })
+						</label>
+					</td>
+					<td>
+						<div class="form-group input-group date" data-provide="datepicker" data-date-end-date=@DateTime.Today.ToShortDateString()>
+							@Html.TextBoxFor(model => Model.displayForPaging[i].TurnAwayDate, "{0:MM/dd/yyyy}", new { @class = "form-control rowData", autocomplete = "off", disabled = "disabled" })
+							<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+						</div>
+						@Html.ValidationMessageFor(model => Model.displayForPaging[i].TurnAwayDate, "", new { @class = "help-block" })
+					</td>
+					<td>
+						<div class="form-group">
+							@Html.TextBoxFor(modelItem => Model.displayForPaging[i].AdultsNo, new { type = "number", min = 0, step = 1, @class = "form-control rowData", disabled = "disabled" })
+							@Html.ValidationMessageFor(model => Model.displayForPaging[i].AdultsNo, "", new { @class = "help-block" })
+						</div>
+					</td>
+					<td>
+						<div class="form-group">
+							@Html.TextBoxFor(modelItem => Model.displayForPaging[i].ChildrenNo, new { type = "number", min = 0, step = 1, @class = "form-control rowData", disabled = "disabled" })
+							@Html.ValidationMessageFor(model => Model.displayForPaging[i].ChildrenNo, "", new { @class = "help-block" })
+							@Html.HiddenFor(modelItem => Model.displayForPaging[i].Id)
+						</div>
+					</td>
+					<td>
+						<div class="form-group">
+							@Html.LookupFor(modelItem => Model.displayForPaging[i].ReferralMadeId, Provider.DV, "<Pick One>", true, new { @class = "form-control rowData", disabled = "disabled" })
+							@Html.ValidationMessageFor(model => Model.displayForPaging[i].ReferralMadeId, "", new { @class = "help-block" })
+						</div>
+					</td>
+				</tr>
+			}
+		}
+	</table>
+			@Html.Partial("_PagedListHiddenFields")
+}
+
+<div class="row">
+	<div class="col-sm-12">
+		@Html.PagedListPager(Model.TurnAwaysList, page => Url.Action(Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)), Html.Snippets().PagedListPagerRouteValues(page, Model)), Html.Snippets().PagedListRenderOptions())
+		@Html.Partial("_PagedListDropMenu", Model, new ViewDataDictionary { { "PagedListUrlAction", Path.GetFileNameWithoutExtension(Server.MapPath(VirtualPath)) } })
+	</div>
+</div>
+
+@section scripts {
+    <script src="~/Scripts/ICJIA/date-ranges.js"></script>
+	<script src="~/Scripts/ICJIA/pagedlist.js"></script>
+	<script src="~/Scripts/Views/Shared/_SearchEdit.js"></script>
+    <script src="~/Scripts/Views/Services/_TurnAway.js"></script> 
+}

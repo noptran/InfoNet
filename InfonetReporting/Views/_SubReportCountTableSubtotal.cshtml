@@ -1,0 +1,26 @@
+﻿@inherits RazorEngine.Templating.TemplateBase<IReportTable>
+@using Infonet.Reporting.Core
+
+<tr class="avoid-break-before">
+	<th class="text-right" scope="row"><b>@(Model.Title) Subtotal @if (Model.UseNonDuplicatedSubtotalLabel) {<span>(Unduplicated)</span>} </b></th>
+	@foreach (var header in Model.Headers) {
+		foreach (var subheader in header.SubHeaders) {
+			if (Model.UseNonDuplicatedSubtotal) {
+				<td class="text-right"><b>
+					@{string format = Model.NonDuplicatedSubtotalRow.Counts[header.Code.ToString()][subheader.Code.ToString()] % 1 == 0 ? "{0:n0}" : "{0:n2}";}
+					@(string.Format(format, Model.NonDuplicatedSubtotalRow.Counts[header.Code.ToString()][subheader.Code.ToString()]))
+				</b></td>
+			} else {
+				double subtotal = 0;
+				foreach (var row in Model.Rows) {
+					subtotal += row.Counts[header.Code.ToString()][subheader.Code.ToString()];
+				}
+				<td class="text-right"><b>
+					@{string format = subtotal % 1 == 0 ? "{0:n0}" : "{0:n2}";}
+					@(string.Format(format, subtotal))
+				</b></td>
+			}
+		}
+	}
+</tr>
+

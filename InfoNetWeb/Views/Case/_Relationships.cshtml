@@ -1,0 +1,90 @@
+﻿@model ClientCase
+
+@if (Model.InvestigationClients?.FirstOrDefault() != null && Model.InvestigationClients.First().Investigation.InvestigationClient.Count > 0) {
+<div class="table-responsive">
+	<table id="tbl_residences" class="table">
+		<caption class="text-center text-uppercase">Related Clients</caption>
+		<thead class="icjia-panel-subheader">
+            <tr>
+                <th scope="col" >Client ID</th>
+                <th scope="col" >Case</th>
+                <th scope="col" >Age</th>
+                <th scope="col" >Gender Identity</th>
+                <th scope="col" >Races</th>
+                <th scope="col" >Client Type</th>
+                <th scope="col" >Relationship to Victim</th>
+                <th scope="col" ><span class="sr-only">View</span></th>
+            </tr>
+		</thead>
+		<tbody>
+			@foreach (var client in Model.InvestigationClients.First().Investigation.InvestigationClient) {
+				var caze = client.ClientCase;
+				<tr>
+					<td>@caze.Client.ClientCode</td>
+					<td>@caze.CaseId</td>
+					<td>@caze.Age</td>
+					<td>@(Lookups.GenderIdentity[caze.Client.GenderIdentityId]?.Description)</td>
+					<td>
+						@foreach (int id in caze.Client.RaceHudIds) {
+							@(Lookups.RaceHud[id].Description + " ")
+						}
+					</td>
+					<td>@(Lookups.ClientType[caze.Client.ClientTypeId]?.Description)</td>
+					<td>@(Lookups.RelationshipToClient[caze.RelationSOtoClientId]?.Description)</td>
+					<td><a href="/Case/Edit/@(caze.Client.ClientId)c@(caze.CaseId)">View</a></td>
+				</tr>
+			}	
+		</tbody>
+	</table>
+</div>
+<div class="panel-body">
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="text-info"><strong>Note:</strong> To create relationships for this client, go to Clients > Client Relationships.</div>
+		</div>
+	</div>
+</div>
+<hr style="margin-bottom: 0; margin-top: 0;" />
+} else {
+	<div class="well text-center" style="margin: 20px 20px 20px 20px;color:#767676; font-weight: bold">No client relationships exist for this client. To create a relationship, go to Clients > Client Relationships.</div>
+}
+@if (Model.Client.ClientTypeId == 7) {
+	if (Model.Offenders != null && Model.Offenders.Count > 0) {
+	<div class="table-responsive">
+		<table id="tbl_residences" class="table">
+			<caption class="text-center text-uppercase">Offenders</caption>
+			<thead class="icjia-panel-subheader">
+				<tr>
+					<th scope="col" >Offender ID</th>
+					<th scope="col" >Age</th>
+					<th scope="col" >Gender Identity</th>
+					<th scope="col" >Races</th>
+					<th scope="col" >Relationship to Victim</th>
+                    <th scope="col" ><span class="sr-only">View</span></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var offender in Model.Offenders) {
+					<tr>
+						<td>@offender.OffenderListing.OffenderCode</td>
+						<td>@offender.Age</td>
+						<td>@(Lookups.GenderIdentity[offender.SexId]?.Description)</td>
+						<td>@(Lookups.Race[offender.RaceId]?.Description)</td>
+						<td>@(Lookups.RelationshipToClient[offender.RelationshipToClientId]?.Description)</td>
+						<td><a href="/Case/Offenders/@(Model.ClientId)c@(Model.CaseId)#offender@(offender.OffenderId)_0">View</a></td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="text-info"><strong>Note:</strong> To create additional offender relationships for the client, select the Offender link and add another offender to the client case.</div>
+			</div>
+		</div>
+	</div>
+	} else {
+		<div class="well text-center" style="margin: 0 20px 20px 20px;color:#767676; font-weight: bold">No offender relationships exist for this client. To create an offender relationship, select the Offender link and add an offender to the client case.</div>
+	}
+}

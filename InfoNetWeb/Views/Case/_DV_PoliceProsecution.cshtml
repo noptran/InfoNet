@@ -1,0 +1,130 @@
+﻿@model ClientCase
+
+@{
+	var visitKey = Model.ClientPoliceProsecutionsById.Keys.SingleOrDefault() ?? Key.Template(null, "0");
+}
+
+<div class="panel-body pb-0">
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="form-group">
+				@Html.Hidden(Html.NameFor(m => m.ClientPoliceProsecutionsById) + ".index", (visitKey.Components[0] == null ? "+" : "=") + visitKey)
+								
+				@Html.LabelFor(m => m.ClientPoliceProsecutionsById[visitKey].DateReportPolice, new { @class = "control-label", data_toggle = "tooltip", title = "Indicate the date incident was first reported to police. Approximate dates are acceptable if exact date is not known." })
+				<div class="input-group date" data-provide="datepicker">
+					@Html.TextBoxFor(m => m.ClientPoliceProsecutionsById[visitKey].DateReportPolice, true, new { @class = "form-control" }) 
+					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+				</div>
+				@Html.ValidationMessageFor(m => m.ClientPoliceProsecutionsById[visitKey].DateReportPolice, "", new { @class = "help-block" })
+			</div>
+			<fieldset class="form-group">
+				<legend data-toggle="tooltip" title="Check which types of interviews were conducted with the client regarding the reported incident.">Indicate Interviews Conducted</legend>
+				<div class="icjia-checkbox-group">
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientPoliceProsecutionsById[visitKey].IsPatrolInterview)
+						@Html.LabelFor(m => m.ClientPoliceProsecutionsById[visitKey].IsPatrolInterview)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientPoliceProsecutionsById[visitKey].IsDetectiveInterview)
+						@Html.LabelFor(m => m.ClientPoliceProsecutionsById[visitKey].IsDetectiveInterview)
+					</div>
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientPoliceProsecutionsById[visitKey].IsSAInterview)
+						@Html.LabelFor(m => m.ClientPoliceProsecutionsById[visitKey].IsSAInterview)
+					</div>
+				</div>
+			</fieldset>
+			<fieldset class="form-group">
+				<legend data-toggle="tooltip" title="Check if a Victim/Witness program is available.">Indicate Other</legend>
+				<div class="icjia-checkbox-group">
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientPoliceProsecutionsById[visitKey].IsVWProgram)
+						@Html.LabelFor(m => m.ClientPoliceProsecutionsById[visitKey].IsVWProgram)
+					</div>
+				</div>
+			</fieldset>
+		</div>
+		<div class="col-sm-6">
+			<fieldset class="form-group">
+				<legend data-toggle="tooltip" title="Check if a trial has been scheduled regarding the reported incident.">Trial Information</legend>
+				<div class="icjia-checkbox-group">
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.ClientPoliceProsecutionsById[visitKey].IsTrialScheduled)
+						@Html.LabelFor(m => m.ClientPoliceProsecutionsById[visitKey].IsTrialScheduled)
+					</div>
+				</div>
+			</fieldset>
+			<div class="form-group">
+				@Html.LabelFor(m => m.ClientPoliceProsecutionsById[visitKey].TrialTypeId, new { @class = "control-label", data_toggle = "tooltip", title = "Select the type of trial if known. If a trial is scheduled but the type not yet determined, select unknown." })
+				@Html.LookupFor(m => m.ClientPoliceProsecutionsById[visitKey].TrialTypeId, "<Pick One>", true, new { @class = "form-control" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.ClientPoliceProsecutionsById[visitKey].VWParticipateID, new { @class = "control-label", data_toggle = "tooltip", title = "Select if the victim received services from a victim/witness program." })
+				@Html.LookupFor(m => m.ClientPoliceProsecutionsById[visitKey].VWParticipateID, "<Pick One>", true, new { @class = "form-control" })
+			</div>
+		</div>
+		<div class="col-sm-12">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th scope="col">Number of Court Appearances</th>
+						<th scope="col">Number of Defense Continuances</th>
+						<th scope="col">Number of Prosecution Continuances</th>
+						<th scope="col">Number of No Continuance - Case Progressed</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td id="numbOfCtApprs">0</td>
+						<td id="numbOfDefCont">0</td>
+						<td id="numbOfPrscCont">0</td>
+						<td id="numbOfNoCont">0</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="table-responsive">
+	<table id="tbl_courtAppearance_appearances" class="table table-condensed-y table-borderless mb-0">
+		<colgroup>
+			<col />
+			<col style="width: 50%" />
+			<col style="width: 40px" />
+		</colgroup>
+		<thead>
+			@{ var SAMPLE_COURT_APPEARANCE = new ClientCourtAppearance(); }
+            <tr class="icjia-panel-subheader">
+                <th scope="col" class="icjia-required" style="padding-left: 20px" data-toggle="tooltip" title="Enter the date the court appearance occurred or is scheduled to occur if it has not happened yet.">@Html.DisplayNameFor(m => SAMPLE_COURT_APPEARANCE.CourtDate)</th>
+                <th scope="col" class="pr-0" data-toggle="tooltip" title="If this appearance resulted in a continuance, select which side initiated the continuance. If no continuance was granted and the case progressed some, select No continuance–case progressed.">@Html.DisplayNameFor(m => SAMPLE_COURT_APPEARANCE.CourtContinuanceID)</th>
+                <th scope="col"><span class="sr-only">Action</span></th>
+            </tr>
+			<tr aria-hidden="true"> @* for spacing only *@
+				<th scope="col" colspan="3" class="pb-0"></th>
+			</tr>
+		</thead>
+		<tbody>
+			@{
+				var courtAppearances = Model.ClientCourtAppearancesById;
+			}
+			@foreach (var each in courtAppearances.KeysFor(courtAppearances.Values.Restorable.Concat(courtAppearances.Values))) {
+				bool isNew = each.Components[0] == null;
+				string prefix = courtAppearances.ContainsKey(each) ? (isNew ? "+" : "=") : (isNew ? "~" : "-");
+				@Html.Partial("_PoliceProsecution_CourtAppearance", Model, ViewData.CopyWith(new { appearanceKey = each, appearanceKeyPrefix = prefix }))
+			}
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="3" class="text-right uncondensed">
+					<button type="button" class="btn btn-primary btn-xs btn-icon" aria-label="Add New Court Appearance"
+							data-icjia-role="courtAppearance.add" data-icjia-mustache-next='{ "key": @Model.ClientCourtAppearancesById.NextOccurrenceFor(null) }'>
+						<span class="glyphicon glyphicon-plus"></span>
+						@using (var mustache = Html.BeginMustache("script", "--qqq-", "-ppp--")) {
+							@Html.Partial("_PoliceProsecution_CourtAppearance", Model, ViewData.CopyWith(new { appearanceKey = Key.Template(null, mustache.Tag("key")), appearanceKeyPrefix = "+" }))
+						}
+					</button>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+</div>

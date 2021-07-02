@@ -1,0 +1,200 @@
+﻿@using Infonet.Data
+@using Infonet.Web.ViewModels.Offender
+@model ClientCase
+
+@{
+	ViewBag.ScrollspyTarget = ".icjia-scrollspy.on";
+
+	string CONTROLLER = (string)ViewContext.RouteData.Values["controller"];
+	string ACTION = (string)ViewContext.RouteData.Values["action"];
+	bool IS_NEW_CLIENT = Model.Client.ClientId == null;
+	bool IS_NEW_CASE = Model.CaseId == null;
+	var PAGES = CaseOutline.CreateFor(Model, Session.Center().HasShelter, Session.Center().AllRelated.Any(c => c.HasShelter)).Pages;
+
+	if (!IS_NEW_CASE) {
+		Session.IncludeRecentClient((int)Model.ClientId, (int)Model.CaseId, Model.Client.ClientCode, ACTION);
+	}
+}
+
+@using (Html.BeginForm(ACTION, CONTROLLER, FormMethod.Post, new { id = "main", autocomplete = "off", data_icjia_role = "dirty.form" })) {
+	@Html.AntiForgeryToken()
+	@Html.Hidden("clientId", Model.Client.ClientId)
+	@Html.Hidden("caseId", Model.CaseId)
+	@Html.Hidden("clientType", Model.Client.ClientTypeId)
+	@Html.Hidden("hash")
+
+	foreach (var eachPage in PAGES) {
+		if (eachPage.Action == ACTION && (eachPage.Visibility & Model.CaseType) != CaseType.None && (!IS_NEW_CASE || eachPage.NewCaseAllowed)) {
+			if (ViewBag.Title == null) {
+				ViewBag.Title = eachPage.Heading;
+				ViewBag.PageHeader = (IS_NEW_CASE ? "New " : "Edit ") + ViewBag.Title;
+			}
+			foreach (var eachPanel in eachPage.Panels) {
+				if ((eachPanel.Visibility & Model.CaseType) != CaseType.None) {
+					@Html.Partial("_EditPanel", Model, ViewData.CopyWith(new { panel = eachPanel }))
+				}
+			}
+			if (eachPage.FooterPartial != null) {
+				@Html.Partial(eachPage.FooterPartial, Model)
+			}
+		}
+	}
+}
+
+@if (Model.Provider == Provider.CAC && ACTION == "Offenders") {
+	@Html.Partial("_OffenderSearch", new OffenderSearchViewModel())
+}
+
+<div id="scrollspyBuffer" style="height: 4320px"></div>
+
+@section Sidebar {
+	<div class="well well-sm text-center" style="padding: 5px 7px 7px; margin-bottom: 15px">
+
+		<small>@Lookups.ClientType[Model.Client.ClientTypeId].Description</small>
+
+		<div style="margin: 9px 0 11px; font-size: 120%; font-weight: bold; word-break: break-all; word-wrap: break-word;">@(IS_NEW_CLIENT ? "New Client" : Model.Client.ClientCode)</div>
+
+		@if (!IS_NEW_CLIENT) {
+			if (Model.Provider == Provider.SA) {
+				foreach (OtherCase each in ViewBag.OtherCases) {
+					if (each.CaseId == Model.CaseId) {
+						@Html.DisplayFor(m => each.FirstContactDate)@:&nbsp;
+						if (each.IsClosed) {
+							<span class="label label-danger">Closed</span>
+						} else {
+							<span class="label label-success">Open</span>
+						}
+					}
+				}
+			} else {
+				<div class="dropdown">
+					<button id="otherCasesMenu" type="button" class="btn btn-default btn-white btn-xs btn-block dropdown-toggle" data-toggle="dropdown" style="font-weight: bold; margin-bottom: 10px;" aria-haspopup="true" aria-expanded="false">
+						@if (IS_NEW_CASE) {
+							<span class="label label-info">New Case</span>
+							@:&nbsp;<span class="caret"></span>
+					} else {
+							foreach (OtherCase each in ViewBag.OtherCases) {
+								if (each.CaseId == Model.CaseId) {
+									@Html.DisplayFor(m => each.CaseDisplay)@:&nbsp;
+									if (each.IsClosed) {
+										<span class="label label-danger">Closed</span>
+									} else {
+										<span class="label label-success">Open</span>
+									}
+									@:&nbsp;<span class="caret"></span>
+								}
+							}
+						}
+					</button>
+					<ul class="dropdown-menu icjia-dropdown-menu-xs" style="width: 100%" aria-labelledby="otherCasesMenu">
+						@foreach (OtherCase each in ViewBag.OtherCases) {
+							<li class=@(each.CaseId == Model.CaseId ? "active" : null)>
+								<a href=@Url.Action(ACTION, new { clientId = Model.ClientId, caseId = each.CaseId })>
+									@Html.DisplayFor(m => each.CaseDisplay)
+									@if (each.IsClosed) {
+										@:&nbsp;<span class="label label-danger">Closed</span>
+									} else {
+										@:&nbsp;<span class="label label-success">Open</span>
+									}
+								</a>
+							</li>
+						}
+						@if (!IS_NEW_CASE) {
+							<li role="separator" class="divider"></li>
+							<li data-toggle="tooltip" title="Click to add a new case to this client's record. Generally, you should only add a new case to a client's record if this client has not received services in at least one year.">
+								<a id="newCaseLink" href=""><span class="glyphicon glyphicon-plus-sign"></span>&nbsp; Open New Case</a>
+							</li>
+						}
+					</ul>
+				</div>
+			}
+			<div style="margin-top: 8px">
+				<a href=@Url.Action("Edit", "Client", new { id = Model.Client.ClientId }) style="font-weight: bold; font-size: 14px">Client Summary</a>
+			</div>
+		}
+	</div>
+
+	<div class="form-group">
+		<nav class="icjia-scrollspy on">
+			<ul class="nav icjia-nav-stacked">
+				@foreach (var eachPage in PAGES) {
+					if ((eachPage.Visibility & Model.CaseType) != CaseType.None && (!IS_NEW_CASE || eachPage.NewCaseAllowed)) {
+						string url = eachPage.Action == ACTION ? null : Url.Action(eachPage.Action, new { clientId = Model.ClientId, caseId = Model.CaseId });
+						<li class=@(url == null ? "active" : null)>
+							<a href="@(url ?? "#pageHeader")">@eachPage.Heading</a>
+							<ul class="nav">
+								@foreach (var eachPanel in eachPage.Panels) {
+									if ((eachPanel.Visibility & Model.CaseType) != CaseType.None) {
+										<li class=@(eachPanel.IsDeleted ? "deleted": null)><a href="@url#@eachPanel.Id">@eachPanel.ShortName</a></li>
+									}
+								}
+							</ul>
+						</li>
+					}
+				}
+			</ul>
+		</nav>
+	</div>
+
+	<div class="form-group">
+		@Html.Snippets().SaveButton(new { onclick = "$('#main').submit();", @class = "btn btn-block btn-success", data_icjia_role = "preventDuplicateRequest", accesskey = "s" })
+		@if (IS_NEW_CASE && !IS_NEW_CLIENT) {
+			@Html.Snippets().CancelLink(ViewBag.UrlReferrer, new { @class = "btn btn-block btn-warning", accesskey = "u" })
+		} else if (IS_NEW_CLIENT) {
+			@Html.Snippets().CancelLink("/Client/Search", new { @class = "btn btn-block btn-warning", accesskey = "u" })
+		} else {
+			@Html.Snippets().UndoLink(Url.Action(ACTION), new { @class = "btn btn-block btn-warning", Id = "btnUndo", accesskey = "u" })
+		}
+	</div>
+	@Html.Hidden("NoDatesAvail", (bool)(ViewBag.NoDatesAvail ?? false))
+	@if ((bool)ViewBag.ShowWarning) {
+		string msg = (string)ViewBag.WarningMessage;
+		<div id="warningMessage" style="display:none">
+			@Html.Raw(msg)
+		</div>
+	}
+}
+
+@section Styles {
+	@Styles.Render("~/Content/Views/Case/Edit.css")
+	@Styles.Render("~/Content/ICJIA/pagination.css")
+	@Styles.Render("~/Content/bootstrap-chosen.css", "~/Content/ICJIA/bootstrap-chosen-addons.css")
+	@Styles.Render("~/Content/ICJIA/full-screen-spinner.css")
+}
+
+@section Scripts {
+	@Scripts.Render("~/bundles/pagination")
+	@Scripts.Render("~/bundles/mustache")
+	@Scripts.Render("~/bundles/typeahead")
+	@Scripts.Render("~/Scripts/ICJIA/debounce.js")
+	@Scripts.Render("~/Scripts/ICJIA/jquery.fadeslide.js")
+	@Scripts.Render("~/Scripts/ICJIA/broadcast.js")
+	@Scripts.Render("~/Scripts/ICJIA/date-ranges.js")
+	@Scripts.Render("~/Scripts/Views/Case/Edit.js")
+	@Scripts.Render("~/Scripts/ICJIA/state-county.js")
+	@Scripts.Render("~/Scripts/chosen.jquery.min.js")
+
+	@{
+		var rendered = new HashSet<string>();
+	}
+	@foreach (var eachPage in PAGES) {
+		if (eachPage.Action == ACTION && (eachPage.Visibility & Model.CaseType) != CaseType.None && (!IS_NEW_CASE || eachPage.NewCaseAllowed)) {
+			if (eachPage.Script != null) {
+				foreach (string script in eachPage.Script) {
+					if (rendered.Add(script)) {
+						@Scripts.Render("~/Scripts/Views/Case/" + script)
+					}
+				}
+			}
+		}
+		foreach (var eachPanel in eachPage.Panels) {
+			if (eachPanel.Script != null && (eachPanel.Visibility & Model.CaseType) != CaseType.None) {
+				foreach (string script in eachPanel.Script) {
+					if (rendered.Add(script)) {
+						@Scripts.Render("~/Scripts/Views/Case/" + script)
+					}
+				}
+			}
+		}
+	}
+}
